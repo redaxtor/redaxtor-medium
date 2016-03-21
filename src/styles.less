@@ -1,0 +1,107 @@
+// theme settings
+@bgcolor: #2f1e07;
+@border-color: lighten(@bgcolor, 10);
+@button-active-text-color: #ffedd5;
+@hover-color: darken(@bgcolor, 10);
+@link-color: #ffedd5;
+@placeholder-color: #ffedd5;
+@button-size: 30px;
+@padding: 5px;
+@border-radius: 3px;
+
+// theme rules
+.medium-toolbar-arrow-under:after {
+  border-color: @bgcolor transparent transparent transparent;
+  top: @button-size;
+}
+
+.medium-toolbar-arrow-over:before {
+  border-color: transparent transparent @bgcolor transparent;
+}
+
+.medium-editor-toolbar {
+  background-color: @bgcolor;
+  border: 1px solid @border-color;
+  border-radius: @border-radius;
+  z-index: 200000;
+  li {
+    button {
+      background-color: transparent;
+      border: none;
+      border-right: 1px solid @border-color;
+      box-sizing: border-box;
+      color: @link-color;
+      width: @button-size;
+      height: @button-size;
+      padding: @padding;
+      transition: background-color .2s ease-in, color .2s ease-in;
+      &:hover {
+        background-color: @hover-color;
+        color: @button-active-text-color;
+      }
+    }
+
+    .medium-editor-button-first {
+      border-bottom-left-radius: @border-radius;
+      border-top-left-radius: @border-radius;
+    }
+
+    .medium-editor-button-last {
+      border-bottom-right-radius: @border-radius;
+      border-right: none;
+      border-top-right-radius: @border-radius;
+    }
+
+    .medium-editor-button-active {
+      background-color: @hover-color;
+      color: @button-active-text-color;
+    }
+
+    .medium-editor-action-pre {
+      padding: @padding;
+    }
+  }
+}
+
+.medium-editor-toolbar-form {
+  background: @bgcolor;
+  border-radius: @border-radius;
+  color: #ffedd5;
+
+  .medium-editor-toolbar-input {
+    background: @bgcolor;
+    color: @link-color;
+    height: @button-size;
+
+    &::-webkit-input-placeholder {
+      color: @placeholder-color;
+      color: fade(@placeholder-color, .8);
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+      color: @placeholder-color;
+      color: fade(@placeholder-color, .8);
+    }
+    &::-moz-placeholder {  /* Firefox 19+ */
+      color: @placeholder-color;
+      color: fade(@placeholder-color, .8);
+    }
+    &:-ms-input-placeholder {
+      color: @placeholder-color;
+      color: fade(@placeholder-color, .8);
+    }
+  }
+
+  a {
+    color: @link-color;
+  }
+}
+
+.medium-editor-toolbar-anchor-preview {
+  background: @bgcolor;
+  border-radius: @border-radius;
+  color: @link-color;
+}
+
+.medium-editor-placeholder:after {
+  color: @border-color;
+}

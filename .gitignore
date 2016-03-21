@@ -1,0 +1,7 @@
+/.build
+#/resources
+/lib
+/node_modules
+*.log
+.DS_Store
+.idea
