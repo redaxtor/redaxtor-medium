@@ -2,7 +2,7 @@
   "name": "redaxtor-medium",
   "version": "0.0.1",
   "description": "MediumEditor component for Redaxtor library",
-  "main": "dist/redaxtor-medium.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:umd:example": "cross-env NODE_ENV=development & webpack example/src/index.js example/redaxtor-custom.js"

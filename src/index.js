@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import {Piece} from "redaxtor"
 import _MediumEditor from './HTMLEditor'
 
-export default class redaxtorMedium extends Component {
+export default class RedaxtorMedium extends Component {
     static propTypes = {
         tag: PropTypes.string,
         text: PropTypes.string,
