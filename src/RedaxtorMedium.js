@@ -31,10 +31,12 @@ export default class RedaxtorMedium extends Component {
         });
     };
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return false;
-        // return nextProps.data.html !== this.medium.element.innerHTML;
-    }
+    //TODO think about this
+    //shouldComponentUpdate(nextProps, nextState) {
+    //    debugger
+    //    return false;
+    //    // return nextProps.data.html !== this.medium.element.innerHTML;
+    //}
 
     componentWillUnmount() {
         this.medium.editor.removeListeners();
@@ -42,7 +44,7 @@ export default class RedaxtorMedium extends Component {
     };
 
     render() {
-        return <Piece dangerouslySetInnerHTML={{__html: this.props.node.innerHTML}}
+        return <Piece dangerouslySetInnerHTML={{__html: this.props.data.html}}
         highlight={this.props.highlight} edit={this.props.edit}/>
     }
 }
