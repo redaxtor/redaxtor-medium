@@ -6,12 +6,16 @@ import _MediumEditor from './HTMLEditor'
 export default class RedaxtorMedium extends Component {
     componentDidMount() {
         const dom = ReactDOM.findDOMNode(this);
+        this.state = {codeEditorActive: false};
         this.medium = new _MediumEditor(dom, {
             onUpdate: ()=> {
                 this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
             },
             onSave: ()=> {
                 this.props.savePiece(this.props.id)
+            },
+            onSetCurrentSourcePieceId: ()=> {
+                this.props.setCurrentSourcePieceId(this.props.id)
             }
         });
     };
@@ -29,7 +33,9 @@ export default class RedaxtorMedium extends Component {
     };
 
     render() {
-        return <Piece dangerouslySetInnerHTML={{__html: this.props.data.html}}
+        return (<Piece dangerouslySetInnerHTML={{__html: this.props.data.html}}
         highlight={this.props.highlight} edit={this.props.edit}/>
+
+        )
     }
 }

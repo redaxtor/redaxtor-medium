@@ -1,6 +1,7 @@
 import MediumEditor from 'medium-editor/dist/js/medium-editor.js';
 require('./extensions/undoButton');
 require('./extensions/saveButton');
+require('./extensions/sourceButton');
 
 
 MediumEditor.extensions.toolbar.prototype.positionStaticToolbar = function (container) {

@@ -17,7 +17,8 @@ export default class HTMLEditor {
                 //imageDragging: new MediumEditor.extensions.imageDrag(),
                 //imageResize: new MediumEditor.extensions.imageResize(),
                 'undo': new MediumEditor.extensions.undoButton(),
-                'save': new MediumEditor.extensions.saveButton()
+                'save': new MediumEditor.extensions.saveButton(),
+                'source': new MediumEditor.extensions.sourceButton()
             },
             'imageDragging': true
         }
@@ -29,11 +30,13 @@ export default class HTMLEditor {
         this.onFocusBinded = this.onFocus.bind(this);
         this.onBlurBinded = this.onBlur.bind(this);
         this.saveBinded = this.save.bind(this);
+        this.setCurrentSourcePieceIdBinded = this.setCurrentSourcePieceId.bind(this);
 
         this.editor.startHTML = this.element.innerHTML;
         this.editor.subscribe('focus', this.onFocusBinded);
         this.editor.subscribe('blur', this.onBlurBinded);
         this.editor.subscribe('save', this.saveBinded);
+        this.editor.subscribe('setCurrentSourcePieceId', this.setCurrentSourcePieceIdBinded);
     }
 
     needSave() {
@@ -45,6 +48,10 @@ export default class HTMLEditor {
         this.editor.startHTML = this.element.innerHTML;
         this.updatePiece();
         this.options.onSave && this.options.onSave();
+    }
+
+    setCurrentSourcePieceId() {
+        this.options.onSetCurrentSourcePieceId && this.options.onSetCurrentSourcePieceId();
     }
 
     onFocus() {
@@ -61,6 +68,7 @@ export default class HTMLEditor {
         this.editor.unsubscribe('blur', this.onBlurBinded);
         this.editor.getExtensionByName('undo').destroy();
         this.editor.getExtensionByName('save').destroy();
+        this.editor.getExtensionByName('source').destroy();
     }
 
     updatePiece() {
