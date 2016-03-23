@@ -4,8 +4,7 @@
     "react"
   ],
   "plugins": [
-    "babel-plugin-transform-object-rest-spread",
-    "babel-plugin-transform-class-properties"
+    "babel-plugin-transform-object-rest-spread"
   ],
   "env": {
     "commonjs": {

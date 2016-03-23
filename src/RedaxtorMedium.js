@@ -1,24 +1,9 @@
-import React, {Component, PropTypes,} from 'react'
+import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import {Piece} from "redaxtor"
 import _MediumEditor from './HTMLEditor'
 
 export default class RedaxtorMedium extends Component {
-    static propTypes = {
-        tag: PropTypes.string,
-        text: PropTypes.string,
-        options: PropTypes.any,
-        onChange: PropTypes.func,
-        flushEditorDOM: PropTypes.bool
-    };
-
-    static defaultProps = {
-        tag: 'div',
-        initialHTML: '',
-        onChange: () => {
-        }
-    };
-
     componentDidMount() {
         const dom = ReactDOM.findDOMNode(this);
         this.medium = new _MediumEditor(dom, {

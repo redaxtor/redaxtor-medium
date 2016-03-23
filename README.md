@@ -7,29 +7,19 @@ npm install
 npm run build:umd:example
 ```
 
-## The Gist (Redaxtor)
+## The Gist
 ```js
-import Redaxtor from 'Redaxtor'
+var Redaxtor = require('redaxtor');
+var RedaxtorMedium = require('redaxtor-medium');
+require('redaxtor-medium/lib/styles/redaxtor.css');
 
-//import your components for the Redaxtor
-import MediumEditor from "./components/MediumEditor/"
-let components = {
-    navigation: Navigation,
-    html: MediumEditor
+var components = {
+    html: RedaxtorMedium
 }
 
-//initialise Redaxtor with options
-//ANY option and suboption is optional and has default value
 let redaxtor = new Redaxtor({
     pieces: {
-        attribute: "data-piece",
-        idAttribute: "data-id",
-        fetchAttribute: "data-fetch",
-        saveAttribute: "data-save",
-        components: components,
-        initialState: {}
-    },
-    i18n: i18n,
-    state: {}
+        components: components
+    }
 });
 ```

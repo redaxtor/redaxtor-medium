@@ -36,27 +36,34 @@ export default class HTMLEditor {
         this.editor.subscribe('save', this.saveBinded);
     }
 
-    needSave = () => (this.element.innerHTML !== this.startHTML)
-    save = () => {
+    needSave() {
+        return this.element.innerHTML !== this.startHTML
+    }
+
+    save() {
         if (!this.needSave()) return;
         this.editor.startHTML = this.element.innerHTML;
         this.updatePiece();
         this.options.onSave && this.options.onSave();
     }
-    onFocus = () => {
+
+    onFocus() {
         this.options.onFocus && this.options.onFocus();
     }
-    onBlur = () => {
+
+    onBlur() {
         this.options.onUnfocus && this.options.onUnfocus();
         this.updatePiece();
     }
-    removeListeners = () => {
+
+    removeListeners() {
         this.editor.unsubscribe('focus', this.onFocusBinded);
         this.editor.unsubscribe('blur', this.onBlurBinded);
         this.editor.getExtensionByName('undo').destroy();
         this.editor.getExtensionByName('save').destroy();
     }
-    updatePiece = () => {
+
+    updatePiece() {
         this.needSave() && this.options.onUpdate && this.options.onUpdate();
     }
 }
