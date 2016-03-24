@@ -1,6 +1,6 @@
 {
   "name": "redaxtor-medium",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "MediumEditor component for Redaxtor library",
   "main": "lib/index.js",
   "files": [
