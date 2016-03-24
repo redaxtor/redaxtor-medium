@@ -1,6 +1,5 @@
 "use strict";
 import MediumEditor from './mediumEditor';
-require('!style!css!medium-editor/dist/css/medium-editor.css');
 
 export default class HTMLEditor {
     constructor(node, options) {
