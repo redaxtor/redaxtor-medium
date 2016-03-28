@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import {Piece} from "redaxtor"
 import _MediumEditor from './HTMLEditor'
 
 export default class RedaxtorMedium extends Component {
@@ -33,9 +32,9 @@ export default class RedaxtorMedium extends Component {
     };
 
     render() {
-        return (<Piece dangerouslySetInnerHTML={{__html: this.props.data.html}}
-        highlight={this.props.highlight} edit={this.props.edit}/>
-
-        )
+        return React.createElement(this.props.wrapper, {
+            style: this.props.style,
+            dangerouslySetInnerHTML: {__html: this.props.data.html}
+        })
     }
 }
