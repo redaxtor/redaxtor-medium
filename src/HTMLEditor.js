@@ -6,8 +6,9 @@ export default class HTMLEditor {
         this.options = {};
         var defaults = {
             buttonLabels: 'fontawesome',
+            autoLink: true,
             toolbar: {
-                buttons: ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'quote', 'pre', 'orderedlist', 'unorderedlist', 'indent', 'outdent', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'removeFormat', 'image', 'source', 'undo', 'save'],
+                buttons: ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'quote', 'pre', 'orderedlist', 'unorderedlist', 'indent', 'outdent', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'removeFormat', 'anchor', 'source', 'undo', 'save'],
                 static: true,
                 updateOnEmptySelection: true,
                 sticky: true
