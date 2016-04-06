@@ -3,9 +3,16 @@ import ReactDOM from 'react-dom'
 import _MediumEditor from './HTMLEditor'
 
 export default class RedaxtorMedium extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {codeEditorActive: false, firstRun: true};
+    }
     componentDidMount() {
+
+    };
+    componentInit() {
         const dom = ReactDOM.findDOMNode(this);
-        this.state = {codeEditorActive: false};
+
         this.medium = new _MediumEditor(dom, {
             onUpdate: ()=> {
                 this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
@@ -17,8 +24,8 @@ export default class RedaxtorMedium extends Component {
                 this.props.setCurrentSourcePieceId(this.props.id)
             }
         });
-    };
-
+        this.setState({firstRun: false})
+    }
     //TODO think about this
     //shouldComponentUpdate(nextProps, nextState) {
     //    debugger
@@ -32,9 +39,21 @@ export default class RedaxtorMedium extends Component {
     };
 
     render() {
-        return React.createElement(this.props.wrapper, {
-            style: this.props.style,
-            dangerouslySetInnerHTML: {__html: this.props.data.html}
-        })
+        var settings;
+        if (this.state.firstRun){
+            settings = {
+                style: this.props.style,
+                dangerouslySetInnerHTML: {__html: this.props.data.html},
+                onFocus: this.componentInit.bind(this),
+                contentEditable: true
+            }
+        } else {
+            settings = {
+                style: this.props.style,
+                dangerouslySetInnerHTML: {__html: this.props.data.html},
+                contentEditable: true
+            }
+        }
+        return React.createElement(this.props.wrapper, settings)
     }
 }

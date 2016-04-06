@@ -30,7 +30,8 @@ export default class HTMLEditor {
         this.onBlurBinded = this.onBlur.bind(this);
         this.saveBinded = this.save.bind(this);
         this.setCurrentSourcePieceIdBinded = this.setCurrentSourcePieceId.bind(this);
-
+        this.editor.getExtensionByName('toolbar').showToolbar();
+        this.editor.getExtensionByName('toolbar').positionStaticToolbar(node);
         this.editor.startHTML = this.element.innerHTML;
         this.editor.subscribe('focus', this.onFocusBinded);
         this.editor.subscribe('blur', this.onBlurBinded);
