@@ -35,8 +35,8 @@
     "webpack": "^1.12.14"
   },
   "dependencies": {
+    "medium-editor": "^5.14.4",
     "react": "^15.0.0-rc || ^15.0.0",
-    "react-dom": "^15.0.0-rc || ^15.0.0",
-    "medium-editor": "^5.14.4"
+    "react-dom": "^15.0.0-rc || ^15.0.0"
   }
 }
