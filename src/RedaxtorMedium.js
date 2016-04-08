@@ -33,8 +33,8 @@ export default class RedaxtorMedium extends Component {
         if (this.img) {
             this.props.saveImageData({url: this.img.src, alt: this.img.alt || ""})
         }
-        //this.medium.editor.saveSelection();
-        this.saveSelection()
+        this.medium.editor.saveSelection();
+        //this.saveSelection()
         this.props.setCancelCallback(this.cancelCallback.bind(this));
         this.props.setSaveCallback(this.saveCallback.bind(this));
         this.props.toggleImagePopup();
