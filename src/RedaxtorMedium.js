@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import _MediumEditor from './HTMLEditor'
-import rangy from 'rangy'
 
 export default class RedaxtorMedium extends Component {
     constructor(props) {
@@ -30,6 +29,7 @@ export default class RedaxtorMedium extends Component {
     }
 
     onToggleImagePopup() {
+        this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
         if (this.img) {
             this.props.saveImageData({url: this.img.src, alt: this.img.alt || ""})
         }
