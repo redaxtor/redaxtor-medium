@@ -21,6 +21,12 @@ export default class HTMLEditor {
                 'source': new MediumEditor.extensions.sourceButton(),
                 'imageInsert': new MediumEditor.extensions.imageInsertButton()
             },
+            anchor: {
+                linkValidation: true,
+                placeholderText: 'Paste or type a link',
+                targetCheckbox: true,
+                targetCheckboxText: 'Open in new window'
+            },
             'imageDragging': true
         }
 
