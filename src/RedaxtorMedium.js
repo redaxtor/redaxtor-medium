@@ -43,15 +43,15 @@ export default class RedaxtorMedium extends Component {
         this.medium.editor.restoreSelection()
         //this.restoreSelection()
         if (this.img) {
-            this.img.src = this.props.imageInsert.url;
-            this.img.alt = this.props.imageInsert.alt;
-            this.img.width = this.props.imageInsert.width;
-            this.img.height = this.props.imageInsert.height;
+            this.img.src = this.props.images.url;
+            this.img.alt = this.props.images.alt;
+            this.img.width = this.props.images.width;
+            this.img.height = this.props.images.height;
             this.img = null;
         } else {
-            this.medium.editor.pasteHTML('<img src="' + (this.props.imageInsert.url || "") + '" alt="' +
-                (this.props.imageInsert.alt || "") + '" width="' + (this.props.imageInsert.width || "") +
-                'px" height="' + (this.props.imageInsert.height || "") + 'px">')
+            this.medium.editor.pasteHTML('<img src="' + (this.props.images.url || "") + '" alt="' +
+                (this.props.images.alt || "") + '" width="' + (this.props.images.width || "") +
+                'px" height="' + (this.props.images.height || "") + 'px">')
         }
         this.props.resetImageData()
         this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
