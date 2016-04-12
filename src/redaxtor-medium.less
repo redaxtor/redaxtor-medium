@@ -1,14 +1,14 @@
 @import url('http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css');
 // theme settings
-@bgcolor: #2f1e07;
+@bgcolor: #efefef;
 @border-color: lighten(@bgcolor, 10);
-@button-active-text-color: #ffedd5;
+@button-active-text-color: #111111;
 @hover-color: darken(@bgcolor, 10);
-@link-color: #ffedd5;
-@placeholder-color: #ffedd5;
+@link-color: #4a4a4a;
+@placeholder-color: #111111;
 @button-size: 30px;
 @padding: 5px;
-@border-radius: 3px;
+@border-radius: 2px;
 
 // theme rules
 .medium-toolbar-arrow-under:after {
@@ -21,15 +21,20 @@
 }
 
 .medium-editor-toolbar {
-  background-color: @bgcolor;
-  border: 1px solid @border-color;
+
   border-radius: @border-radius;
   z-index: 200000;
+  text-align: center;
+  max-width: 610px;
+
   li {
+    background-color: @bgcolor;
+    display: inline-block;
+    vertical-align: top;
+
     button {
       background-color: transparent;
       border: none;
-      border-right: 1px solid @border-color;
       box-sizing: border-box;
       color: @link-color;
       width: @button-size;

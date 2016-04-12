@@ -8,7 +8,7 @@ export default class HTMLEditor {
             buttonLabels: 'fontawesome',
             autoLink: true,
             toolbar: {
-                buttons: ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'quote', 'pre', 'orderedlist', 'unorderedlist', 'indent', 'outdent', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'removeFormat', 'anchor', 'source','imageInsert', 'undo', 'save'],
+                buttons: ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'quote', 'pre', 'orderedlist', 'unorderedlist', 'indent', 'outdent', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'h1', 'h2', 'h3', 'h4', 'removeFormat', 'anchor', 'source','imageInsert', 'undo', 'save'],
                 static: true,
                 updateOnEmptySelection: true,
                 sticky: true
