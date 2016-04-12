@@ -14,7 +14,7 @@ export default class HTMLEditor {
                 sticky: true
             },
             extensions: {
-                //imageDragging: new MediumEditor.extensions.imageDrag(),
+                imageDragging: new MediumEditor.extensions.imageDrag(),
                 //imageResize: new MediumEditor.extensions.imageResize(),
                 'undo': new MediumEditor.extensions.undoButton(),
                 'save': new MediumEditor.extensions.saveButton(),
