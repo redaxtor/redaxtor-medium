@@ -112,14 +112,14 @@ export default class RedaxtorMedium extends Component {
         var settings;
         if (this.state.firstRun) {
             settings = {
-                style: this.props.style,
+                className: this.props.className,
                 dangerouslySetInnerHTML: {__html: this.props.data.html},
                 onFocus: this.componentInit.bind(this),
                 contentEditable: true
             }
         } else {
             settings = {
-                style: this.props.style,
+                className: this.props.className,
                 dangerouslySetInnerHTML: {__html: this.props.data.html},
                 contentEditable: true,
                 onClick: this.onClick.bind(this)
