@@ -66,7 +66,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(range), 'a')) {
                 var node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(range), 'a');
                 opts = {
-                    url: node.attribute.href.value,
+                    url: node.getAttribute('href'),
                     target: node.target || ""
                 }
                 //return this.execAction('unlink');
