@@ -3,6 +3,8 @@ require('./extensions/undoButton');
 require('./extensions/saveButton');
 require('./extensions/sourceButton');
 require('./extensions/imageInsertButton');
+require('./extensions/link');
+require('./extensions/imageDrag');
 
 
 MediumEditor.extensions.toolbar.prototype.positionStaticToolbar = function (container) {

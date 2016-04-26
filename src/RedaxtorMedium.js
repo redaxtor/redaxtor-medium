@@ -29,9 +29,8 @@ export default class RedaxtorMedium extends Component {
     }
 
     onToggleImagePopup() {
-        this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
         if (this.img) {
-            this.props.saveImageData({url: this.img.src, alt: this.img.alt || ""})
+            this.props.saveImageData({url: this.img.src, alt: this.img.alt || "", width: +this.img.width, height: +this.img.height})
         }
         this.medium.editor.saveSelection();
         //this.saveSelection()
@@ -44,11 +43,15 @@ export default class RedaxtorMedium extends Component {
         this.medium.editor.restoreSelection()
         //this.restoreSelection()
         if (this.img) {
-            this.img.src = this.props.imageInsert.url;
-            this.img.alt = this.props.imageInsert.alt;
+            this.img.src = this.props.images.url;
+            this.img.alt = this.props.images.alt;
+            this.img.width = this.props.images.width;
+            this.img.height = this.props.images.height;
             this.img = null;
         } else {
-            this.medium.editor.pasteHTML('<img src="' + (this.props.imageInsert.url || "") + '" alt="' + (this.props.imageInsert.alt || "") + '">')
+            this.medium.editor.pasteHTML('<img src="' + (this.props.images.url || "") + '" alt="' +
+                (this.props.images.alt || "") + '" width="' + (this.props.images.width || "") +
+                'px" height="' + (this.props.images.height || "") + 'px">')
         }
         this.props.resetImageData()
         this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
@@ -87,20 +90,13 @@ export default class RedaxtorMedium extends Component {
                 this.props.setCurrentSourcePieceId(this.props.id)
             },
             onToggleImagePopup: this.onToggleImagePopup.bind(this)
-            //onToggleImagePopup: this.props.toggleImagePopup,
-            //setCancelCallback: this.props.setCancelCallback,
-            //setSaveCallback: this.props.setSaveCallback,
-            //saveCallback: this.saveCallback.bind(this),
-            //cancelCallback: this.cancelCallback.bind(this)
-
         });
         this.setState({firstRun: false})
     }
 
-    //TODO think about this
     shouldComponentUpdate(nextProps, nextState) {
         if (!this.medium) return false;
-        return (nextProps.data.html !== this.medium.element.innerHTML) || (this.state.firstRun!==nextState.firstRun);
+        return (nextProps.data.html !== this.medium.element.innerHTML) || (this.state.firstRun !== nextState.firstRun) || (nextProps.edit !== this.props.edit);
     }
 
     componentWillUnmount() {
@@ -122,7 +118,8 @@ export default class RedaxtorMedium extends Component {
                 className: this.props.className,
                 dangerouslySetInnerHTML: {__html: this.props.data.html},
                 contentEditable: true,
-                onClick: this.onClick.bind(this)
+                onClick: this.onClick.bind(this),
+                onBlur: ()=>this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
             }
         }
         return React.createElement(this.props.wrapper, settings)

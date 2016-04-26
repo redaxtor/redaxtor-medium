@@ -14,12 +14,19 @@ export default class HTMLEditor {
                 sticky: true
             },
             extensions: {
-                //imageDragging: new MediumEditor.extensions.imageDrag(),
+                imageDragging: new MediumEditor.extensions.imageDrag(),
                 //imageResize: new MediumEditor.extensions.imageResize(),
                 'undo': new MediumEditor.extensions.undoButton(),
                 'save': new MediumEditor.extensions.saveButton(),
                 'source': new MediumEditor.extensions.sourceButton(),
-                'imageInsert': new MediumEditor.extensions.imageInsertButton()
+                'imageInsert': new MediumEditor.extensions.imageInsertButton(),
+                'link': new MediumEditor.extensions.link()
+            },
+            anchor: {
+                linkValidation: true,
+                placeholderText: 'Paste or type a link',
+                targetCheckbox: true,
+                targetCheckboxText: 'Open in new window'
             },
             'imageDragging': true
         }
