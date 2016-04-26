@@ -1,37 +1,65 @@
 "use strict";
 import MediumEditor from './mediumEditor';
 
+const defaults = {
+    buttonLabels: 'fontawesome',
+    autoLink: true,
+    toolbar: {
+        buttons: [
+            'save',
+            'undo',
+            'source',
+            'removeFormat',
+            'anchor',
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'subscript',
+            'superscript',
+            'quote',
+            'pre',
+            'orderedlist',
+            'unorderedlist',
+            'indent',
+            'outdent',
+            'justifyLeft',
+            'justifyCenter',
+            'justifyRight',
+            'justifyFull',
+            'h1',
+            'h2',
+            'h3',
+            'h4'
+        ],
+        static: true,
+        updateOnEmptySelection: true,
+        sticky: true
+    },
+    extensions: {
+        imageDragging: new MediumEditor.extensions.imageDrag(),
+        //imageResize: new MediumEditor.extensions.imageResize(),
+        'undo': new MediumEditor.extensions.undoButton(),
+        'save': new MediumEditor.extensions.saveButton(),
+        'source': new MediumEditor.extensions.sourceButton(),
+        'imageInsert': new MediumEditor.extensions.imageInsertButton(),
+        'link': new MediumEditor.extensions.link()
+    },
+    anchor: {
+        linkValidation: true,
+        placeholderText: 'Paste or type a link',
+        targetCheckbox: true,
+        targetCheckboxText: 'Open in new window'
+    },
+    'imageDragging': true
+}
+
 export default class HTMLEditor {
     constructor(node, options) {
-        this.options = {};
-        var defaults = {
-            buttonLabels: 'fontawesome',
-            autoLink: true,
-            toolbar: {
-                buttons: ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', 'quote', 'pre', 'orderedlist', 'unorderedlist', 'indent', 'outdent', 'justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull', 'h1', 'h2', 'h3', 'h4', 'removeFormat', 'anchor', 'source','imageInsert', 'undo', 'save'],
-                static: true,
-                updateOnEmptySelection: true,
-                sticky: true
-            },
-            extensions: {
-                imageDragging: new MediumEditor.extensions.imageDrag(),
-                //imageResize: new MediumEditor.extensions.imageResize(),
-                'undo': new MediumEditor.extensions.undoButton(),
-                'save': new MediumEditor.extensions.saveButton(),
-                'source': new MediumEditor.extensions.sourceButton(),
-                'imageInsert': new MediumEditor.extensions.imageInsertButton(),
-                'link': new MediumEditor.extensions.link()
-            },
-            anchor: {
-                linkValidation: true,
-                placeholderText: 'Paste or type a link',
-                targetCheckbox: true,
-                targetCheckboxText: 'Open in new window'
-            },
-            'imageDragging': true
+        this.options = {
+            ...defaults,
+            ...options
         }
-
-        this.options = {...defaults, ...options}
 
         this.editor = new MediumEditor(node, this.options);
         this.element = this.editor.elements[0];
@@ -54,7 +82,8 @@ export default class HTMLEditor {
     }
 
     save() {
-        if (!this.needSave()) return;
+        if (!this.needSave())
+            return;
         this.editor.startHTML = this.element.innerHTML;
         this.updatePiece();
         this.options.onSave && this.options.onSave();
