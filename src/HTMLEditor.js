@@ -10,7 +10,7 @@ const defaults = {
             'undo',
             'source',
             'removeFormat',
-            'anchor',
+            'link',
             'bold',
             'italic',
             'underline',
