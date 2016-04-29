@@ -5,6 +5,7 @@ require('./extensions/sourceButton');
 require('./extensions/imageInsertButton');
 require('./extensions/link');
 require('./extensions/imageDrag');
+require('./extensions/ToolbarSeparator');
 
 
 MediumEditor.extensions.toolbar.prototype.positionStaticToolbar = function (container) {

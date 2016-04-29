@@ -10,7 +10,9 @@ const defaults = {
             'undo',
             'source',
             'removeFormat',
-            'link',
+            'anchor',
+            'imageInsert',
+            'separator',
             'bold',
             'italic',
             'underline',
@@ -43,7 +45,8 @@ const defaults = {
         'save': new MediumEditor.extensions.saveButton(),
         'source': new MediumEditor.extensions.sourceButton(),
         'imageInsert': new MediumEditor.extensions.imageInsertButton(),
-        'link': new MediumEditor.extensions.link()
+        'link': new MediumEditor.extensions.link(),
+        'separator': new MediumEditor.extensions.toolbarSeparator()
     },
     anchor: {
         linkValidation: true,
@@ -75,6 +78,11 @@ export default class HTMLEditor {
         this.editor.subscribe('save', this.saveBinded);
         this.editor.subscribe('setCurrentSourcePieceId', this.setCurrentSourcePieceIdBinded);
         this.editor.subscribe('onToggleImagePopup', this.options.onToggleImagePopup);
+        //Add separator class on li node
+        var toolbarSeparators = this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('separator');
+        for (var index in toolbarSeparators){
+            toolbarSeparators[index].parentNode && toolbarSeparators[index].parentNode.classList.add('separator')
+        }
     }
 
     needSave() {

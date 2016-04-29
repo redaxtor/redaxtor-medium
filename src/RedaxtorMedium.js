@@ -6,6 +6,8 @@ export default class RedaxtorMedium extends Component {
     constructor(props) {
         super(props)
         this.state = {codeEditorActive: false, firstRun: true};
+        this.props.images && this.props.images.galleryGetUrl && this.props.images.imageManager.init({galleryGetUrl: this.props.images.galleryGetUrl})
+        this.props.images && this.props.images.imageUploadUrl && this.props.images.imageManager.init({imageUploadUrl: this.props.images.imageUploadUrl})
     }
 
     componentDidMount() {
@@ -13,54 +15,50 @@ export default class RedaxtorMedium extends Component {
     };
 
     saveSelection() {
-
         this.savedRange = window.getSelection().getRangeAt(0);
-
     }
 
     restoreSelection() {
         if (this.savedRange !== null) {
             var s = window.getSelection();
-
             s.removeAllRanges();
             s.addRange(this.savedRange);
         }
-
     }
 
     onToggleImagePopup() {
         if (this.img) {
-            this.props.saveImageData({url: this.img.src, alt: this.img.alt || "", width: +this.img.width, height: +this.img.height})
+            this.props.images.imageManager.setImageData({url: this.img.src, alt: this.img.alt || "", width: +this.img.width, height: +this.img.height})
         }
         this.medium.editor.saveSelection();
         //this.saveSelection()
-        this.props.setCancelCallback(this.cancelCallback.bind(this));
-        this.props.setSaveCallback(this.saveCallback.bind(this));
-        this.props.toggleImagePopup();
+        this.props.images.imageManager.setImageData({
+            onClose: this.cancelCallback.bind(this),
+            onSave: this.saveCallback.bind(this)
+        })
+        this.props.images.imageManager.showPopup();
     }
 
-    saveCallback() {
+    saveCallback(data) {
         this.medium.editor.restoreSelection()
         //this.restoreSelection()
         if (this.img) {
-            this.img.src = this.props.images.url;
-            this.img.alt = this.props.images.alt;
-            this.img.width = this.props.images.width;
-            this.img.height = this.props.images.height;
+            this.img.src = data.url;
+            this.img.alt = data.alt;
+            this.img.width = data.width;
+            this.img.height = data.height;
             this.img = null;
         } else {
-            this.medium.editor.pasteHTML('<img src="' + (this.props.images.url || "") + '" alt="' +
-                (this.props.images.alt || "") + '" width="' + (this.props.images.width || "") +
-                'px" height="' + (this.props.images.height || "") + 'px">')
+            this.medium.editor.pasteHTML('<img src="' + (data.url || "") + '" alt="' +
+                (data.alt || "") + '" width="' + (data.width || "") +
+                'px" height="' + (data.height || "") + 'px">')
         }
-        this.props.resetImageData()
         this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
     }
 
     cancelCallback() {
         this.medium.editor.restoreSelection()
         //this.restoreSelection();
-        this.props.resetImageData()
     }
 
     onClick(e) {
