@@ -93,18 +93,27 @@ export default class RedaxtorMedium extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!this.medium) return false;
-        return (nextProps.data.html !== this.medium.element.innerHTML) || (this.state.firstRun !== nextState.firstRun) || (nextProps.edit !== this.props.edit);
+        !nextProps.edit && this.die()
+        return (this.medium && (nextProps.data.html !== this.medium.element.innerHTML)) || (this.state.firstRun !== nextState.firstRun) || (nextProps.edit !== this.props.edit);
     }
 
-    componentWillUnmount() {
-        this.medium.editor.removeListeners();
-        this.medium.editor.destroy();
+    die() {
+        if (this.medium) {
+            this.medium.editor.getExtensionByName('toolbar').destroy();
+            this.medium.editor.destroy();
+        }
+        this.state.firstRun = true;
     };
 
     render() {
         var settings;
-        if (this.state.firstRun) {
+        if (!this.props.edit){
+            settings = {
+                className: this.props.className,
+                dangerouslySetInnerHTML: {__html: this.props.data.html}
+            }
+        }
+        else if (this.state.firstRun) {
             settings = {
                 className: this.props.className,
                 dangerouslySetInnerHTML: {__html: this.props.data.html},
