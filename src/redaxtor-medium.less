@@ -78,7 +78,7 @@
   border-radius: @border-radius;
   color: #ffedd5;
 
-  .medium-editor-toolbar-unlink{
+  .medium-editor-toolbar-unlink {
     display: none;
     font-size: 20px;
   }
@@ -96,7 +96,7 @@
       color: @placeholder-color;
       color: fade(@placeholder-color, .8);
     }
-    &::-moz-placeholder {  /* Firefox 19+ */
+    &::-moz-placeholder { /* Firefox 19+ */
       color: @placeholder-color;
       color: fade(@placeholder-color, .8);
     }
@@ -119,4 +119,25 @@
 
 .medium-editor-placeholder:after {
   color: @border-color;
+}
+
+.vanilla-color-picker {
+  display: inline-block;
+  position: absolute;
+  width: 204px;
+  padding: 5px;
+  background-color: #efefef;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.3)
+}
+
+.vanilla-color-picker-single-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: 1px 2px 0;
+  border-radius: 2px;
+}
+
+.no-color {
+  background: linear-gradient(45deg, #ffffff 0%, #ffffff 47%, #ff0f0f 51%, #ff0f0f 51%, #ff0f0f 51%, #ffffff 55%, #ffffff 100%);
 }

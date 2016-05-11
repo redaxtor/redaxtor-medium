@@ -32,7 +32,8 @@ const defaults = {
             'h1',
             'h2',
             'h3',
-            'h4'
+            'h4',
+            'colorPicker'
         ],
         static: true,
         updateOnEmptySelection: true,
@@ -46,7 +47,8 @@ const defaults = {
         'source': new MediumEditor.extensions.sourceButton(),
         'imageInsert': new MediumEditor.extensions.imageInsertButton(),
         'link': new MediumEditor.extensions.link(),
-        'separator': new MediumEditor.extensions.toolbarSeparator()
+        'separator': new MediumEditor.extensions.toolbarSeparator(),
+        'colorPicker': new MediumEditor.extensions.colorPicker()
     },
     anchor: {
         linkValidation: true,
