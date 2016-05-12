@@ -45,13 +45,13 @@ export default class RedaxtorMedium extends Component {
         if (this.img) {
             this.img.src = data.url;
             this.img.alt = data.alt;
-            this.img.width = data.width;
-            this.img.height = data.height;
+            this.img.style.width = data.width+"px";
+            this.img.style.height = data.height+"px";
             this.img = null;
         } else {
             this.medium.editor.pasteHTML('<img src="' + (data.url || "") + '" alt="' +
-                (data.alt || "") + '" width="' + (data.width || "") +
-                'px" height="' + (data.height || "") + 'px">')
+                (data.alt || "") + 'style="' + 'width: "' + (data.width || "") +
+                'px; height: "' + (data.height || "") + 'px">')
         }
         this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
     }

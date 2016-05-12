@@ -1,66 +1,68 @@
 "use strict";
 import MediumEditor from './mediumEditor';
 
-const defaults = {
-    buttonLabels: 'fontawesome',
-    autoLink: true,
-    toolbar: {
-        buttons: [
-            'save',
-            'undo',
-            'source',
-            'removeFormat',
-            'anchor',
-            'imageInsert',
-            'separator',
-            'bold',
-            'italic',
-            'underline',
-            'strikethrough',
-            'subscript',
-            'superscript',
-            'quote',
-            'pre',
-            'orderedlist',
-            'unorderedlist',
-            'indent',
-            'outdent',
-            'justifyLeft',
-            'justifyCenter',
-            'justifyRight',
-            'justifyFull',
-            'h1',
-            'h2',
-            'h3',
-            'h4',
-            'colorPicker'
-        ],
-        static: true,
-        updateOnEmptySelection: true,
-        sticky: true
-    },
-    extensions: {
-        imageDragging: new MediumEditor.extensions.imageDrag(),
-        //imageResize: new MediumEditor.extensions.imageResize(),
-        'undo': new MediumEditor.extensions.undoButton(),
-        'save': new MediumEditor.extensions.saveButton(),
-        'source': new MediumEditor.extensions.sourceButton(),
-        'imageInsert': new MediumEditor.extensions.imageInsertButton(),
-        'link': new MediumEditor.extensions.link(),
-        'separator': new MediumEditor.extensions.toolbarSeparator(),
-        'colorPicker': new MediumEditor.extensions.colorPicker()
-    },
-    anchor: {
-        linkValidation: true,
-        placeholderText: 'Paste or type a link',
-        targetCheckbox: true,
-        targetCheckboxText: 'Open in new window'
-    },
-    'imageDragging': true
-}
+
 
 export default class HTMLEditor {
     constructor(node, options) {
+        var defaults = {
+            buttonLabels: 'fontawesome',
+            autoLink: true,
+            toolbar: {
+                buttons: [
+                    'save',
+                    'undo',
+                    'source',
+                    'removeFormat',
+                    'link',
+                    'imageInsert',
+                    'separator',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'strikethrough',
+                    'subscript',
+                    'superscript',
+                    'quote',
+                    'pre',
+                    'orderedlist',
+                    'unorderedlist',
+                    'indent',
+                    'outdent',
+                    'justifyLeft',
+                    'justifyCenter',
+                    'justifyRight',
+                    'justifyFull',
+                    'h1',
+                    'h2',
+                    'h3',
+                    'h4',
+                    'colorPicker'
+                ],
+                static: true,
+                updateOnEmptySelection: true,
+                sticky: true
+            },
+            extensions: {
+                imageDragging: new MediumEditor.extensions.imageDrag(),
+                //imageResize: new MediumEditor.extensions.imageResize(),
+                'undo': new MediumEditor.extensions.undoButton(),
+                'save': new MediumEditor.extensions.saveButton(),
+                'source': new MediumEditor.extensions.sourceButton(),
+                'imageInsert': new MediumEditor.extensions.imageInsertButton(),
+                'link': new MediumEditor.extensions.link(),
+                'separator': new MediumEditor.extensions.toolbarSeparator(),
+                'colorPicker': new MediumEditor.extensions.colorPicker()
+            },
+            anchor: {
+                linkValidation: true,
+                placeholderText: 'Paste or type a link',
+                targetCheckbox: true,
+                targetCheckboxText: 'Open in new window'
+            },
+            'imageDragging': true
+        }
+
         this.options = {
             ...defaults,
             ...options
