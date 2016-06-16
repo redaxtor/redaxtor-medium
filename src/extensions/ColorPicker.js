@@ -34,11 +34,12 @@ import vanillaColorPicker from '../helpers/VanillaColorPicker';
                 "#e74c3c",
                 "#bdc3c7",
                 "#95a5a6",
+                "#666",
+                "#212121",
                 "#f39c12",
                 "#d2d064",
                 "#4fbbf7",
                 "#ffffff"
-
             ];
 
             var picker = vanillaColorPicker(this.document.querySelector(".medium-editor-toolbar-active .editor-color-picker"));

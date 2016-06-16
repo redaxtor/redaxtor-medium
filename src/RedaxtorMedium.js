@@ -126,7 +126,7 @@ export default class RedaxtorMedium extends Component {
                 dangerouslySetInnerHTML: {__html: this.props.data.html},
                 contentEditable: true,
                 onClick: this.onClick.bind(this),
-                onBlur: ()=>this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
+                onBlur: ()=>{this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}}); this.props.savePiece(this.props.id)}
             }
         }
         return React.createElement(this.props.wrapper, settings)
