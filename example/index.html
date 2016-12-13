@@ -254,6 +254,31 @@
         </div>
     </div>
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
-    <script src="./redaxtor-custom.js"></script>
+    <script lang="text/javascript" src="../dist/redaxtor.min.js"></script>
+    <script lang="text/javascript" src="../dist/redaxtor-medium.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../dist/medium-editor.min.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../dist/redaxtor-medium.min.css" charset="utf-8">
+
+    <script lang="text/javascript">
+        var components = {
+            html: window['Redaxtor-Medium']
+        }
+
+        //initialise Redaxtor with options
+        //ANY option and suboption is optional and has default value
+        var redaxtor = new Redaxtor({
+            pieces: {
+                attribute: "data-piece",
+                idAttribute: "data-id",
+                fetchAttribute: "data-fetch",
+                saveAttribute: "data-save",
+                getURL: "api/pieces/get",
+                saveURL: "api/pieces/save",
+                components: components,
+                initialState: {}
+            },
+            state: {}
+        });
+    </script>
 </body>
 </html>
