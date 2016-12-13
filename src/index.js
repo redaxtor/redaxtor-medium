@@ -1,3 +1,3 @@
-import RedaxtorMedium from './RedaxtorMedium'
+import RedaxtorMedium from './RedaxtorMedium';
 
-module.exports = RedaxtorMedium
+module.exports = RedaxtorMedium;

@@ -1,8 +1,8 @@
 'use strict';
 
-var path = require('path')
-var webpack = require('webpack')
-var env = process.env.NODE_ENV
+var path = require('path');
+var webpack = require('webpack');
+var env = process.env.NODE_ENV;
 // var node_modules_dir = path.resolve(__dirname, 'node_modules');
 
 var config = {
@@ -18,32 +18,36 @@ var config = {
             'process.env.NODE_ENV': JSON.stringify(env)
         })
     ],
+    devtool: "source-map",
     module: {
         loaders: [
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js)$/,
+                exclude: /(node_modules)/,
                 loader: 'babel',
                 query: {
                     presets: ['es2015', 'react'],
                     plugins: [
-                        'babel-plugin-transform-object-rest-spread',
-                        'babel-plugin-transform-class-properties'//used in material-ui
+                        'babel-plugin-transform-object-rest-spread'
                     ]
                 }
             },
             {
                 test: /\.less$/,
-                loader: "style!css?-url!less"//don't use loaders for urls
+                loaders: [
+                    'style-loader',
+                    'css-loader?-url&sourceMap',
+                    'postcss-loader',
+                    'less?sourceMap'
+                ]
             }
         ],
         noParse: []
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js', '.jsx', '.less']
     }
-    // devtool: "eval-source-map"
-    // devtool: "eval-cheap-source-map"
-}
+};
 
 if (env === 'production') {
     config.plugins.push(
@@ -59,4 +63,4 @@ if (env === 'production') {
     )
 }
 
-module.exports = config
+module.exports = config;
