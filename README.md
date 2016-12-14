@@ -37,7 +37,7 @@ let redaxtor = new Redaxtor({
 
 ```js
 var components = {
-    html: RedaxtorMedium
+    html: window['Redaxtor-Medium']
 }
 
 var redaxtor = new Redaxtor({

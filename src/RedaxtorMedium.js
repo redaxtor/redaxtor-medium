@@ -1,13 +1,14 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import _MediumEditor from './HTMLEditor'
+import {imageManagerApi} from './imageManager/index';
 
 export default class RedaxtorMedium extends Component {
     constructor(props) {
         super(props)
         this.state = {codeEditorActive: false, firstRun: true};
-        this.props.images && this.props.images.galleryGetUrl && this.props.images.imageManager.init({galleryGetUrl: this.props.images.galleryGetUrl})
-        this.props.images && this.props.images.imageUploadUrl && this.props.images.imageManager.init({imageUploadUrl: this.props.images.imageUploadUrl})
+        this.props.images && this.props.images.galleryGetUrl && imageManagerApi.init({galleryGetUrl: this.props.images.galleryGetUrl})
+        this.props.images && this.props.images.imageUploadUrl && imageManagerApi.init({imageUploadUrl: this.props.images.imageUploadUrl})
     }
 
     componentDidMount() {
@@ -28,15 +29,15 @@ export default class RedaxtorMedium extends Component {
 
     onToggleImagePopup() {
         if (this.img) {
-            this.props.images.imageManager.setImageData({url: this.img.src, alt: this.img.alt || "", width: +this.img.width, height: +this.img.height})
+            imageManagerApi.setImageData({url: this.img.src, alt: this.img.alt || "", width: +this.img.width, height: +this.img.height})
         }
         this.medium.editor.saveSelection();
         //this.saveSelection()
-        this.props.images.imageManager.setImageData({
+        imageManagerApi.setImageData({
             onClose: this.cancelCallback.bind(this),
             onSave: this.saveCallback.bind(this)
         })
-        this.props.images.imageManager.showPopup();
+        imageManagerApi.showPopup();
     }
 
     saveCallback(data) {

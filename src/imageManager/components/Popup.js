@@ -1,0 +1,28 @@
+import React, {Component} from "react"
+import classNames from "classnames"
+
+export default class Popup extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {show: false}
+    }
+
+    componentDidMount() {
+        setTimeout(()=>this.setState({show: true}),0)
+    }
+
+    componentWillUnmount() {
+        this.setState({show: false})
+    }
+    render() {
+        var contentClasses = "modal-content " + (this.props.contentClass?this.props.contentClass:"");
+        return (
+            <div className={classNames({"modal-overlay": true, "show": this.state.show})}>
+                <div className={contentClasses}>
+                    {this.props.children}
+                </div>
+            </div>
+
+        )
+    }
+}
