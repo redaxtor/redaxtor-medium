@@ -1,4 +1,5 @@
 import MediumEditor from 'medium-editor/dist/js/medium-editor.js';
+
 require('./extensions/undoButton');
 require('./extensions/saveButton');
 require('./extensions/sourceButton');
@@ -23,21 +24,37 @@ MediumEditor.extensions.toolbar.prototype.positionStaticToolbar = function (cont
         toolbarHeight = toolbarElement.offsetHeight,
         toolbarWidth = toolbarElement.offsetWidth,
         halfOffsetWidth = toolbarWidth / 2,
+        scrollTopBottom = toolbarHeight + scrollTop,
+        stickyOffsetTop = this.options && this.options.stickyTopOffset || 5,
         targetLeft;
 
     if (this.sticky) {
-        // If it's beyond the height of the editor, position it at the bottom of the editor
-        if (scrollTop > (containerTop + container.offsetHeight - toolbarHeight - this.stickyTopOffset)) {
+        toolbarElement.classList.remove('medium-editor-on-top');
+        toolbarElement.classList.remove('medium-editor-on-bottom');
+        /**
+         * If editor can't be fit on top before container, and there IS place under element, push it there
+         */
+
+        if(scrollTopBottom>containerTop - stickyOffsetTop && containerTop + container.offsetHeight + toolbarHeight + stickyOffsetTop<scrollTop+window.innerHeight) {
+            toolbarElement.style.top = (containerTop + container.offsetHeight + stickyOffsetTop) + "px";
+            toolbarElement.classList.remove('medium-editor-sticky-toolbar');
+            toolbarElement.classList.add('medium-editor-on-bottom');
+        } else
+            // If it's beyond the height of the editor, position it at the bottom of the editor
+        if (scrollTop > (containerTop + container.offsetHeight - toolbarHeight - stickyOffsetTop)) {
             toolbarElement.style.top = (containerTop + container.offsetHeight - toolbarHeight) > 0 ? (containerTop + container.offsetHeight - toolbarHeight) : scrollTop + 'px';
             toolbarElement.classList.remove('medium-editor-sticky-toolbar');
+
+        } else
             // Stick the toolbar to the top of the window
-        } else if (scrollTop > (containerTop - toolbarHeight - this.stickyTopOffset)) {
+         if (scrollTop > (containerTop - toolbarHeight - stickyOffsetTop)) {
             toolbarElement.classList.add('medium-editor-sticky-toolbar');
-            toolbarElement.style.top = this.stickyTopOffset + 'px';
-            // Normal static toolbar position
+            toolbarElement.style.top = stickyOffsetTop + 'px';
+
         } else {
             toolbarElement.classList.remove('medium-editor-sticky-toolbar');
-            toolbarElement.style.top = containerTop - toolbarHeight + 'px';
+            toolbarElement.classList.add('medium-editor-on-top');
+            toolbarElement.style.top = containerTop - toolbarHeight  - stickyOffsetTop + 'px';
         }
     } else {
         toolbarElement.style.top = containerTop - toolbarHeight + 'px';

@@ -8,6 +8,7 @@ export default class HTMLEditor {
         var defaults = {
             buttonLabels: 'fontawesome',
             autoLink: true,
+            stickyTopOffset: 5,
             toolbar: {
                 buttons: [
                     'save',
@@ -23,6 +24,11 @@ export default class HTMLEditor {
                     'strikethrough',
                     'subscript',
                     'superscript',
+                    'colorPicker',
+                    'h1',
+                    'h2',
+                    'h3',
+                    'h4',
                     'quote',
                     'pre',
                     'orderedlist',
@@ -32,12 +38,7 @@ export default class HTMLEditor {
                     'justifyLeft',
                     'justifyCenter',
                     'justifyRight',
-                    'justifyFull',
-                    'h1',
-                    'h2',
-                    'h3',
-                    'h4',
-                    'colorPicker'
+                    'justifyFull'
                 ],
                 static: true,
                 updateOnEmptySelection: true,

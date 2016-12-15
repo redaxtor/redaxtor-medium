@@ -1,15 +1,16 @@
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css');
 
 // theme settings
-@bgcolor: #efefef;
+@bgcolor: #455a64;
 @border-color: lighten(@bgcolor, 10);
-@button-active-text-color: #111111;
 @hover-color: darken(@bgcolor, 10);
-@link-color: #4a4a4a;
-@placeholder-color: #111111;
+@link-color: #e8e8f0;
+@button-active-text-color: lighten(@link-color, 10);
+@placeholder-color: darken(@link-color, 10);;
 @button-size: 30px;
 @padding: 5px;
-@border-radius: 2px;
+@border-radius: 5px;
+@arrow-size: 10px;
 
 // theme rules
 .medium-toolbar-arrow-under:after {
@@ -22,22 +23,71 @@
 }
 
 .medium-editor-toolbar {
-
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: @border-radius;
   z-index: 200000;
   text-align: center;
-  max-width: 500px;
-
+  max-width: 458px;
+  &.medium-editor-on-bottom {
+    &::before {
+      content: '';
+      border: @arrow-size solid @bgcolor;
+      border-color: transparent transparent @bgcolor transparent;
+      top: -2*@arrow-size;
+      left:50%;
+      position: absolute;
+      z-index: 20;
+    }
+  }
+  &.medium-editor-on-top {
+    &::before {
+      content: '';
+      border: @arrow-size solid @bgcolor;
+      border-color: @bgcolor transparent transparent transparent;
+      bottom: -2*@arrow-size;
+      left:50%;
+      position: absolute;
+      z-index: 20;
+    }
+  }
+  ul {
+    border-radius: @border-radius;
+    padding: 5px;
+    background: @bgcolor;
+  }
   li {
     background-color: @bgcolor;
     display: inline-block;
     vertical-align: top;
 
+    &:nth-child(1),
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4),
+    &:nth-child(5),
+    &:nth-child(6) {
+      button {
+        color: white;
+      }
+    }
+
     &.separator {
+      //clear: left;
+      width: 0;
+      height: 3*@button-size/4;
+      margin-top: @button-size/8;
+      margin-left: @button-size/2-1px;
+      margin-right: @button-size/2-1px;
+      border-left: 2px solid @border-color;
+    }
+
+    &.new-line {
       clear: left;
     }
 
     button {
+      margin: 1px;
+      border-radius: @border-radius;
       background-color: transparent;
       border: none;
       box-sizing: border-box;
