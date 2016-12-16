@@ -69,6 +69,7 @@ export default class HTMLEditor {
             ...options
         }
 
+       // node.classList.add('r_medium-editor');
         this.editor = new MediumEditor(node, this.options);
         this.element = this.editor.elements[0];
         this.onFocusBinded = this.onFocus.bind(this);
