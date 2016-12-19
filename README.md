@@ -16,7 +16,8 @@ require('!style!css!medium-editor/dist/css/medium-editor.css');
 require('!style!css!redaxtor-medium/lib/redaxtor-medium.css');
 
 var components = {
-    html: RedaxtorMedium
+    html: RedaxtorMedium.HTMLEditor,
+    image: RedaxtorMedium.IMGTagEditor
 }
 
 let redaxtor = new Redaxtor({
@@ -37,7 +38,7 @@ let redaxtor = new Redaxtor({
 
 ```js
 var components = {
-    html: window['Redaxtor-Medium']
+    html: RedaxtorMedium.HTMLEditor
 }
 
 var redaxtor = new Redaxtor({

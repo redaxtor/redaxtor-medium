@@ -1,3 +1,8 @@
 import RedaxtorMedium from './RedaxtorMedium';
+import ImageTag from './ImageTag';
 
-module.exports = RedaxtorMedium;
+module.exports = {
+    HTMLEditor: RedaxtorMedium,
+    IMGTagEditor: ImageTag,
+    BackgroundImageEditor: ImageTag,
+};
