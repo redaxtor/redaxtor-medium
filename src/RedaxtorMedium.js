@@ -85,6 +85,19 @@ export default class RedaxtorMedium extends Component {
             onSave: ()=> {
                 this.props.savePiece(this.props.id)
             },
+            onLeave: (resetCallback)=> {
+               /* if(resetCallback) {
+                    if(confirm("Save changes?")) {
+                        this.props.savePiece(this.props.id);
+                    } else {
+                        resetCallback();
+                        this.props.resetPiece(this.props.id);
+                    }
+                } else {
+                    //
+                }*/
+                this.props.savePiece(this.props.id);
+            },
             onSetCurrentSourcePieceId: ()=> {
                 this.props.setCurrentSourcePieceId(this.props.id)
             },
@@ -94,8 +107,8 @@ export default class RedaxtorMedium extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        !nextProps.edit && this.die()
-        return (this.medium && (nextProps.data.html !== this.medium.element.innerHTML)) || (this.state.firstRun !== nextState.firstRun) || (nextProps.edit !== this.props.edit);
+        !nextProps.editorActive && this.die()
+        return (this.medium && (nextProps.data.html !== this.medium.element.innerHTML)) || (this.state.firstRun !== nextState.firstRun) || (nextProps.editorActive !== this.props.editorActive);
     }
 
     die() {
@@ -108,7 +121,7 @@ export default class RedaxtorMedium extends Component {
 
     render() {
         var settings;
-        if (!this.props.edit){
+        if (!this.props.editorActive){
             settings = {
                 className: this.props.className,
                 dangerouslySetInnerHTML: {__html: this.props.data.html}
@@ -127,7 +140,7 @@ export default class RedaxtorMedium extends Component {
                 dangerouslySetInnerHTML: {__html: this.props.data.html},
                 contentEditable: true,
                 onClick: this.onClick.bind(this),
-                onBlur: ()=>{this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}}); this.props.savePiece(this.props.id)}
+               // onBlur: ()=>{console.trace('blur'); this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}}); this.props.savePiece(this.props.id)}
             }
         }
         return React.createElement(this.props.wrapper, settings)

@@ -62,14 +62,13 @@ export default class HTMLEditor {
                 targetCheckboxText: 'Open in new window'
             },
             'imageDragging': true
-        }
+        };
 
         this.options = {
             ...defaults,
             ...options
-        }
+        };
 
-       // node.classList.add('r_medium-editor');
         this.editor = new MediumEditor(node, this.options);
         this.element = this.editor.elements[0];
         this.onFocusBinded = this.onFocus.bind(this);
@@ -78,7 +77,7 @@ export default class HTMLEditor {
         this.setCurrentSourcePieceIdBinded = this.setCurrentSourcePieceId.bind(this);
         //this.editor.getExtensionByName('toolbar').showToolbar();
         //this.editor.getExtensionByName('toolbar').positionStaticToolbar(node);
-        this.editor.startHTML = this.element.innerHTML;
+        this.startHTML = this.element.innerHTML;
         this.editor.subscribe('focus', this.onFocusBinded);
         this.editor.subscribe('blur', this.onBlurBinded);
         this.editor.subscribe('save', this.saveBinded);
@@ -92,13 +91,13 @@ export default class HTMLEditor {
     }
 
     needSave() {
-        return this.element.innerHTML !== this.startHTML
+        return this.element.innerHTML != this.startHTML
     }
 
     save() {
         if (!this.needSave())
             return;
-        this.editor.startHTML = this.element.innerHTML;
+        this.startHTML = this.element.innerHTML;
         this.updatePiece();
         this.options.onSave && this.options.onSave();
     }
@@ -109,11 +108,26 @@ export default class HTMLEditor {
 
     onFocus() {
         this.options.onFocus && this.options.onFocus();
+        clearTimeout(this.blurTimeout);
     }
 
     onBlur() {
-        this.options.onUnfocus && this.options.onUnfocus();
-        this.updatePiece();
+        /**
+         * Let blur event to settle. If blur was produced by editor button click it will be followed by focus soon and we don't really need to react on it
+         * @type {number}
+         */
+        this.blurTimeout = setTimeout(()=>{
+            this.updatePiece();
+            if(this.needSave()) {
+                this.options.onLeave && this.options.onLeave(()=>{
+                    this.element.innerHTML = this.startHTML;
+                    this.updatePiece();
+                });
+            } else {
+                this.options.onLeave && this.options.onLeave();
+            }
+
+        }, 100);
     }
 
     removeListeners() {
