@@ -77,7 +77,7 @@ export default class HTMLEditor {
         this.setCurrentSourcePieceIdBinded = this.setCurrentSourcePieceId.bind(this);
         //this.editor.getExtensionByName('toolbar').showToolbar();
         //this.editor.getExtensionByName('toolbar').positionStaticToolbar(node);
-        this.startHTML = this.element.innerHTML;
+        this.editor.startHTML = this.element.innerHTML;
         this.editor.subscribe('focus', this.onFocusBinded);
         this.editor.subscribe('blur', this.onBlurBinded);
         this.editor.subscribe('save', this.saveBinded);
@@ -91,13 +91,13 @@ export default class HTMLEditor {
     }
 
     needSave() {
-        return this.element.innerHTML != this.startHTML
+        return this.element.innerHTML != this.editor.startHTML
     }
 
     save() {
         if (!this.needSave())
             return;
-        this.startHTML = this.element.innerHTML;
+        this.editor.startHTML = this.element.innerHTML;
         this.updatePiece();
         this.options.onSave && this.options.onSave();
     }
@@ -120,7 +120,7 @@ export default class HTMLEditor {
             this.updatePiece();
             if(this.needSave()) {
                 this.options.onLeave && this.options.onLeave(()=>{
-                    this.element.innerHTML = this.startHTML;
+                    this.element.origElements.innerHTML = this.editor.startHTML;
                     this.updatePiece();
                 });
             } else {

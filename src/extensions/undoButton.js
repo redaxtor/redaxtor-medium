@@ -6,8 +6,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         init: function () {
             this.button = this.document.createElement('button');
             this.button.classList.add('medium-editor-action');
-            this.button.innerHTML = '<i class="fa fa-undo"></i>';
-            this.button.title = "Undo changes";
+            this.button.innerHTML = '<i class="fa fa-times"></i>';
+            this.button.title = "Reset Changes";
             this.handleClickBinded = this.handleClick.bind(this)
             this.on(this.button, 'click', this.handleClickBinded);
         },

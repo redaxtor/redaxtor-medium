@@ -7,7 +7,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             this.button = this.document.createElement('button');
             this.button.classList.add('medium-editor-action');
             this.button.innerHTML = '<i class="fa fa-floppy-o"></i>';
-            this.button.title = "Save changes";
+            this.button.title = "Save Changes";
             this.handleClickBinded = this.handleClick.bind(this)
             this.on(this.button, 'click', this.handleClickBinded);
         },
