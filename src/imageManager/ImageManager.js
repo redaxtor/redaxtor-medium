@@ -9,6 +9,10 @@ export default class ImageManager extends Component {
         this.state = {
             isVisible: false
         }
+
+        props.api && props.api.getImageList && props.api.getImageList().then((list)=>{
+            this.setState({gallery: list})
+        });
     }
 
     toggleImagePopup() {
@@ -82,21 +86,21 @@ export default class ImageManager extends Component {
     }
 
     sendFile() {
-        var that = this
-        if (!this.state.file || !this.state.file[0]) return;
-        var file = this.state.file[0],
-            formdata = new FormData();
-        formdata.append("image", file);
-        request.post(that.state.imageUploadUrl)
-            .send(formdata)
-            .end(function (err, res) {
-                var response = JSON.parse(res.text);
-                that.onUrlChange(response.data.url);
-                if (that.state.gallery) {
-                    that.state.gallery.push(response.data.url);
-                    that.setState({file: null})
+        if(this.props.api.uploadImage) {
+            if (!this.state.file || !this.state.file[0]) return;
+            var file = this.state.file[0],
+                formdata = new FormData();
+
+            formdata.append("image", file);
+
+            this.props.api.uploadImage(formdata).then((response)=>{
+                this.onUrlChange(response.url);
+                if (this.state.gallery) {
+                    this.state.gallery.push(response.url);
+                    this.setState({file: null})
                 }
-            });
+            })
+        }
     }
 
     selectGalleryItem(data) {
@@ -108,22 +112,20 @@ export default class ImageManager extends Component {
     }
 
     deleteGalleryItem(id) {
-        var that = this;
-        request.post(this.state.imageDeleteUrl)
-            .send({id: id})
-            .end(function (err, res) {
-                if (!err) {
-                    var index = that.state.gallery.findIndex(element=> element.id === id);
-                    that.state.gallery.splice(index, 1);
-                    that.forceUpdate()
-                }
-            });
+        if(this.props.api.deleteImage) {
+            this.props.api.deleteImage(id).then(()=>{
+                var index = this.state.gallery.findIndex(element=> element.id === id);
+                this.state.gallery.splice(index, 1);
+                this.forceUpdate()
+            })
+        }
     }
 
     resetData() {
         this.setState({
             url: null,
             alt: null,
+            api: {},
             width: null,
             height: null,
             originalHeight: null,
@@ -173,7 +175,7 @@ export default class ImageManager extends Component {
                         </div>
                     </div>
                     {
-                        this.state.imageUploadUrl &&
+                        this.props.api.uploadImage &&
                         <div className="browse-wrap">
                             <div
                                 className="title">{this.state.file ? this.state.file[0].name : "Choose a file to upload"}</div>
@@ -185,7 +187,7 @@ export default class ImageManager extends Component {
                     }
                     {
                         this.state.gallery &&
-                        <Gallery gallery={this.state.gallery} deleteUrl={!!this.state.imageDeleteUrl}
+                        <Gallery gallery={this.state.gallery} api={this.props.api}
                                  onChange={(url)=>{this.selectGalleryItem.call(this, url)}}
                                  onDelete={(id)=>this.deleteGalleryItem.call(this, id)}
                         />

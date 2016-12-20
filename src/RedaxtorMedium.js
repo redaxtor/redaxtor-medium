@@ -7,12 +7,10 @@ export default class RedaxtorMedium extends Component {
     constructor(props) {
         super(props)
         this.state = {codeEditorActive: false, firstRun: true};
-        this.props.images && this.props.images.galleryGetUrl && imageManagerApi.init({galleryGetUrl: this.props.images.galleryGetUrl})
-        this.props.images && this.props.images.imageUploadUrl && imageManagerApi.init({imageUploadUrl: this.props.images.imageUploadUrl})
     }
 
     componentDidMount() {
-
+        imageManagerApi.init({api: this.props.api});
     };
 
     saveSelection() {
@@ -29,15 +27,15 @@ export default class RedaxtorMedium extends Component {
 
     onToggleImagePopup() {
         if (this.img) {
-            imageManagerApi.setImageData({url: this.img.src, alt: this.img.alt || "", width: +this.img.width, height: +this.img.height})
+            imageManagerApi.get().setImageData({url: this.img.src, alt: this.img.alt || "", width: +this.img.width, height: +this.img.height})
         }
         this.medium.editor.saveSelection();
         //this.saveSelection()
-        imageManagerApi.setImageData({
+        imageManagerApi.get().setImageData({
             onClose: this.cancelCallback.bind(this),
             onSave: this.saveCallback.bind(this)
         })
-        imageManagerApi.showPopup();
+        imageManagerApi.get().showPopup();
     }
 
     saveCallback(data) {

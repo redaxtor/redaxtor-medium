@@ -6,13 +6,11 @@ export default class RedaxtorImageTag extends Component {
     constructor(props) {
         super(props);
         this.state = {codeEditorActive: false, firstRun: true};
-        this.props.images && this.props.images.galleryGetUrl && imageManagerApi.init({galleryGetUrl: this.props.images.galleryGetUrl});
-        this.props.images && this.props.images.imageUploadUrl && imageManagerApi.init({imageUploadUrl: this.props.images.imageUploadUrl});
-
         this.onToggleImagePopupBind = this.onToggleImagePopup.bind(this);
     }
 
     componentDidMount() {
+        imageManagerApi.init({api: this.props.api});
         this.dom = ReactDOM.findDOMNode(this);
         this.targetImg = this.dom.parentNode;
         if(this.targetImg.nodeName!="IMG") {
@@ -25,12 +23,12 @@ export default class RedaxtorImageTag extends Component {
 
 
     onToggleImagePopup() {
-        imageManagerApi.setImageData({url: this.targetImg.src, alt: this.targetImg.alt || "", width: this.targetImg.width, height: this.targetImg.height});
-        imageManagerApi.setImageData({
+        imageManagerApi.get().setImageData({url: this.targetImg.src, alt: this.targetImg.alt || "", width: this.targetImg.width, height: this.targetImg.height});
+        imageManagerApi.get().setImageData({
             onClose: this.cancelCallback.bind(this),
             onSave: this.saveCallback.bind(this)
         });
-        imageManagerApi.showPopup();
+        imageManagerApi.get().showPopup();
     }
 
     saveCallback(data) {

@@ -1,33 +1,38 @@
 import ImageManager from './ImageManager'
 import ReactDOM from "react-dom";
 import React, {Component} from "react"
-import request from "superagent"
 
+const lazy = {
+    imageManger: null,
+    api: null
+};
 
-var popupNode = document.createElement("DIV");
-var imageManager = ReactDOM.render(
-    <ImageManager/>,
-    popupNode
-);
-document.body.appendChild(popupNode);
-var init = (data) => {
-    if (data.galleryGetUrl){
-        request.post(data.galleryGetUrl)
-            .end(function (err, res) {
-                var response = JSON.parse(res.text);
-                imageManager.setImageData({gallery: response.data.list})
-            });
+const lazyGetImageManager = (api)=>{
+    if(lazy.imageManger) {
+        return lazy.imageManager;
     }
-    if (data.imageUploadUrl){
-        imageManager.setImageData({imageUploadUrl: data.imageUploadUrl})
+    lazy.api = api;
+    var popupNode = document.createElement("DIV");
+    lazy.imageManager = ReactDOM.render(
+        <ImageManager api={api}/>,
+        popupNode
+    );
+    document.body.appendChild(popupNode);
+    return lazy.imageManager;
+};
+
+const init = (data) => {
+    if(lazy.imageManger && lazy.api != data.api) {
+        console.error("Image manager is stand alone and can't be recreated with different API")
     }
-    if (data.imageDeleteUrl){
-        imageManager.setImageData({imageDeleteUrl: data.imageDeleteUrl})
-    }
-}
+    lazyGetImageManager(data.api);
+};
+
+const get = () => {
+    return lazy.imageManager;
+};
 
 export const imageManagerApi = {
-    showPopup: imageManager.showPopup.bind(imageManager),
-    setImageData: imageManager.setImageData.bind(imageManager),
+    get: get,
     init: init
-}
+};
