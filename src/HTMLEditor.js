@@ -97,9 +97,10 @@ export default class HTMLEditor {
     save() {
         if (!this.needSave())
             return;
-        this.editor.startHTML = this.element.innerHTML;
+
         this.updatePiece();
         this.options.onSave && this.options.onSave();
+        this.editor.startHTML = this.element.innerHTML;
     }
 
     setCurrentSourcePieceId() {

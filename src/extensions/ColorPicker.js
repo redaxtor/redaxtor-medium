@@ -25,6 +25,7 @@ import vanillaColorPicker from '../helpers/VanillaColorPicker';
 
             // colors for picker
             var pickerColors = [
+                "inherit",
                 "#9b59b6",
                 "#34495e",
                 "#16a085",
@@ -55,7 +56,12 @@ import vanillaColorPicker from '../helpers/VanillaColorPicker';
                 }
                 this.base.importSelection(this.selectionState);
                 this.document.execCommand("styleWithCSS", false, true);
-                this.document.execCommand("foreColor", false, color);
+                if(color==='inherit') {
+                    document.execCommand("removeFormat", false, "foreColor");
+                } else {
+                    this.document.execCommand("foreColor", false, color);
+                }
+
                 if(emptySelection) {
                     this.base.importSelection(emptySelection);
                 }

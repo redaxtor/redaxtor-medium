@@ -33,7 +33,11 @@ export default class RedaxtorMedium extends Component {
         //this.saveSelection()
         imageManagerApi.get().setImageData({
             onClose: this.cancelCallback.bind(this),
-            onSave: this.saveCallback.bind(this)
+            onSave: this.saveCallback.bind(this),
+            settings: {
+                editDimensions: true,
+                editBackground: false
+            }
         })
         imageManagerApi.get().showPopup();
     }
@@ -60,13 +64,30 @@ export default class RedaxtorMedium extends Component {
         //this.restoreSelection();
     }
 
+    /**
+     * Prevent parent elements from getting our click
+     */
+    onClickPreventBubble(e) {
+        console.trace("Prevent click 1", e);
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    /**
+     * Handle clicking on image in html
+     * @param e
+     */
     onClick(e) {
+        console.trace("Prevent click 2", e);
+        e.preventDefault();
+        e.stopPropagation();
+
         if (e.target.tagName.toLowerCase() !== 'img') {
             this.img = null;
         } else {
             this.img = e.target;
         }
-        if (e.target.tagName.toLowerCase() !== 'img') return
+        if (e.target.tagName.toLowerCase() !== 'img') return;
         var sel = window.getSelection();
         var range = document.createRange();
         range.selectNode(e.target);
@@ -130,6 +151,7 @@ export default class RedaxtorMedium extends Component {
                 className: this.props.className,
                 dangerouslySetInnerHTML: {__html: this.props.data.html},
                 onFocus: this.componentInit.bind(this),
+                onClick: this.onClickPreventBubble.bind(this),
                 contentEditable: true
             }
         } else {
@@ -144,3 +166,9 @@ export default class RedaxtorMedium extends Component {
         return React.createElement(this.props.wrapper, settings)
     }
 }
+
+/**
+ * Specify component should be rendered inside target node and capture all inside html
+ * @type {string}
+ */
+RedaxtorMedium.__renderType = "INSIDE";
