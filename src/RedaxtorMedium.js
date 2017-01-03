@@ -138,6 +138,11 @@ export default class RedaxtorMedium extends Component {
         this.state.firstRun = true;
     };
 
+    componentWillUnmount(){
+        this.die();
+        console.log(`Medium editor ${this.props.id} unmounted`);
+    }
+
     render() {
         var settings;
         if (!this.props.editorActive){
@@ -172,3 +177,4 @@ export default class RedaxtorMedium extends Component {
  * @type {string}
  */
 RedaxtorMedium.__renderType = "INSIDE";
+RedaxtorMedium.__name = "Html";

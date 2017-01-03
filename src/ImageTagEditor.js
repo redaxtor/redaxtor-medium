@@ -96,6 +96,11 @@ export default class RedaxtorImageTag extends Component {
         }
     }
 
+    componentWillUnmount(){
+        this.die();
+        console.log(`Image editor ${this.props.id} unmounted`);
+    }
+
     render() {
         this.check();
         return React.createElement(this.props.wrapper, {})
@@ -107,3 +112,4 @@ export default class RedaxtorImageTag extends Component {
  * @type {string}
  */
 RedaxtorImageTag.__renderType = "BEFORE";
+RedaxtorImageTag.__name = "Images";
