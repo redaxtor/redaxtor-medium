@@ -8,6 +8,7 @@ export default class HTMLEditor {
         var defaults = {
             buttonLabels: 'fontawesome',
             autoLink: true,
+            stickyTopOffset: 5,
             toolbar: {
                 buttons: [
                     'save',
@@ -23,6 +24,11 @@ export default class HTMLEditor {
                     'strikethrough',
                     'subscript',
                     'superscript',
+                    'colorPicker',
+                    'h1',
+                    'h2',
+                    'h3',
+                    'h4',
                     'quote',
                     'pre',
                     'orderedlist',
@@ -32,12 +38,7 @@ export default class HTMLEditor {
                     'justifyLeft',
                     'justifyCenter',
                     'justifyRight',
-                    'justifyFull',
-                    'h1',
-                    'h2',
-                    'h3',
-                    'h4',
-                    'colorPicker'
+                    'justifyFull'
                 ],
                 static: true,
                 updateOnEmptySelection: true,
@@ -61,12 +62,12 @@ export default class HTMLEditor {
                 targetCheckboxText: 'Open in new window'
             },
             'imageDragging': true
-        }
+        };
 
         this.options = {
             ...defaults,
             ...options
-        }
+        };
 
         this.editor = new MediumEditor(node, this.options);
         this.element = this.editor.elements[0];
@@ -90,15 +91,16 @@ export default class HTMLEditor {
     }
 
     needSave() {
-        return this.element.innerHTML !== this.startHTML
+        return this.element.innerHTML != this.editor.startHTML
     }
 
     save() {
         if (!this.needSave())
             return;
-        this.editor.startHTML = this.element.innerHTML;
+
         this.updatePiece();
         this.options.onSave && this.options.onSave();
+        this.editor.startHTML = this.element.innerHTML;
     }
 
     setCurrentSourcePieceId() {
@@ -107,11 +109,26 @@ export default class HTMLEditor {
 
     onFocus() {
         this.options.onFocus && this.options.onFocus();
+        clearTimeout(this.blurTimeout);
     }
 
     onBlur() {
-        this.options.onUnfocus && this.options.onUnfocus();
-        this.updatePiece();
+        /**
+         * Let blur event to settle. If blur was produced by editor button click it will be followed by focus soon and we don't really need to react on it
+         * @type {number}
+         */
+        this.blurTimeout = setTimeout(()=>{
+            this.updatePiece();
+            if(this.needSave()) {
+                this.options.onLeave && this.options.onLeave(()=>{
+                    this.element.origElements.innerHTML = this.editor.startHTML;
+                    this.updatePiece();
+                });
+            } else {
+                this.options.onLeave && this.options.onLeave();
+            }
+
+        }, 100);
     }
 
     removeListeners() {

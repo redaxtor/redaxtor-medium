@@ -15,13 +15,17 @@ import vanillaColorPicker from '../helpers/VanillaColorPicker';
 
             this.selectionState = this.base.exportSelection();
 
-            // If no text selected, stop here.
+            var emptySelection = false;
+            // If no text selected, select everything and remember empty selection to recover it later
             if (this.selectionState && (this.selectionState.end - this.selectionState.start === 0)) {
-                return;
+                emptySelection = this.selectionState;
+                this.base.selectAllContents();
+                this.selectionState = this.base.exportSelection();
             }
 
             // colors for picker
             var pickerColors = [
+                "inherit",
                 "#9b59b6",
                 "#34495e",
                 "#16a085",
@@ -46,11 +50,22 @@ import vanillaColorPicker from '../helpers/VanillaColorPicker';
             picker.set("customColors", pickerColors);
             picker.set("positionOnTop");
             picker.openPicker();
-            picker.on("colorChosen", function (color) {
+            picker.on("colorChosen", (color)=> {
+                if(emptySelection) {
+
+                }
                 this.base.importSelection(this.selectionState);
                 this.document.execCommand("styleWithCSS", false, true);
-                this.document.execCommand("foreColor", false, color);
-            }.bind(this));
+                if(color==='inherit') {
+                    document.execCommand("removeFormat", false, "foreColor");
+                } else {
+                    this.document.execCommand("foreColor", false, color);
+                }
+
+                if(emptySelection) {
+                    this.base.importSelection(emptySelection);
+                }
+            });
         }
     });
     MediumEditor.extensions.colorPicker = ColorPicker;
