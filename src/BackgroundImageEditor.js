@@ -56,7 +56,7 @@ export default class RedaxtorBackgroundEditor extends Component {
     }
 
     findRedaxtor (el) {
-        while (el && el.tagName.toLowerCase() != 'redaxtor' && el.className && el.className.indexOf("r_modal-overlay")==-1 && el.className.indexOf("r_bar")==-1) {
+        while (el && el.tagName.toLowerCase() != 'redaxtor' && (!el.className || (el.className.indexOf("r_modal-overlay")==-1 && el.className.indexOf("r_bar")==-1))) {
             el = el.parentElement;
         }
         return el;
