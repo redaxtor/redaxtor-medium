@@ -42,9 +42,7 @@ export default class RedaxtorImageTag extends Component {
     }
 
     saveCallback(data) {
-        this.targetImg.src = data.url;
-        this.targetImg.alt = data.alt;
-        this.props.updatePiece(this.props.id, {data: {src: this.targetImg.src, alt: this.targetImg.alt}});
+        this.props.updatePiece(this.props.id, {data: {src: data.url, alt: data.alt}});
         this.props.savePiece(this.props.id);
     }
 
@@ -86,7 +84,7 @@ export default class RedaxtorImageTag extends Component {
     };
 
     /**
-     * Based on external prop ensures editor is enabled or disabled
+     * Based on external prop ensures editor is enabled or disabled and attaches-detaches non-react bindings
      */
     check() {
         if (this.props.editorActive) {
@@ -96,6 +94,15 @@ export default class RedaxtorImageTag extends Component {
         }
     }
 
+    /**
+     * Updates rendering of props that are not updated by react
+     * Here that updates IMG tag src and alt
+     */
+    renderNonReactAttributes(data) {
+        this.targetImg.src = data.src;
+        this.targetImg.alt = data.alt;
+    }
+
     componentWillUnmount(){
         this.die();
         console.log(`Image editor ${this.props.id} unmounted`);
@@ -103,6 +110,7 @@ export default class RedaxtorImageTag extends Component {
 
     render() {
         this.check();
+        this.renderNonReactAttributes(this.props.data);
         return React.createElement(this.props.wrapper, {})
     }
 }
