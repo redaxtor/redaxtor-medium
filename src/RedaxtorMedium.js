@@ -143,6 +143,10 @@ export default class RedaxtorMedium extends Component {
         this.state.firstRun = true;
     };
 
+    /**
+     * Updates rendering of props that are not updated by react
+     * Here that updates styles of background
+     */
     renderNonReactAttributes(data) {
         if (!this.medium) {
             return;
