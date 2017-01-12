@@ -12,6 +12,12 @@ export default class ImageManager extends Component {
         }
 
         props.api && props.api.getImageList && props.api.getImageList().then((list) => {
+            // add index to item if not set by the server
+            list.forEach((item, index) => {
+                if(!item.Id){
+                    item.id = index;
+                }
+            });
             this.setState({gallery: list})
         });
     }
@@ -44,6 +50,7 @@ export default class ImageManager extends Component {
             !getOriginalSizeOnly && this.setState({width: imageData.width, height: imageData.height});
             this.setState({originalWidth: imageData.width, originalHeight: imageData.height});
         } else {
+            //if set by hands
             var that = this;
             var img = new Image();
             img.onload = function () {
@@ -215,7 +222,8 @@ export default class ImageManager extends Component {
                     url: response.url,
                     thumbnailUrl: response.thumbnailUrl,
                     width: response.width,
-                    height: response.height
+                    height: response.height,
+                    id: response.id || this.state.gallery.length
                 };
 
                 this.onUrlChange(newImageData);

@@ -35,7 +35,7 @@ export default class Gallery extends Component {
                                           e.stopPropagation();
                                           this.setState({image: this.props.gallery[index]})
                                       }}>
-                                    <i className="im-icon-trash-empty"/>
+                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
                                 </span>}
                             </div>
                         </div>
