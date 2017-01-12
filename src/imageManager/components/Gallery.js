@@ -28,7 +28,7 @@ export default class Gallery extends Component {
                                  onClick={()=> {
                                      this.props.onChange(this.props.gallery[index])
                                  }}
-                                 style={{backgroundImage: "url(" + (this.props.gallery[index].url ? this.props.gallery[index].url : this.props.gallery[index]) + ")"}}>
+                                 style={{backgroundImage: "url(" + (this.props.gallery[index].thumbnailUrl ? this.props.gallery[index].thumbnailUrl : this.props.gallery[index]) + ")"}}>
                                 {this.props.api.deleteImage &&
                                 <span className="delete-icon"
                                       onClick={(e)=> {
