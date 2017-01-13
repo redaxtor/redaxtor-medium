@@ -11,7 +11,13 @@ export default class ImageManager extends Component {
             settings: {}
         }
 
-        props.api && props.api.getImageList && props.api.getImageList().then((list)=> {
+        props.api && props.api.getImageList && props.api.getImageList().then((list) => {
+            // add index to item if not set by the server
+            list.forEach((item, index) => {
+                if(!item.Id){
+                    item.id = index;
+                }
+            });
             this.setState({gallery: list})
         });
     }
@@ -32,19 +38,28 @@ export default class ImageManager extends Component {
         this.resetData();
     }
 
-    onUrlChange(url) {
-        this.setState({url: url, alt: ""});
-        this.getImageSize(url);
+    onUrlChange(imageData) {
+        this.setState({url: imageData.url, alt: ""});
+        this.getImageSize(imageData);
     }
 
-    getImageSize(url, getOriginalSizeOnly) {
-        var that = this;
-        var img = new Image();
-        img.onload = function () {
-            !getOriginalSizeOnly && that.setState({width: this.width, height: this.height});
-            that.setState({originalWidth: this.width, originalHeight: this.height});
+    getImageSize(imageData, getOriginalSizeOnly) {
+
+        //if is image from gallery
+        if(imageData.width &&  imageData.height) {
+            !getOriginalSizeOnly && this.setState({width: imageData.width, height: imageData.height});
+            this.setState({originalWidth: imageData.width, originalHeight: imageData.height});
+        } else {
+            //if set by hands
+            var that = this;
+            var img = new Image();
+            img.onload = function () {
+                !getOriginalSizeOnly && that.setState({width: this.width, height: this.height});
+                that.setState({originalWidth: this.width, originalHeight: this.height});
+            }
+            img.src = imageData.url;
         }
-        img.src = url;
+
     }
 
     setBgSize(e) {
@@ -98,8 +113,8 @@ export default class ImageManager extends Component {
         /**
          * If we have previously created color picker that is not bound to correct element, kill it
          */
-        if(this.picker) {
-            if(this.picker.__boundElement != this.colorDiv) {
+        if (this.picker) {
+            if (this.picker.__boundElement != this.colorDiv) {
                 this.picker.destroyPicker();
                 this.picker = null;
             }
@@ -108,7 +123,7 @@ export default class ImageManager extends Component {
         /**
          * If we still have a picker, open it
          */
-        if(this.picker) {
+        if (this.picker) {
             this.picker.openPicker();
         } else {
             //Create new picker
@@ -116,8 +131,8 @@ export default class ImageManager extends Component {
             this.picker.set("customColors", pickerColors);
             this.picker.set("positionOnTop");
             this.picker.openPicker();
-            this.picker.on("colorChosen", (color)=> {
-                if(color=="inherit") {
+            this.picker.on("colorChosen", (color) => {
+                if (color == "inherit") {
                     this.setState({
                         bgColor: ""
                     })
@@ -164,7 +179,7 @@ export default class ImageManager extends Component {
         /**
          * If image was resized, export new sizes
          */
-        if(this.state.originalHeight != this.state.height || this.state.originalWidth != this.state.width ) {
+        if (this.state.originalHeight != this.state.height || this.state.originalWidth != this.state.width) {
             data = {
                 width: this.state.width,
                 height: this.state.height,
@@ -175,7 +190,7 @@ export default class ImageManager extends Component {
         /**
          * If editing background, pass backgrounds too
          */
-        if(this.state.settings.editBackground ) {
+        if (this.state.settings.editBackground) {
             data = {
                 bgColor: this.state.bgColor,
                 bgPosition: this.state.bgPosition,
@@ -191,7 +206,7 @@ export default class ImageManager extends Component {
     setImageData(data) {
         (!data.alt && data.url) && (data.alt = "");
         this.setState(data);
-        data.url && this.getImageSize(data.url, !!data.width);
+        data.url && this.getImageSize(data, !!data.width);
     }
 
     sendFile() {
@@ -202,28 +217,42 @@ export default class ImageManager extends Component {
 
             formdata.append("image", file);
 
-            this.props.api.uploadImage(formdata).then((response)=> {
-                this.onUrlChange(response.url);
+            this.props.api.uploadImage(formdata).then((response) => {
+                let newImageData = {
+                    url: response.url,
+                    thumbnailUrl: response.thumbnailUrl,
+                    width: response.width,
+                    height: response.height,
+                    id: response.id || this.state.gallery.length
+                };
+
+                this.onUrlChange(newImageData);
                 if (this.state.gallery) {
-                    this.state.gallery.push(response.url);
+                    this.state.gallery.push(newImageData);
                     this.setState({file: null})
                 }
             })
         }
     }
 
+    /**
+     * save new images data
+     * @param data {object} new image data
+     */
     selectGalleryItem(data) {
-        if (typeof data === "object") {
-            this.setImageData(data)
-        } else {
+
+        //change URL
+        if(data.url != this.state.url){
             this.onUrlChange(data)
         }
+        this.setImageData(data)
+
     }
 
     deleteGalleryItem(id) {
         if (this.props.api.deleteImage) {
-            this.props.api.deleteImage(id).then(()=> {
-                var index = this.state.gallery.findIndex(element=> element.id === id);
+            this.props.api.deleteImage(id).then(() => {
+                var index = this.state.gallery.findIndex(element => element.id === id);
                 this.state.gallery.splice(index, 1);
                 this.forceUpdate()
             })
@@ -252,48 +281,50 @@ export default class ImageManager extends Component {
                     <div className="image-inputs-container">
                         <div className="image-left-part">
                             <div className="item-form">
-                                <input onChange={e=>this.onUrlChange.call(this, e.target.value)}
+                                <input onChange={e => this.onUrlChange.call(this, {url: e.target.value})}
                                        placeholder="Enter image URL" value={this.state.url || ""}/>
                             </div>
                             <div className="item-form">
-                                <input onChange={e=>this.setState({alt: e.target.value})}
+                                <input onChange={e => this.setState({alt: e.target.value})}
                                        placeholder="Enter image alt" value={this.state.alt || ""}/>
                             </div>
                             {this.state.settings.editDimensions &&
-                                <div className="sizes item-form">
-                                    <div className="input-container">
-                                        <input onChange={this.onWidthChange.bind(this)}
-                                               placeholder="width" value={this.state.width || ""}
-                                               style={{width: "65px", marginRight: "10px"}}/>
-                                    </div>
-                                    X
-                                    <div className="input-container">
-                                        <input onChange={this.onHeightChange.bind(this)}
-                                               placeholder="height" value={this.state.height || ""}
-                                               style={{width: "65px", marginLeft: "10px"}}/>
-                                    </div>
-                                    <div className="sizes-checkbox">
-                                        <input type="checkbox" id="proportions" name="proportions"
-                                               onChange={e=> {
-                                                   this.setState({proportions: e.target.checked})
-                                               }}
-                                               defaultChecked={this.state.proportions}/>
-                                        <label htmlFor="proportions">Constrain proportions</label>
-                                    </div>
-
+                            <div className="sizes item-form">
+                                <div className="input-container">
+                                    <input onChange={this.onWidthChange.bind(this)}
+                                           placeholder="width" value={this.state.width || ""}
+                                           style={{width: "65px", marginRight: "10px"}}/>
                                 </div>
+                                X
+                                <div className="input-container">
+                                    <input onChange={this.onHeightChange.bind(this)}
+                                           placeholder="height" value={this.state.height || ""}
+                                           style={{width: "65px", marginLeft: "10px"}}/>
+                                </div>
+                                <div className="sizes-checkbox">
+                                    <input type="checkbox" id="proportions" name="proportions"
+                                           onChange={e => {
+                                               this.setState({proportions: e.target.checked})
+                                           }}
+                                           defaultChecked={this.state.proportions}/>
+                                    <label htmlFor="proportions">Constrain proportions</label>
+                                </div>
+
+                            </div>
                             }
                             {this.state.settings.editBackground &&
                             <div className="sizes item-form">
                                 <div className="input-container">
-                                    <select name="background-size"  value={this.state.bgSize} onChange={this.setBgSize.bind(this)}>
+                                    <select name="background-size" value={this.state.bgSize}
+                                            onChange={this.setBgSize.bind(this)}>
                                         <option value="">Don't Resize</option>
                                         <option value="cover">Resize to Fill</option>
                                         <option value="contain">Resize to Fit</option>
                                     </select>
                                 </div>
                                 <div className="input-container">
-                                    <select name="background-repeat" value={this.state.bgRepeat} onChange={this.setBgRepeat.bind(this)}>
+                                    <select name="background-repeat" value={this.state.bgRepeat}
+                                            onChange={this.setBgRepeat.bind(this)}>
                                         <option value="no-repeat">No Tiling</option>
                                         <option value="repeat">Tile</option>
                                         <option value="repeat-x">Tile Horizontally</option>
@@ -301,17 +332,23 @@ export default class ImageManager extends Component {
                                     </select>
                                 </div>
                                 <div className="input-container">
-                                    <select name="background-position"  value={this.state.bgPosition} onChange={this.setBgPosition.bind(this)}>
+                                    <select name="background-position" value={this.state.bgPosition}
+                                            onChange={this.setBgPosition.bind(this)}>
                                         <option value="50% 50%">Center</option>
                                         <option value="0px 0px">Top Left</option>
                                     </select>
                                 </div>
                                 <div className="input-container">
-                                    <input ref={(input) => { this.colorInput = input; }} onChange={this.setBgColor.bind(this)}
+                                    <input ref={(input) => {
+                                        this.colorInput = input;
+                                    }} onChange={this.setBgColor.bind(this)}
                                            onClick={this.pickBgColor.bind(this)}
                                            placeholder="Color" value={this.state.bgColor || ""}
                                            style={{width: "150px", marginRight: "5px"}}/>
-                                    <div color={this.state.bgColor} ref={(div) => { this.colorDiv = div; }} onClick={this.pickBgColor.bind(this)} className="color-pick" style={{backgroundColor: this.state.bgColor || ""}}>
+                                    <div color={this.state.bgColor} ref={(div) => {
+                                        this.colorDiv = div;
+                                    }} onClick={this.pickBgColor.bind(this)} className="color-pick"
+                                         style={{backgroundColor: this.state.bgColor || ""}}>
                                     </div>
                                 </div>
                             </div>
@@ -327,7 +364,7 @@ export default class ImageManager extends Component {
                             <div
                                 className="title">{this.state.file ? this.state.file[0].name : "Choose a file to upload"}</div>
                             <input type="file" className="upload" title="Choose a file to upload"
-                                   onChange={(e)=> {
+                                   onChange={(e) => {
                                        this.setState({file: e.target.files})
                                    }}/>
                             <button type="submit" className="button" onClick={this.sendFile.bind(this)}>Upload File
@@ -337,10 +374,10 @@ export default class ImageManager extends Component {
                     {
                         this.state.gallery &&
                         <Gallery gallery={this.state.gallery} api={this.props.api}
-                                 onChange={(url)=> {
-                                     this.selectGalleryItem.call(this, url)
+                                 onChange={(imageData) => {
+                                     this.selectGalleryItem.call(this, imageData)
                                  }}
-                                 onDelete={(id)=>this.deleteGalleryItem.call(this, id)}
+                                 onDelete={(id) => this.deleteGalleryItem.call(this, id)}
                         />
                     }
                     <div className="actions-bar">
