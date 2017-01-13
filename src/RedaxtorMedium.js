@@ -27,7 +27,12 @@ export default class RedaxtorMedium extends Component {
 
     onToggleImagePopup() {
         if (this.img) {
-            imageManagerApi.get().setImageData({url: this.img.src, alt: this.img.alt || "", width: +this.img.width, height: +this.img.height})
+            imageManagerApi.get().setImageData({
+                url: this.img.src,
+                alt: this.img.alt || "",
+                width: +this.img.width,
+                height: +this.img.height
+            })
         }
         this.medium.editor.saveSelection();
         //this.saveSelection()
@@ -48,15 +53,15 @@ export default class RedaxtorMedium extends Component {
         if (this.img) {
             this.img.src = data.url;
             this.img.alt = data.alt;
-            this.img.style.width = data.width+"px";
-            this.img.style.height = data.height+"px";
+            this.img.style.width = data.width + "px";
+            this.img.style.height = data.height + "px";
             this.img = null;
         } else {
             this.medium.editor.pasteHTML('<img src="' + (data.url || "") + '" alt="' +
                 (data.alt || "") + 'style="' + 'width: "' + (data.width || "") +
                 'px; height: "' + (data.height || "") + 'px">')
         }
-        this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
+        this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}})
     }
 
     cancelCallback() {
@@ -98,26 +103,26 @@ export default class RedaxtorMedium extends Component {
     componentInit() {
         const dom = ReactDOM.findDOMNode(this);
         this.medium = new _MediumEditor(dom, {
-            onUpdate: ()=> {
-                this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}})
+            onUpdate: () => {
+                this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}})
             },
-            onSave: ()=> {
+            onSave: () => {
                 this.props.savePiece(this.props.id)
             },
-            onLeave: (resetCallback)=> {
-               /* if(resetCallback) {
-                    if(confirm("Save changes?")) {
-                        this.props.savePiece(this.props.id);
-                    } else {
-                        resetCallback();
-                        this.props.resetPiece(this.props.id);
-                    }
-                } else {
-                    //
-                }*/
+            onLeave: (resetCallback) => {
+                /* if(resetCallback) {
+                 if(confirm("Save changes?")) {
+                 this.props.savePiece(this.props.id);
+                 } else {
+                 resetCallback();
+                 this.props.resetPiece(this.props.id);
+                 }
+                 } else {
+                 //
+                 }*/
                 this.props.savePiece(this.props.id);
             },
-            onSetCurrentSourcePieceId: ()=> {
+            onSetCurrentSourcePieceId: () => {
                 this.props.setCurrentSourcePieceId(this.props.id)
             },
             onToggleImagePopup: this.onToggleImagePopup.bind(this)
@@ -127,7 +132,7 @@ export default class RedaxtorMedium extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         !nextProps.editorActive && this.die()
-        return (this.medium && (nextProps.data.html !== this.medium.element.innerHTML)) || (this.state.firstRun !== nextState.firstRun) || (nextProps.editorActive !== this.props.editorActive);
+        return (this.medium && (nextProps.data.html !== this.medium.editor.getContent())) || (this.state.firstRun !== nextState.firstRun) || (nextProps.editorActive !== this.props.editorActive);
     }
 
     die() {
@@ -138,14 +143,30 @@ export default class RedaxtorMedium extends Component {
         this.state.firstRun = true;
     };
 
-    componentWillUnmount(){
+    /**
+     * Updates rendering of props that are not updated by react
+     * Here that updates styles of background
+     */
+    renderNonReactAttributes(data) {
+        if (!this.medium) {
+            return;
+        }
+
+        let content = this.medium.editor.getContent();
+        if (content != data.html) {
+            this.medium.editor.setContent(data.html);
+        }
+
+    }
+
+    componentWillUnmount() {
         this.die();
         console.log(`Medium editor ${this.props.id} unmounted`);
     }
 
     render() {
         var settings;
-        if (!this.props.editorActive){
+        if (!this.props.editorActive) {
             settings = {
                 className: this.props.className,
                 dangerouslySetInnerHTML: {__html: this.props.data.html}
@@ -165,9 +186,10 @@ export default class RedaxtorMedium extends Component {
                 dangerouslySetInnerHTML: {__html: this.props.data.html},
                 contentEditable: true,
                 onClick: this.onClick.bind(this),
-               // onBlur: ()=>{console.trace('blur'); this.props.updatePiece(this.props.id, {data: {html: this.medium.element.innerHTML}}); this.props.savePiece(this.props.id)}
+                // onBlur: ()=>{console.trace('blur'); this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}}); this.props.savePiece(this.props.id)}
             }
         }
+        this.renderNonReactAttributes(this.props.data);
         return React.createElement(this.props.wrapper, settings)
     }
 }

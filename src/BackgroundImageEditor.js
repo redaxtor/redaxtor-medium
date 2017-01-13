@@ -56,7 +56,7 @@ export default class RedaxtorBackgroundEditor extends Component {
     }
 
     findRedaxtor (el) {
-        while (el && el.tagName.toLowerCase() != 'redaxtor' && el.className && el.className.indexOf("r_modal-overlay")==-1 && el.className.indexOf("r_bar")==-1) {
+        while (el && el.tagName.toLowerCase() != 'redaxtor' && (!el.className || (el.className.indexOf("r_modal-overlay")==-1 && el.className.indexOf("r_bar")==-1))) {
             el = el.parentElement;
         }
         return el;
@@ -109,7 +109,7 @@ export default class RedaxtorBackgroundEditor extends Component {
     };
 
     /**
-     * Based on external prop ensures editor is enabled or disabled
+     * Based on external prop ensures editor is enabled or disabled and attaches-detaches non-react bindings
      */
     check() {
         if (this.props.editorActive) {
@@ -119,7 +119,11 @@ export default class RedaxtorBackgroundEditor extends Component {
         }
     }
 
-    applyStyling(data) {
+    /**
+     * Updates rendering of props that are not updated by react
+     * Here that updates styles of background
+     */
+    renderNonReactAttributes(data) {
         if (this.targetDiv) {
             this.targetDiv.style.backgroundImage = `url(${data.url})`;
             this.targetDiv.style.backgroundSize = data.bgSize;
@@ -130,7 +134,6 @@ export default class RedaxtorBackgroundEditor extends Component {
         }
     }
 
-
     componentWillUnmount(){
         this.die();
         console.log(`Background editor ${this.props.id} unmounted`);
@@ -138,7 +141,7 @@ export default class RedaxtorBackgroundEditor extends Component {
 
     render() {
         this.check();
-        this.applyStyling(this.props.data);
+        this.renderNonReactAttributes(this.props.data);
         return React.createElement(this.props.wrapper, {})
     }
 }
