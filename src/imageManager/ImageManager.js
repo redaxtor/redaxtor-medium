@@ -179,7 +179,7 @@ export default class ImageManager extends Component {
         /**
          * If image was resized, export new sizes
          */
-        if (this.state.originalHeight != this.state.height || this.state.originalWidth != this.state.width) {
+        if (this.state.height || this.state.width) {
             data = {
                 width: this.state.width,
                 height: this.state.height,
