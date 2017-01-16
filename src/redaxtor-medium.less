@@ -23,6 +23,23 @@
   border-color: transparent transparent @bgcolor transparent;
 }
 
+#toolbarButton(){
+  margin: 1px;
+  border-radius: @border-radius;
+  background-color: transparent;
+  border: none;
+  box-sizing: border-box;
+  color: @link-color;
+  width: @button-size;
+  height: @button-size;
+  padding: @padding;
+  transition: background-color .2s ease-in, color .2s ease-in;
+  &:hover {
+    background-color: @hover-color;
+    color: @button-active-text-color;
+  }
+}
+
 .medium-editor-toolbar {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: @border-radius;
@@ -87,20 +104,7 @@
     }
 
     button {
-      margin: 1px;
-      border-radius: @border-radius;
-      background-color: transparent;
-      border: none;
-      box-sizing: border-box;
-      color: @link-color;
-      width: @button-size;
-      height: @button-size;
-      padding: @padding;
-      transition: background-color .2s ease-in, color .2s ease-in;
-      &:hover {
-        background-color: @hover-color;
-        color: @button-active-text-color;
-      }
+      #toolbarButton();
     }
 
     .medium-editor-button-first {
@@ -129,6 +133,31 @@
   background: @bgcolor;
   border-radius: @border-radius;
   color: #ffedd5;
+
+  &.medium-editor-link-form-toolbar{
+
+    .medium-editor-button{
+      #toolbarButton();
+
+      font-size: 14px
+    }
+
+
+    input{
+      #editorInput();
+
+      height: 30px;
+      margin: 9px 10px;
+
+      &:focus{
+        border: 1px solid #b9b9b9;
+      }
+    }
+
+    .medium-editor-toolbar-form-row{
+      padding: 9px 10px;
+    }
+  }
 
   .medium-editor-toolbar-unlink {
     display: none;

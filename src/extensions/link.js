@@ -100,12 +100,12 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             ];
 
             template.push(
-                '<a href="#" class="medium-editor-toolbar-save">',
+                '<a href="#" class="medium-editor-button medium-editor-toolbar-save">',
                 this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="fa fa-check"></i>' : this.formSaveLabel,
                 '</a>'
             );
 
-            template.push('<a href="#" class="medium-editor-toolbar-close">',
+            template.push('<a href="#" class="medium-editor-button medium-editor-toolbar-close">',
                 this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="fa fa-times"></i>' : this.formCloseLabel,
                 '</a>');
 
@@ -272,7 +272,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             var close = form.querySelector('.medium-editor-toolbar-close'),
                 save = form.querySelector('.medium-editor-toolbar-save'),
                 input = form.querySelector('.medium-editor-toolbar-input'),
-                unlink = form.querySelector('.medium-editor-toolbar-unlink');
+                unlink = form.querySelector('.medium-editor-toolbar-unlink'),
+                checkbox = form.querySelector('.medium-editor-toolbar-anchor-target + label');
 
             // Handle clicks on the form itself
             this.on(form, 'click', this.handleFormClick.bind(this));
@@ -289,6 +290,9 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             // Handle unlink button clicks (capture)
             this.on(unlink, 'click', this.handleUnlinkClick.bind(this));
 
+            // Handle toggle checkbox via label
+            this.on(checkbox, 'click', this.handleCheckClick.bind(this));
+
         },
 
         createForm: function () {
@@ -296,7 +300,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 form = doc.createElement('div');
 
             // Anchor Form (div)
-            form.className = 'medium-editor-toolbar-form';
+            form.className = 'medium-editor-toolbar-form medium-editor-link-form-toolbar';
             form.id = 'medium-editor-toolbar-form-anchor-' + this.getEditorId();
             form.innerHTML = this.getTemplate();
             this.attachFormEvents(form);
@@ -318,6 +322,10 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
         getAnchorButtonCheckbox: function () {
             return this.getForm().querySelector('.medium-editor-toolbar-anchor-button');
+        },
+
+        getAnchorTargetCheckboxLabel: function () {
+            return this.getForm().querySelector('.medium-editor-toolbar-anchor-target + label')
         },
 
         handleTextboxKeyup: function (event) {
@@ -351,6 +359,14 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             event.preventDefault();
             this.doFormCancel();
         },
+
+        handleCheckClick: function (event) {
+            // Click label checkbox -> toggle checkbox
+            event.preventDefault();
+            let checkbox = this.getAnchorTargetCheckbox();
+            checkbox.checked = !checkbox.checked;
+        },
+
         handleUnlinkClick: function (event) {
             this.base.restoreSelection();
             var node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(MediumEditor.selection.getSelectionRange(this.document)), 'a');
