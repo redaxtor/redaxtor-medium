@@ -109,7 +109,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="fa fa-times"></i>' : this.formCloseLabel,
                 '</a>');
 
-            template.push('<a href="#" class="medium-editor-toolbar-unlink" title="Unlink">','<i class="fa fa-chain-broken"></i></a>');
+            template.push('<a href="#" class="medium-editor-button medium medium-editor-toolbar-unlink" title="Unlink">','<i class="fa fa-chain-broken"></i></a>');
 
             // both of these options are slightly moot with the ability to
             // override the various form buildup/serialize functions.
@@ -168,8 +168,10 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 };
             }
             if (opts.url){
+                input.style.width = "60%"; //update input width pto place all the buttons in one line
                 buttonUnlink.style.display = "inline-block"
             } else {
+                input.style.width = "70%";
                 buttonUnlink.style.display = "none"
             }
             this.base.saveSelection();
