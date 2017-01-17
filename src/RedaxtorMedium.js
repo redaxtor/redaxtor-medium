@@ -126,14 +126,7 @@ export default class RedaxtorMedium extends Component {
                 this.props.setCurrentSourcePieceId(this.props.id)
             },
             onToggleImagePopup: this.onToggleImagePopup.bind(this),
-            pickerColors: [
-                "#666",
-                "#212121",
-                "#f39c12",
-                "#d2d064",
-                "#4fbbf7",
-                "#ffffff"
-            ],
+            pickerColors: this.props.options.pickerColors,
         });
         this.setState({firstRun: false})
     }
