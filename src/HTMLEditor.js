@@ -53,7 +53,9 @@ export default class HTMLEditor {
                 'imageInsert': new MediumEditor.extensions.imageInsertButton(),
                 'link': new MediumEditor.extensions.link(),
                 'separator': new MediumEditor.extensions.toolbarSeparator(),
-                'colorPicker': new MediumEditor.extensions.colorPicker()
+                'colorPicker': new MediumEditor.extensions.colorPicker({
+                    pickerColors: options.pickerColors
+                })
             },
             anchor: {
                 linkValidation: true,

@@ -125,13 +125,14 @@ export default class RedaxtorMedium extends Component {
             onSetCurrentSourcePieceId: () => {
                 this.props.setCurrentSourcePieceId(this.props.id)
             },
-            onToggleImagePopup: this.onToggleImagePopup.bind(this)
+            onToggleImagePopup: this.onToggleImagePopup.bind(this),
+            pickerColors: this.props.options.pickerColors,
         });
         this.setState({firstRun: false})
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        !nextProps.editorActive && this.die()
+        !nextProps.editorActive && this.die();
         return (this.medium && (nextProps.data.html !== this.medium.editor.getContent())) || (this.state.firstRun !== nextState.firstRun) || (nextProps.editorActive !== this.props.editorActive);
     }
 
