@@ -119,8 +119,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 // figure out how to deprecate? also consider `fa-` icon default implcations.
                 template.push(
                     '<div class="medium-editor-toolbar-form-row">',
-                    '<input type="checkbox" class="medium-editor-toolbar-anchor-target">',
-                    '<label>',
+                    '<input type="checkbox" id="anchorCheckbox" class="medium-editor-toolbar-anchor-target">',
+                    '<label for="anchorCheckbox">',
                     this.targetCheckboxText,
                     '</label>',
                     '</div>'
@@ -132,8 +132,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 // and provide similar access to a `fa-` icon default.
                 template.push(
                     '<div class="medium-editor-toolbar-form-row">',
-                    '<input type="checkbox" class="medium-editor-toolbar-anchor-button">',
-                    '<label>',
+                    '<input type="checkbox" id="anchorCheckbox" class="medium-editor-toolbar-anchor-button">',
+                    '<label for="anchorCheckbox">',
                     this.customClassOptionText,
                     '</label>',
                     '</div>'
@@ -292,8 +292,6 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             // Handle unlink button clicks (capture)
             this.on(unlink, 'click', this.handleUnlinkClick.bind(this));
 
-            // Handle toggle checkbox via label
-            this.on(checkbox, 'click', this.handleCheckClick.bind(this));
 
         },
 
@@ -362,12 +360,6 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             this.doFormCancel();
         },
 
-        handleCheckClick: function (event) {
-            // Click label checkbox -> toggle checkbox
-            event.preventDefault();
-            let checkbox = this.getAnchorTargetCheckbox();
-            checkbox.checked = !checkbox.checked;
-        },
 
         handleUnlinkClick: function (event) {
             this.base.restoreSelection();
