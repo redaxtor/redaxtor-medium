@@ -27,6 +27,21 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
          */
         placeholderText: 'Paste or type a link',
 
+        /* urlInputText: [string]
+         * text to be shown as the label of the anchor input.
+         */
+        urlInputText: 'URL:',
+
+        /* placeholderRelText: [string]
+         * text to be shown as placeholder of the rel input.
+         */
+        placeholderRelText: 'Paste or type a rel value',
+
+        /* relInputText: [string]
+         * text to be shown as the label of the rel input.
+         */
+        relInputText: 'Rel:',
+
         /* targetCheckbox: [boolean]  (previously options.anchorTarget)
          * enables/disables displaying a "Open in new window" checkbox, which when checked
          * changes the `target` attribute of the created link.
@@ -37,6 +52,17 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
          * text to be shown in the checkbox enabled via the __targetCheckbox__ option.
          */
         targetCheckboxText: 'Open in new window',
+
+        /* excludeCheckbox: [boolean]
+         * enables/disables displaying a "Exclude url from search engines" checkbox, which when checked
+         * changes the `nofollow` attribute of the created link.
+         */
+        excludeCheckbox: true,
+
+        /* excludeCheckboxText: [string]
+         * text to be shown in the checkbox enabled via the __excludeCheckbox__ option.
+         */
+        excludeCheckboxText: 'Exclude url from search engines',
 
         // Options for the Button base class
         name: 'link',
@@ -67,8 +93,9 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 var node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(range), 'a');
                 opts = {
                     url: node.getAttribute('href'),
-                    target: node.target || ""
-                }
+                    target: node.target || "",
+                    rel: node.rel || ""
+                };
                 //return this.execAction('unlink');
             }
 
@@ -96,7 +123,9 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
         getTemplate: function () {
             var template = [
-                '<input type="text" class="medium-editor-toolbar-input" placeholder="', this.placeholderText, '">'
+                '<div class="medium-editor-toolbar-form-row">',
+                '<label for="urlInput" class="inline-label">', this.urlInputText, '</label>',
+                '<input type="text" id="urlInput" class="medium-editor-toolbar-input" placeholder="',this.placeholderText, '">'
             ];
 
             template.push(
@@ -111,6 +140,14 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
             template.push('<a href="#" class="medium-editor-button medium medium-editor-toolbar-unlink" title="Unlink">','<i class="fa fa-chain-broken"></i></a>');
 
+            template.push('</div>'); //close tag for the <div class="medium-editor-toolbar-form-row">
+
+            //the rel editor
+            template.push('<div class="medium-editor-toolbar-form-row">');
+            template.push('<label for="relInput" class="inline-label">', this.relInputText, '</label>',
+                '<input type="text" id="relInput" class="medium-editor-toolbar-input" placeholder="',this.placeholderRelText, '">');
+            template.push('</div>');
+
             // both of these options are slightly moot with the ability to
             // override the various form buildup/serialize functions.
 
@@ -119,9 +156,20 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 // figure out how to deprecate? also consider `fa-` icon default implcations.
                 template.push(
                     '<div class="medium-editor-toolbar-form-row">',
-                    '<input type="checkbox" id="anchorCheckbox" class="medium-editor-toolbar-anchor-target">',
-                    '<label for="anchorCheckbox">',
+                    '<input type="checkbox" id="targetCheckbox" class="medium-editor-toolbar-anchor-target">',
+                    '<label for="targetCheckbox">',
                     this.targetCheckboxText,
+                    '</label>',
+                    '</div>'
+                );
+            }
+
+            if (this.excludeCheckbox) {
+                template.push(
+                    '<div class="medium-editor-toolbar-form-row">',
+                    '<input type="checkbox" id="excludeCheckbox" class="medium-editor-toolbar-anchor-exclude">',
+                    '<label for="excludeCheckbox">',
+                    this.excludeCheckboxText,
                     '</label>',
                     '</div>'
                 );
@@ -156,7 +204,9 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
         showForm: function (opts) {
             var input = this.getInput(),
+                relInput = this.getRelInput(),
                 targetCheckbox = this.getAnchorTargetCheckbox(),
+                excludeCheckbox = this.getAnchorExcludeCheckbox(),
                 buttonCheckbox = this.getAnchorButtonCheckbox(),
                 buttonUnlink = this.getUnlink();
             opts = opts || { url: '' };
@@ -168,12 +218,15 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 };
             }
             if (opts.url){
-                input.style.width = "60%"; //update input width pto place all the buttons in one line
+                input.style.width = "calc(100% - 161px)"; //update input width pto place all the buttons in one line
+                relInput.style.width = "calc(100% - 161px)";
                 buttonUnlink.style.display = "inline-block"
             } else {
-                input.style.width = "70%";
+                input.style.width = "calc(100% - 130px)";
+                relInput.style.width = "calc(100% - 130px)";
                 buttonUnlink.style.display = "none"
             }
+
             this.base.saveSelection();
             this.hideToolbarDefaultActions();
             MediumEditor.extensions.form.prototype.showForm.apply(this);
@@ -181,6 +234,14 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
             input.value = opts.url;
             input.focus();
+
+            let relValue = opts.rel ? opts.rel.split(' ') : [];
+            let index = relValue.indexOf('nofollow');
+            if(index >=0){
+                relValue.splice(index, 1);
+            }
+            excludeCheckbox.checked = index >= 0;
+            relInput.value = relValue.join(' ');
 
             // If we have a target checkbox, we want it to be checked/unchecked
             // based on whether the existing link has target=_blank
@@ -215,6 +276,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         getFormOpts: function () {
             // no notion of private functions? wanted `_getFormOpts`
             var targetCheckbox = this.getAnchorTargetCheckbox(),
+                relInput = this.getRelInput(),
+                excludeCheckbox = this.getAnchorExcludeCheckbox(),
                 buttonCheckbox = this.getAnchorButtonCheckbox(),
                 opts = {
                     url: this.getInput().value.trim()
@@ -227,6 +290,11 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             opts.target = '_self';
             if (targetCheckbox && targetCheckbox.checked) {
                 opts.target = '_blank';
+            }
+
+            opts.rel = relInput.value;
+            if(excludeCheckbox && excludeCheckbox.checked){
+                opts.rel += ' nofollow'
             }
 
             if (buttonCheckbox && buttonCheckbox.checked) {
@@ -246,6 +314,11 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             var node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(MediumEditor.selection.getSelectionRange(this.document)), 'a');
             node && this.base.selectElement(node);
             this.execAction(this.action, opts);
+
+            //a node an be crated after exec action. MediumEditor have no options to set the rel attribute
+            let createdNode = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(MediumEditor.selection.getSelectionRange(this.document)), 'a');
+            createdNode.rel = opts.rel;
+
             this.base.checkSelection();
         },
 
@@ -273,9 +346,10 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         attachFormEvents: function (form) {
             var close = form.querySelector('.medium-editor-toolbar-close'),
                 save = form.querySelector('.medium-editor-toolbar-save'),
-                input = form.querySelector('.medium-editor-toolbar-input'),
-                unlink = form.querySelector('.medium-editor-toolbar-unlink'),
-                checkbox = form.querySelector('.medium-editor-toolbar-anchor-target + label');
+                input = form.querySelector('#urlInput.medium-editor-toolbar-input'),
+                relInput = form.querySelector('#relInput.medium-editor-toolbar-input'),
+                unlink = form.querySelector('.medium-editor-toolbar-unlink');
+
 
             // Handle clicks on the form itself
             this.on(form, 'click', this.handleFormClick.bind(this));
@@ -309,7 +383,11 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         },
 
         getInput: function () {
-            return this.getForm().querySelector('input.medium-editor-toolbar-input');
+            return this.getForm().querySelector('input#urlInput.medium-editor-toolbar-input');
+        },
+
+        getRelInput: function () {
+            return this.getForm().querySelector('input#relInput.medium-editor-toolbar-input');
         },
 
         getUnlink: function () {
@@ -318,6 +396,10 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
         getAnchorTargetCheckbox: function () {
             return this.getForm().querySelector('.medium-editor-toolbar-anchor-target');
+        },
+
+        getAnchorExcludeCheckbox: function () {
+            return this.getForm().querySelector('.medium-editor-toolbar-anchor-exclude');
         },
 
         getAnchorButtonCheckbox: function () {
