@@ -101,7 +101,8 @@ export default class RedaxtorMedium extends Component {
     }
 
     componentInit() {
-        const dom = ReactDOM.findDOMNode(this);
+        const dom = this.props.node;
+        // const dom = ReactDOM.findDOMNode(this);
         this.medium = new _MediumEditor(dom, {
             onUpdate: () => {
                 this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}})
@@ -199,5 +200,5 @@ export default class RedaxtorMedium extends Component {
  * Specify component should be rendered inside target node and capture all inside html
  * @type {string}
  */
-RedaxtorMedium.__renderType = "INSIDE";
+RedaxtorMedium.__renderType = "BEFORE";
 RedaxtorMedium.__name = "Html";
