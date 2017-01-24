@@ -6,7 +6,7 @@ import {imageManagerApi} from './imageManager/index';
 export default class RedaxtorMedium extends Component {
     constructor(props) {
         super(props)
-        this.state = {codeEditorActive: false, firstRun: true};
+        this.state = {codeEditorActive: false};
     }
 
     componentDidMount() {
@@ -129,20 +129,20 @@ export default class RedaxtorMedium extends Component {
             onToggleImagePopup: this.onToggleImagePopup.bind(this),
             pickerColors: this.props.options.pickerColors,
         });
-        this.setState({firstRun: false})
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         !nextProps.editorActive && this.die();
-        return (this.medium && (nextProps.data.html !== this.medium.editor.getContent())) || (this.state.firstRun !== nextState.firstRun) || (nextProps.editorActive !== this.props.editorActive);
+        return (this.medium && (nextProps.data.html !== this.medium.editor.getContent())) || (nextProps.editorActive !== this.props.editorActive);
     }
 
     die() {
         if (this.medium) {
             this.medium.editor.getExtensionByName('toolbar').destroy();
             this.medium.editor.destroy();
+            delete this.medium;
         }
-        this.state.firstRun = true;
+
     };
 
     /**
@@ -150,6 +150,22 @@ export default class RedaxtorMedium extends Component {
      * Here that updates styles of background
      */
     renderNonReactAttributes(data) {
+        if(this.props.editorActive){
+            if(!this.medium) {
+                this.componentInit();
+                this.props.node.addEventListener('click', this.onClick.bind(this));
+                this.props.node.className = this.props.className;
+            }
+        } else {
+            this.props.node.removeEventListener('click', this.onClick.bind(this));
+            this.props.node.className = '';
+
+            // the die method called also from  the shouldComponentUpdate method and this. medium can not exist here
+            if(this.medium) {
+                this.die();
+            }
+        }
+
         if (!this.medium) {
             return;
         }
@@ -167,32 +183,8 @@ export default class RedaxtorMedium extends Component {
     }
 
     render() {
-        var settings;
-        if (!this.props.editorActive) {
-            settings = {
-                className: this.props.className,
-                dangerouslySetInnerHTML: {__html: this.props.data.html}
-            }
-        }
-        else if (this.state.firstRun) {
-            settings = {
-                className: this.props.className,
-                dangerouslySetInnerHTML: {__html: this.props.data.html},
-                onFocus: this.componentInit.bind(this),
-                onClick: this.onClickPreventBubble.bind(this),
-                contentEditable: true
-            }
-        } else {
-            settings = {
-                className: this.props.className,
-                dangerouslySetInnerHTML: {__html: this.props.data.html},
-                contentEditable: true,
-                onClick: this.onClick.bind(this),
-                // onBlur: ()=>{console.trace('blur'); this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}}); this.props.savePiece(this.props.id)}
-            }
-        }
         this.renderNonReactAttributes(this.props.data);
-        return React.createElement(this.props.wrapper, settings)
+        return React.createElement(this.props.wrapper, {})
     }
 }
 
