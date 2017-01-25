@@ -146,10 +146,10 @@ export default class RedaxtorMedium extends Component {
         if(this.props.editorActive){
             if(!this.medium) {
                 this.createEditor();
-                this.props.node.className = this.props.className;
+                this.props.node.classList.add(this.props.className);
             }
         } else {
-            this.props.node.className = '';
+            this.props.node.classList.remove(this.props.className);
 
             // the destroyEditor method called also from  the shouldComponentUpdate method and this. medium can not exist here
             if(this.medium) {
