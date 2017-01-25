@@ -5,8 +5,9 @@ import {imageManagerApi} from './imageManager/index';
 
 export default class RedaxtorMedium extends Component {
     constructor(props) {
-        super(props)
-        this.state = {codeEditorActive: false, firstRun: true};
+        super(props);
+        this.onClickBound = this.onClick.bind(this);
+        this.state = {codeEditorActive: false};
     }
 
     componentDidMount() {
@@ -65,18 +66,9 @@ export default class RedaxtorMedium extends Component {
     }
 
     cancelCallback() {
-        this.medium.editor.restoreSelection()
-        //this.restoreSelection();
+        this.medium.editor.restoreSelection();
     }
 
-    /**
-     * Prevent parent elements from getting our click
-     */
-    onClickPreventBubble(e) {
-        console.trace("Prevent click 1", e);
-        e.preventDefault();
-        e.stopPropagation();
-    }
 
     /**
      * Handle clicking on image in html
@@ -100,8 +92,9 @@ export default class RedaxtorMedium extends Component {
         sel.addRange(range);
     }
 
-    componentInit() {
-        const dom = ReactDOM.findDOMNode(this);
+    createEditor() {
+        const dom = this.props.node;
+        // const dom = ReactDOM.findDOMNode(this);
         this.medium = new _MediumEditor(dom, {
             onUpdate: () => {
                 this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}})
@@ -128,20 +121,21 @@ export default class RedaxtorMedium extends Component {
             onToggleImagePopup: this.onToggleImagePopup.bind(this),
             pickerColors: this.props.options.pickerColors,
         });
-        this.setState({firstRun: false})
+        this.props.node.addEventListener('click', this.onClickBound);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        !nextProps.editorActive && this.die();
-        return (this.medium && (nextProps.data.html !== this.medium.editor.getContent())) || (this.state.firstRun !== nextState.firstRun) || (nextProps.editorActive !== this.props.editorActive);
+        !nextProps.editorActive && this.destroyEditor();
+        return (this.medium && (nextProps.data.html !== this.medium.editor.getContent())) || (nextProps.editorActive !== this.props.editorActive);
     }
 
-    die() {
+    destroyEditor() {
         if (this.medium) {
             this.medium.editor.getExtensionByName('toolbar').destroy();
-            this.medium.editor.destroy();
+            this.medium.editor.destroy();            
+            this.props.node.removeEventListener('click', this.onClickBound);
+            delete this.medium;
         }
-        this.state.firstRun = true;
     };
 
     /**
@@ -149,49 +143,42 @@ export default class RedaxtorMedium extends Component {
      * Here that updates styles of background
      */
     renderNonReactAttributes(data) {
-        if (!this.medium) {
-            return;
+        if(this.props.editorActive){
+            if(!this.medium) {
+                this.createEditor();
+                this.props.node.classList.add(...this.props.className.split(' '));
+            }
+        } else {
+            this.props.node.classList.remove(...this.props.className.split(' '));
+
+            // the destroyEditor method called also from  the shouldComponentUpdate method and this. medium can not exist here
+            if(this.medium) {
+                this.destroyEditor();
+            }
         }
 
-        let content = this.medium.editor.getContent();
-        if (content != data.html) {
-            this.medium.editor.setContent(data.html);
+        if (this.medium) {
+            let content = this.medium.editor.getContent();
+            if (content != data.html) {
+                this.medium.editor.setContent(data.html);
+            }
+        } else {
+            let content = this.props.node.innerHTML;
+            if (content != data.html) {
+                this.props.node.innerHTML = data.html;
+            }
         }
 
     }
 
     componentWillUnmount() {
-        this.die();
+        this.destroyEditor();
         console.log(`Medium editor ${this.props.id} unmounted`);
     }
 
     render() {
-        var settings;
-        if (!this.props.editorActive) {
-            settings = {
-                className: this.props.className,
-                dangerouslySetInnerHTML: {__html: this.props.data.html}
-            }
-        }
-        else if (this.state.firstRun) {
-            settings = {
-                className: this.props.className,
-                dangerouslySetInnerHTML: {__html: this.props.data.html},
-                onFocus: this.componentInit.bind(this),
-                onClick: this.onClickPreventBubble.bind(this),
-                contentEditable: true
-            }
-        } else {
-            settings = {
-                className: this.props.className,
-                dangerouslySetInnerHTML: {__html: this.props.data.html},
-                contentEditable: true,
-                onClick: this.onClick.bind(this),
-                // onBlur: ()=>{console.trace('blur'); this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}}); this.props.savePiece(this.props.id)}
-            }
-        }
         this.renderNonReactAttributes(this.props.data);
-        return React.createElement(this.props.wrapper, settings)
+        return React.createElement(this.props.wrapper, {})
     }
 }
 
@@ -199,5 +186,5 @@ export default class RedaxtorMedium extends Component {
  * Specify component should be rendered inside target node and capture all inside html
  * @type {string}
  */
-RedaxtorMedium.__renderType = "INSIDE";
+RedaxtorMedium.__renderType = "BEFORE";
 RedaxtorMedium.__name = "Html";
