@@ -72,6 +72,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         contentDefault: '<b>#</b>',
         contentFA: '<i class="fa fa-link"></i>',
 
+
         init: function () {
             MediumEditor.extensions.form.prototype.init.apply(this, arguments);
 
@@ -122,10 +123,12 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         },
 
         getTemplate: function () {
+
+
             var template = [
                 '<div class="medium-editor-toolbar-form-row">',
-                '<label for="urlInput" class="inline-label">', this.urlInputText, '</label>',
-                '<input type="text" id="urlInput" class="medium-editor-toolbar-input" placeholder="',this.placeholderText, '">'
+                '<label for="urlInput' + this.getEditorId() + '" class="inline-label">', this.urlInputText, '</label>',
+                '<input type="text" id="urlInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="',this.placeholderText, '">'
             ];
 
             template.push(
@@ -144,8 +147,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
             //the rel editor
             template.push('<div class="medium-editor-toolbar-form-row">');
-            template.push('<label for="relInput" class="inline-label">', this.relInputText, '</label>',
-                '<input type="text" id="relInput" class="medium-editor-toolbar-input" placeholder="',this.placeholderRelText, '">');
+            template.push('<label for="relInput' + this.getEditorId() + '" class="inline-label">', this.relInputText, '</label>',
+                '<input type="text" id="relInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="',this.placeholderRelText, '">');
             template.push('</div>');
 
             // both of these options are slightly moot with the ability to
@@ -156,8 +159,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 // figure out how to deprecate? also consider `fa-` icon default implcations.
                 template.push(
                     '<div class="medium-editor-toolbar-form-row">',
-                    '<input type="checkbox" id="targetCheckbox" class="medium-editor-toolbar-anchor-target">',
-                    '<label for="targetCheckbox">',
+                    '<input type="checkbox" id="targetCheckbox' + this.getEditorId() + '" class="medium-editor-toolbar-anchor-target">',
+                    '<label for="targetCheckbox' + this.getEditorId() + '">',
                     this.targetCheckboxText,
                     '</label>',
                     '</div>'
@@ -167,8 +170,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             if (this.excludeCheckbox) {
                 template.push(
                     '<div class="medium-editor-toolbar-form-row">',
-                    '<input type="checkbox" id="excludeCheckbox" class="medium-editor-toolbar-anchor-exclude">',
-                    '<label for="excludeCheckbox">',
+                    '<input type="checkbox" id="excludeCheckbox' + this.getEditorId() + '" class="medium-editor-toolbar-anchor-exclude">',
+                    '<label for="excludeCheckbox' + this.getEditorId() + '">',
                     this.excludeCheckboxText,
                     '</label>',
                     '</div>'
@@ -292,10 +295,11 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 opts.target = '_blank';
             }
 
-            opts.rel = relInput.value;
+            opts.rel = relInput.value.trim(); // trim from input
             if(excludeCheckbox && excludeCheckbox.checked){
                 opts.rel += ' nofollow'
             }
+            opts.rel = opts.rel.trim(); //trim for 'nofollow'
 
             if (buttonCheckbox && buttonCheckbox.checked) {
                 opts.buttonClass = this.customClassOption;
@@ -346,8 +350,8 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         attachFormEvents: function (form) {
             var close = form.querySelector('.medium-editor-toolbar-close'),
                 save = form.querySelector('.medium-editor-toolbar-save'),
-                input = form.querySelector('#urlInput.medium-editor-toolbar-input'),
-                relInput = form.querySelector('#relInput.medium-editor-toolbar-input'),
+                input = form.querySelector('#urlInput' + this.getEditorId() + '.medium-editor-toolbar-input'),
+                relInput = form.querySelector('#relInput' + this.getEditorId() + '.medium-editor-toolbar-input'),
                 unlink = form.querySelector('.medium-editor-toolbar-unlink');
 
 
@@ -383,11 +387,11 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         },
 
         getInput: function () {
-            return this.getForm().querySelector('input#urlInput.medium-editor-toolbar-input');
+            return this.getForm().querySelector('input#urlInput' + this.getEditorId() + '.medium-editor-toolbar-input');
         },
 
         getRelInput: function () {
-            return this.getForm().querySelector('input#relInput.medium-editor-toolbar-input');
+            return this.getForm().querySelector('input#relInput' + this.getEditorId() + '.medium-editor-toolbar-input');
         },
 
         getUnlink: function () {
