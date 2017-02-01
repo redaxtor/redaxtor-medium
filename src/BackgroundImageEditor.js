@@ -38,7 +38,7 @@ export default class RedaxtorBackgroundEditor extends Component {
     }
 
     saveCallback(data) {
-        this.applyStyling(data);
+        this.renderNonReactAttributes(data);
         this.props.updatePiece(this.props.id, {
             data: {
                 url: data.url,
