@@ -73,6 +73,10 @@ export default class HTMLEditor {
 
         this.editor = new MediumEditor(node, this.options);
         this.element = this.editor.elements[0];
+        if(!this.element) {
+            console.error('Could not create MediumEditor on node for unknown reason ', node);
+            return;
+        }
         this.onFocusBinded = this.onFocus.bind(this);
         this.onBlurBinded = this.onBlur.bind(this);
         this.saveBinded = this.save.bind(this);
