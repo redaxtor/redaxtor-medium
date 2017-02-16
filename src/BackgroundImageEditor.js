@@ -16,6 +16,21 @@ export default class RedaxtorBackgroundEditor extends Component {
         this.check();
     };
 
+    /**
+     * That is a common public method that should activate component editor if it presents
+     */
+    activateEditor() {
+        if(this.props.editorActive && !imageManagerApi.get().state.isVisible) {
+            this.onToggleImagePopup();
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
+        if(newProps.manualActivation) {
+            this.props.onManualActivation(this.props.id);
+            this.activateEditor();
+        }
+    }
 
     onToggleImagePopup() {
         imageManagerApi.get().setImageData({
