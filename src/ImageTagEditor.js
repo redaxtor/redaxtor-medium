@@ -1,4 +1,5 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import {imageManagerApi} from './imageManager/index';
 
 export default class RedaxtorImageTag extends Component {
@@ -34,7 +35,7 @@ export default class RedaxtorImageTag extends Component {
     }
 
     componentDidMount() {
-        imageManagerApi.init({api: this.props.api});
+        imageManagerApi.init({api: this.props.api, container: ReactDOM.findDOMNode(this)});
         this.check();
     };
 

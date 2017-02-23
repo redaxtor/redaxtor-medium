@@ -12,7 +12,7 @@ export default class RedaxtorBackgroundEditor extends Component {
     }
 
     componentDidMount() {
-        imageManagerApi.init({api: this.props.api});
+        imageManagerApi.init({api: this.props.api, container: ReactDOM.findDOMNode(this)});
         this.check();
     };
 
