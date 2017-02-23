@@ -2,7 +2,6 @@
 import MediumEditor from './mediumEditor';
 
 
-
 export default class HTMLEditor {
     constructor(node, options) {
         var defaults = {
@@ -72,8 +71,8 @@ export default class HTMLEditor {
         };
 
         this.editor = new MediumEditor(node, this.options);
-        this.element = this.editor.elements[0];
-        if(!this.element) {
+        this.savedContent = null;
+        if (!this.editor.elements[0]) {
             console.error('Could not create MediumEditor on node for unknown reason ', node);
             return;
         }
@@ -81,9 +80,7 @@ export default class HTMLEditor {
         this.onBlurBinded = this.onBlur.bind(this);
         this.saveBinded = this.save.bind(this);
         this.setCurrentSourcePieceIdBinded = this.setCurrentSourcePieceId.bind(this);
-        //this.editor.getExtensionByName('toolbar').showToolbar();
-        //this.editor.getExtensionByName('toolbar').positionStaticToolbar(node);
-        this.editor.startHTML = this.element.innerHTML;
+        this.startHTML = this.editor.getContent();
         this.editor.subscribe('focus', this.onFocusBinded);
         this.editor.subscribe('blur', this.onBlurBinded);
         this.editor.subscribe('save', this.saveBinded);
@@ -91,13 +88,25 @@ export default class HTMLEditor {
         this.editor.subscribe('onToggleImagePopup', this.options.onToggleImagePopup);
         //Add separator class on li node
         var toolbarSeparators = this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('separator');
-        for (var index in toolbarSeparators){
+        for (var index in toolbarSeparators) {
             toolbarSeparators[index].parentNode && toolbarSeparators[index].parentNode.classList.add('separator')
         }
     }
 
+    getEditorContent() {
+        if (this.editor) {
+            return this.editor.getContent();
+        } else {
+            return this.savedContent;
+        }
+    }
+
+    saveData() {
+        this.savedContent = this.editor ? this.editor.getContent() : this.savedContent;
+    }
+
     needSave() {
-        return this.element.innerHTML != this.editor.startHTML
+        return this.getEditorContent() != this.startHTML;
     }
 
     save() {
@@ -106,7 +115,7 @@ export default class HTMLEditor {
 
         this.updatePiece();
         this.options.onSave && this.options.onSave();
-        this.editor.startHTML = this.element.innerHTML;
+        this.startHTML = this.getEditorContent();
     }
 
     setCurrentSourcePieceId() {
@@ -120,20 +129,25 @@ export default class HTMLEditor {
 
     onBlur() {
         /**
-         * Let blur event to settle. If blur was produced by editor button click it will be followed by focus soon and we don't really need to react on it
-         * @type {number}
+         * We can send text update immediately
          */
-        this.blurTimeout = setTimeout(()=>{
-            this.updatePiece();
-            if(this.needSave()) {
-                this.options.onLeave && this.options.onLeave(()=>{
-                    this.element.origElements.innerHTML = this.editor.startHTML;
+        this.updatePiece();
+
+        /**
+         * Let blur event to settle before calling onLeave. If blur was produced by editor button click it will be followed by focus soon and we don't really need to react on it
+         */
+        this.blurTimeout = setTimeout(()=> {
+            if (this.needSave()) {
+                this.options.onLeave && this.options.onLeave(()=> {
+                    /**
+                     * This callback happens on data reset
+                     */
+                    this.editor && this.editor.setContent(this.startHTML);
                     this.updatePiece();
                 });
             } else {
                 this.options.onLeave && this.options.onLeave();
             }
-
         }, 100);
     }
 
@@ -147,5 +161,16 @@ export default class HTMLEditor {
 
     updatePiece() {
         this.needSave() && this.options.onUpdate && this.options.onUpdate();
+    }
+
+    destroy() {
+        if (this.editor) {
+            this.saveData();
+            this.editor.getExtensionByName('toolbar').destroy();
+            this.editor.destroy();
+            delete this.editor;
+        } else {
+            throw Error("Editor already destroyed");
+        }
     }
 }

@@ -1,6 +1,5 @@
-import React, {Component} from 'react'
-import ReactDOM from 'react-dom'
-import _MediumEditor from './HTMLEditor'
+import React, {Component} from 'react';
+import _MediumEditor from './HTMLEditor';
 import {imageManagerApi} from './imageManager/index';
 
 export default class RedaxtorMedium extends Component {
@@ -44,12 +43,12 @@ export default class RedaxtorMedium extends Component {
                 editDimensions: true,
                 editBackground: false
             }
-        })
+        });
         imageManagerApi.get().showPopup();
     }
 
     saveCallback(data) {
-        this.medium.editor.restoreSelection()
+        this.medium.editor.restoreSelection();
         //this.restoreSelection()
         if (this.img) {
             this.img.src = data.url;
@@ -75,7 +74,7 @@ export default class RedaxtorMedium extends Component {
      * @param e
      */
     onClick(e) {
-        console.trace("Prevent click 2", e);
+        // console.trace("Prevent click 2", e);
         e.preventDefault();
         e.stopPropagation();
 
@@ -94,10 +93,11 @@ export default class RedaxtorMedium extends Component {
 
     createEditor() {
         const dom = this.props.node;
+        this.editorData = null;
         // const dom = ReactDOM.findDOMNode(this);
         this.medium = new _MediumEditor(dom, {
             onUpdate: () => {
-                this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}})
+                this.props.updatePiece(this.props.id, {data: {html: this.medium ? this.medium.getEditorContent() : this.editorData}})
             },
             onSave: () => {
                 this.props.savePiece(this.props.id)
@@ -125,14 +125,20 @@ export default class RedaxtorMedium extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        !nextProps.editorActive && this.destroyEditor();
-        return (this.medium && (nextProps.data.html !== this.medium.editor.getContent())) || (nextProps.editorActive !== this.props.editorActive);
+        if(nextProps.editorActive !== this.props.editorActive) {
+            return true;
+        }
+        if(this.medium) {
+            return nextProps.data.html !== this.medium.getEditorContent();
+        } else {
+            return nextProps.data.html !== this.props.node.innerHTML;
+        }
     }
 
     destroyEditor() {
         if (this.medium) {
-            this.medium.editor.getExtensionByName('toolbar').destroy();
-            this.medium.editor.destroy();            
+            this.editorData = this.medium.getEditorContent();
+            this.medium.destroy();
             this.props.node.removeEventListener('click', this.onClickBound);
             delete this.medium;
         }
@@ -158,7 +164,7 @@ export default class RedaxtorMedium extends Component {
         }
 
         if (this.medium) {
-            let content = this.medium.editor.getContent();
+            let content = this.medium.getEditorContent();
             if (content != data.html) {
                 this.medium.editor.setContent(data.html);
             }
