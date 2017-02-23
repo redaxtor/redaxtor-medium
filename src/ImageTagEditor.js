@@ -35,8 +35,12 @@ export default class RedaxtorImageTag extends Component {
     }
 
     componentDidMount() {
-        imageManagerApi.init({api: this.props.api, container: ReactDOM.findDOMNode(this)});
+        imageManagerApi.init({
+            api: this.props.api,
+            container: ReactDOM.findDOMNode(this),
+            id: this.props.id});
         this.check();
+        this.rect = this.props.node.getBoundingClientRect();
     };
 
 
@@ -129,6 +133,38 @@ export default class RedaxtorImageTag extends Component {
         this.check();
         this.renderNonReactAttributes(this.props.data);
         return React.createElement(this.props.wrapper, {})
+    }
+
+    componentDidUpdate() {
+        this.checkifResized();
+    }
+
+    checkifResized() {
+        const rect = this.props.node.getBoundingClientRect();
+        if (this.nodeWasUpdated && this.changedBoundingRect(rect)) {
+            this.setBoundingRect(rect);
+            this.props.onNodeResized && this.props.onNodeResized(this.props.id);
+        }
+    }
+
+    /**
+     * Check if node size is different
+     * @param rect {ClientRect}
+     */
+    changedBoundingRect(rect) {
+        return !this.rect ||
+            this.rect.top !== rect.top ||
+            this.rect.left !== rect.left ||
+            this.rect.bottom !== rect.bottom ||
+            this.rect.right !== rect.right;
+    }
+
+    /**
+     * Store node size
+     * @param rect {ClientRect}
+     */
+    setBoundingRect(rect) {
+        this.rect = rect;
     }
 }
 

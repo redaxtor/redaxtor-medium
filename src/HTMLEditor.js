@@ -78,12 +78,14 @@ export default class HTMLEditor {
         }
         this.onFocusBinded = this.onFocus.bind(this);
         this.onBlurBinded = this.onBlur.bind(this);
+        this.onNeedResizeCheckBinded = options.onNeedResizeCheck.bind(this);
         this.saveBinded = this.save.bind(this);
         this.setCurrentSourcePieceIdBinded = this.setCurrentSourcePieceId.bind(this);
         this.startHTML = this.editor.getContent();
         this.editor.subscribe('focus', this.onFocusBinded);
         this.editor.subscribe('blur', this.onBlurBinded);
         this.editor.subscribe('save', this.saveBinded);
+        this.editor.subscribe('editableInput', this.onNeedResizeCheckBinded);
         this.editor.subscribe('setCurrentSourcePieceId', this.setCurrentSourcePieceIdBinded);
         this.editor.subscribe('onToggleImagePopup', this.options.onToggleImagePopup);
         //Add separator class on li node

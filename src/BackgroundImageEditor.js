@@ -12,7 +12,10 @@ export default class RedaxtorBackgroundEditor extends Component {
     }
 
     componentDidMount() {
-        imageManagerApi.init({api: this.props.api, container: ReactDOM.findDOMNode(this)});
+        imageManagerApi.init({
+            api: this.props.api,
+            container: ReactDOM.findDOMNode(this),
+            id: this.props.id});
         this.check();
     };
 
@@ -20,13 +23,13 @@ export default class RedaxtorBackgroundEditor extends Component {
      * That is a common public method that should activate component editor if it presents
      */
     activateEditor() {
-        if(this.props.editorActive && !imageManagerApi.get().state.isVisible) {
+        if (this.props.editorActive && !imageManagerApi.get().state.isVisible) {
             this.onToggleImagePopup();
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if(newProps.manualActivation) {
+        if (newProps.manualActivation) {
             this.props.onManualActivation(this.props.id);
             this.activateEditor();
         }
@@ -70,15 +73,15 @@ export default class RedaxtorBackgroundEditor extends Component {
     cancelCallback() {
     }
 
-    findRedaxtor (el) {
-        while (el && el.tagName.toLowerCase() != 'redaxtor' && (!el.className || (el.className.indexOf("r_modal-overlay")==-1 && el.className.indexOf("r_bar")==-1))) {
+    findRedaxtor(el) {
+        while (el && el.tagName.toLowerCase() != 'redaxtor' && (!el.className || (el.className.indexOf("r_modal-overlay") == -1 && el.className.indexOf("r_bar") == -1))) {
             el = el.parentElement;
         }
         return el;
     }
 
     onClick(e) {
-        if(this.findRedaxtor(e.target)) {
+        if (this.findRedaxtor(e.target)) {
             // Here we try dealing with mix of native and React events
             // We find if event was triggered within redaxtor tag
             // This can only happen when this element is wrapped in editor that needs exclusive access to element
@@ -149,7 +152,7 @@ export default class RedaxtorBackgroundEditor extends Component {
         }
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.die();
         console.log(`Background editor ${this.props.id} unmounted`);
     }

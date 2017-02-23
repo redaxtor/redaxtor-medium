@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import _MediumEditor from './HTMLEditor';
 import {imageManagerApi} from './imageManager/index';
 
@@ -10,7 +11,12 @@ export default class RedaxtorMedium extends Component {
     }
 
     componentDidMount() {
-        imageManagerApi.init({api: this.props.api});
+        imageManagerApi.init({
+            api: this.props.api,
+            container: ReactDOM.findDOMNode(this),
+            id: this.props.id
+        });
+        this.rect = this.props.node.getBoundingClientRect();
     };
 
     saveSelection() {
@@ -97,7 +103,11 @@ export default class RedaxtorMedium extends Component {
         // const dom = ReactDOM.findDOMNode(this);
         this.medium = new _MediumEditor(dom, {
             onUpdate: () => {
+                this.checkifResized();
                 this.props.updatePiece(this.props.id, {data: {html: this.medium ? this.medium.getEditorContent() : this.editorData}})
+            },
+            onNeedResizeCheck: ()=> {
+                this.checkifResized();
             },
             onSave: () => {
                 this.props.savePiece(this.props.id)
@@ -125,10 +135,10 @@ export default class RedaxtorMedium extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if(nextProps.editorActive !== this.props.editorActive) {
+        if (nextProps.editorActive !== this.props.editorActive) {
             return true;
         }
-        if(this.medium) {
+        if (this.medium) {
             return nextProps.data.html !== this.medium.getEditorContent();
         } else {
             return nextProps.data.html !== this.props.node.innerHTML;
@@ -149,8 +159,9 @@ export default class RedaxtorMedium extends Component {
      * Here that updates styles of background
      */
     renderNonReactAttributes(data) {
-        if(this.props.editorActive){
-            if(!this.medium) {
+        console.log('Rendered');
+        if (this.props.editorActive) {
+            if (!this.medium) {
                 this.createEditor();
                 this.props.node.classList.add(...this.props.className.split(' '));
             }
@@ -158,20 +169,23 @@ export default class RedaxtorMedium extends Component {
             this.props.node.classList.remove(...this.props.className.split(' '));
 
             // the destroyEditor method called also from  the shouldComponentUpdate method and this. medium can not exist here
-            if(this.medium) {
+            if (this.medium) {
                 this.destroyEditor();
             }
         }
 
+        this.nodeWasUpdated = false;
         if (this.medium) {
             let content = this.medium.getEditorContent();
             if (content != data.html) {
                 this.medium.editor.setContent(data.html);
+                this.nodeWasUpdated = true;
             }
         } else {
             let content = this.props.node.innerHTML;
             if (content != data.html) {
                 this.props.node.innerHTML = data.html;
+                this.nodeWasUpdated = true;
             }
         }
 
@@ -182,9 +196,41 @@ export default class RedaxtorMedium extends Component {
         console.log(`Medium editor ${this.props.id} unmounted`);
     }
 
+    componentDidUpdate() {
+        this.checkifResized();
+    }
+
+    checkifResized() {
+        const rect = this.props.node.getBoundingClientRect();
+        if (this.nodeWasUpdated && this.changedBoundingRect(rect)) {
+            this.setBoundingRect(rect);
+            this.props.onNodeResized && this.props.onNodeResized(this.props.id);
+        }
+    }
+
+    /**
+     * Check if node size is different
+     * @param rect {ClientRect}
+     */
+    changedBoundingRect(rect) {
+        return !this.rect ||
+            this.rect.top !== rect.top ||
+            this.rect.left !== rect.left ||
+            this.rect.bottom !== rect.bottom ||
+            this.rect.right !== rect.right;
+    }
+
+    /**
+     * Store node size
+     * @param rect {ClientRect}
+     */
+    setBoundingRect(rect) {
+        this.rect = rect;
+    }
+
     render() {
         this.renderNonReactAttributes(this.props.data);
-        return React.createElement(this.props.wrapper, {})
+        return React.createElement(this.props.wrapper, {data: {id: this.props.id}});
     }
 }
 
