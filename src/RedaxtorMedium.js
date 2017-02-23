@@ -94,10 +94,11 @@ export default class RedaxtorMedium extends Component {
 
     createEditor() {
         const dom = this.props.node;
+        this.editorData = null;
         // const dom = ReactDOM.findDOMNode(this);
         this.medium = new _MediumEditor(dom, {
             onUpdate: () => {
-                this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}})
+                this.props.updatePiece(this.props.id, {data: {html: this.medium ? this.medium.getEditorContent() : this.editorData}})
             },
             onSave: () => {
                 this.props.savePiece(this.props.id)
@@ -131,12 +132,18 @@ export default class RedaxtorMedium extends Component {
 
     destroyEditor() {
         if (this.medium) {
+            this.saveData();
             this.medium.editor.getExtensionByName('toolbar').destroy();
-            this.medium.editor.destroy();            
+            this.medium.editor.destroy();
             this.props.node.removeEventListener('click', this.onClickBound);
             delete this.medium;
         }
     };
+
+    saveData() {
+        this.medium.saveData();
+        this.editorData = this.medium.getEditorContent()
+    }
 
     /**
      * Updates rendering of props that are not updated by react

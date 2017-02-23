@@ -72,6 +72,7 @@ export default class HTMLEditor {
         };
 
         this.editor = new MediumEditor(node, this.options);
+        this.savedContent = null;
         this.element = this.editor.elements[0];
         if(!this.element) {
             console.error('Could not create MediumEditor on node for unknown reason ', node);
@@ -96,8 +97,20 @@ export default class HTMLEditor {
         }
     }
 
+    getEditorContent() {
+        if(this.editor){
+            return this.editor.getContent();
+        } else {
+            this.savedContent;
+        }
+    }
+
+    saveData() {
+        this.savedContent = this.editor ? this.editor.getContent() : null;
+    }
+
     needSave() {
-        return this.element.innerHTML != this.editor.startHTML
+        return (this.savedContent ? this.savedContent : this.element.innerHTML) != this.editor.startHTML
     }
 
     save() {
@@ -125,7 +138,11 @@ export default class HTMLEditor {
          */
         this.blurTimeout = setTimeout(()=>{
             this.updatePiece();
-            if(this.needSave()) {
+            if( this.needSave()) {
+                if(this.savedContent){
+                    this.element.innerHTML = this.savedContent;
+                }
+
                 this.options.onLeave && this.options.onLeave(()=>{
                     this.element.origElements.innerHTML = this.editor.startHTML;
                     this.updatePiece();
