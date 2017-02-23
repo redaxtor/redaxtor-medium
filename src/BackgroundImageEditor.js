@@ -53,6 +53,7 @@ export default class RedaxtorBackgroundEditor extends Component {
             }
         });
         imageManagerApi.get().showPopup();
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, true);
     }
 
     saveCallback(data) {
@@ -68,9 +69,11 @@ export default class RedaxtorBackgroundEditor extends Component {
             }
         });
         this.props.savePiece(this.props.id);
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
 
     cancelCallback() {
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
 
     findRedaxtor(el) {

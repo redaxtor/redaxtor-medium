@@ -127,6 +127,7 @@ export default class HTMLEditor {
     onFocus() {
         this.options.onFocus && this.options.onFocus();
         clearTimeout(this.blurTimeout);
+        this.options.onEditorActive && this.options.onEditorActive(true);
     }
 
     onBlur() {
@@ -150,6 +151,7 @@ export default class HTMLEditor {
             } else {
                 this.options.onLeave && this.options.onLeave();
             }
+            this.options.onEditorActive && this.options.onEditorActive(false);
         }, 100);
     }
 

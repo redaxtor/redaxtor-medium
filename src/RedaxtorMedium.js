@@ -130,6 +130,10 @@ export default class RedaxtorMedium extends Component {
             },
             onToggleImagePopup: this.onToggleImagePopup.bind(this),
             pickerColors: this.props.options.pickerColors,
+
+            onEditorActive: (active) => {
+                this.props.onEditorActive && this.props.onEditorActive(this.props.id, active);
+            }
         });
         this.props.node.addEventListener('click', this.onClickBound);
     }

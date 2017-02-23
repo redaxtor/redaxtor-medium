@@ -60,14 +60,17 @@ export default class RedaxtorImageTag extends Component {
             }
         });
         imageManagerApi.get().showPopup();
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, true);
     }
 
     saveCallback(data) {
         this.props.updatePiece(this.props.id, {data: {src: data.url, alt: data.alt}});
         this.props.savePiece(this.props.id);
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
 
     cancelCallback() {
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
 
     onClick(e) {
