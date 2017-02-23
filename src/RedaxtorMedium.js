@@ -230,7 +230,7 @@ export default class RedaxtorMedium extends Component {
 
     render() {
         this.renderNonReactAttributes(this.props.data);
-        return React.createElement(this.props.wrapper, {data: {id: this.props.id}});
+        return React.createElement(this.props.wrapper, {});
     }
 }
 
