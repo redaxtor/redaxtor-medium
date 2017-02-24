@@ -9,9 +9,14 @@ export default class ImageManager extends Component {
         this.state = {
             isVisible: false,
             settings: {}
-        }
+        };
 
-        props.api && props.api.getImageList && props.api.getImageList().then((list) => {
+        this.updateImageList();
+
+    }
+
+    updateImageList(){
+        this.props.api && this.props.api.getImageList && this.props.api.getImageList(this.state.pieceData).then((list) => {
             // add index to item if not set by the server
             list.forEach((item, index) => {
                 if(!item.Id){
@@ -21,6 +26,7 @@ export default class ImageManager extends Component {
             this.setState({gallery: list})
         });
     }
+
 
     toggleImagePopup() {
         this.setState({isVisible: !this.state.isVisible})
@@ -207,6 +213,9 @@ export default class ImageManager extends Component {
         (!data.alt && data.url) && (data.alt = "");
         this.setState(data);
         data.url && this.getImageSize(data, !!data.width);
+        if(data.pieceData){
+            this.updateImageList();
+        }
     }
 
     sendFile() {
