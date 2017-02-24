@@ -142,11 +142,7 @@ export default class RedaxtorMedium extends Component {
         if (nextProps.editorActive !== this.props.editorActive) {
             return true;
         }
-        if (this.medium) {
-            return nextProps.data.html !== this.medium.getEditorContent();
-        } else {
-            return nextProps.data.html !== this.props.node.innerHTML;
-        }
+        return nextProps.data.html !== this.props.data.html;
     }
 
     destroyEditor() {
@@ -163,7 +159,7 @@ export default class RedaxtorMedium extends Component {
      * Here that updates styles of background
      */
     renderNonReactAttributes(data) {
-        console.log('Rendered');
+        // console.log('Re-Rendered?', this.props.id);
         if (this.props.editorActive) {
             if (!this.medium) {
                 this.createEditor();
@@ -182,12 +178,14 @@ export default class RedaxtorMedium extends Component {
         if (this.medium) {
             let content = this.medium.getEditorContent();
             if (content != data.html) {
+                // console.log('Re-Rendered HARD', this.props.id);
                 this.medium.editor.setContent(data.html);
                 this.nodeWasUpdated = true;
             }
         } else {
             let content = this.props.node.innerHTML;
             if (content != data.html) {
+                // console.log('Re-Rendered HARD', this.props.id);
                 this.props.node.innerHTML = data.html;
                 this.nodeWasUpdated = true;
             }
