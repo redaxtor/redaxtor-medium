@@ -1,28 +1,26 @@
 var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 (function () {
     'use strict';
-    var UndoButton = MediumEditor.Extension.extend({
-        name: 'undo',
+    var ResetButton = MediumEditor.Extension.extend({
+        name: 'reset',
         init: function () {
             this.button = this.document.createElement('button');
             this.button.classList.add('medium-editor-action');
-            this.button.innerHTML = '<i class="fa fa-undo"></i>';
-            this.button.title = "Undo Changes";
+            this.button.innerHTML = '<i class="fa fa-times"></i>';
+            this.button.title = "Reset Changes";
             this.handleClickBinded = this.handleClick.bind(this);
+            this.resetToHTML = this.base.getContent();
             this.on(this.button, 'click', this.handleClickBinded);
         },
         getButton: function () {
             return this.button;
         },
         handleClick: function (event) {
-            let undoContent = this.base.historyManager.undo();
-            if(undoContent) {
-                this.base.setContent(undoContent);
-            }
+            (this.base.getContent() !== this.resetToHTML) && (this.base.setContent(this.resetToHTML));
         },
         destroy: function(){
             this.off(this.button, 'click', this.handleClickBinded);
         }
     });
-    MediumEditor.extensions.undoButton = UndoButton;
+    MediumEditor.extensions.resetButton = ResetButton;
 }());

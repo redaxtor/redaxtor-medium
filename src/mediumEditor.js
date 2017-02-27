@@ -1,6 +1,8 @@
 import MediumEditor from 'medium-editor/dist/js/medium-editor.js';
 
+require('./extensions/resetButton');
 require('./extensions/undoButton');
+require('./extensions/redoButton');
 require('./extensions/saveButton');
 require('./extensions/sourceButton');
 require('./extensions/imageInsertButton');

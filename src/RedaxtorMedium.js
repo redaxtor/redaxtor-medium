@@ -65,7 +65,8 @@ export default class RedaxtorMedium extends Component {
         } else {
             this.medium.editor.pasteHTML('<img src="' + (data.url || "") + '" alt="' +
                 (data.alt || "") + 'style="' + 'width: "' + (data.width || "") +
-                'px; height: "' + (data.height || "") + 'px">')
+                'px; height: "' + (data.height || "") + 'px">');
+            this.medium.onChange();
         }
         this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}})
     }
@@ -204,7 +205,7 @@ export default class RedaxtorMedium extends Component {
 
     checkifResized() {
         const rect = this.props.node.getBoundingClientRect();
-        if (this.nodeWasUpdated && this.changedBoundingRect(rect)) {
+        if (this.changedBoundingRect(rect)) {
             this.setBoundingRect(rect);
             this.props.onNodeResized && this.props.onNodeResized(this.props.id);
         }

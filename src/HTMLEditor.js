@@ -1,17 +1,61 @@
 "use strict";
 import MediumEditor from './mediumEditor';
 
+class HistoryManager {
+    constructor(start) {
+        this.history = [];
+        this.historyIndex = -1;
+        this.applied = false;
+        this.startState = start;
+    }
+
+    registerChange(content) {
+
+        if(this.historyIndex>=0 && this.history[this.historyIndex] == content) {
+            return; // Don't register same text as current history position
+        }
+
+        if (this.historyIndex < this.history.length - 1) {
+            this.history.splice(this.historyIndex + 1);
+        }
+
+        this.history.push(content);
+        this.historyIndex = this.history.length - 1;
+    }
+
+    undo() {
+        this.applied = true;
+        if (this.historyIndex >= 0) {
+            this.historyIndex--;
+            return this.history[this.historyIndex];
+        } else {
+            return this.startState;
+        }
+    }
+
+    redo() {
+        if (this.historyIndex < this.history.length - 1) {
+            this.historyIndex++;
+            this.applied = true;
+            return this.history[this.historyIndex];
+        } else {
+            return void 0;
+        }
+    }
+}
 
 export default class HTMLEditor {
     constructor(node, options) {
+        this.historyManager = new HistoryManager(node.innerHTML);
+
         var defaults = {
             buttonLabels: 'fontawesome',
             autoLink: true,
             stickyTopOffset: 5,
             toolbar: {
                 buttons: [
-                    'save',
                     'undo',
+                    'redo',
                     'source',
                     'removeFormat',
                     'link',
@@ -46,7 +90,9 @@ export default class HTMLEditor {
             extensions: {
                 imageDragging: new MediumEditor.extensions.imageDrag(),
                 //imageResize: new MediumEditor.extensions.imageResize(),
+                'redo': new MediumEditor.extensions.redoButton(),
                 'undo': new MediumEditor.extensions.undoButton(),
+                'reset': new MediumEditor.extensions.resetButton(),
                 'save': new MediumEditor.extensions.saveButton(),
                 'source': new MediumEditor.extensions.sourceButton(),
                 'imageInsert': new MediumEditor.extensions.imageInsertButton(),
@@ -85,14 +131,35 @@ export default class HTMLEditor {
         this.editor.subscribe('focus', this.onFocusBinded);
         this.editor.subscribe('blur', this.onBlurBinded);
         this.editor.subscribe('save', this.saveBinded);
-        this.editor.subscribe('editableInput', this.onNeedResizeCheckBinded);
         this.editor.subscribe('setCurrentSourcePieceId', this.setCurrentSourcePieceIdBinded);
         this.editor.subscribe('onToggleImagePopup', this.options.onToggleImagePopup);
+
+        this.editor.historyManager = this.historyManager;
+
+        this.onChangeDebounceTimer = null;
+        this.onChangeDebounced = ()=> {
+            console.log("History add", this.editor.getContent(), this.historyManager);
+            this.historyManager.registerChange(this.editor.getContent());
+        };
+        this.editor.subscribe('editableInput', ()=> {
+            this.onChange();
+        });
         //Add separator class on li node
         var toolbarSeparators = this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('separator');
         for (var index in toolbarSeparators) {
             toolbarSeparators[index].parentNode && toolbarSeparators[index].parentNode.classList.add('separator')
         }
+    }
+
+    onChange() {
+        clearTimeout(this.onChangeDebounceTimer);
+        if(this.historyManager.applied) {
+            this.historyManager.applied = false; // Omit history event because it came from history manager
+        } else {
+            this.onChangeDebounceTimer = setTimeout(this.onChangeDebounced, 500);
+        }
+
+        options.onNeedResizeCheck();
     }
 
     getEditorContent() {
