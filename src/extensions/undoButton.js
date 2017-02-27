@@ -14,10 +14,16 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         getButton: function () {
             return this.button;
         },
-        handleClick: function (event) {
+        handleClick: function (e) {
+            // console.log("UNDO");
+            e.preventDefault();
+            e.stopPropagation();
             let undoContent = this.base.historyManager.undo();
+            let selection = this.base.exportSelection();
             if(undoContent) {
-                this.base.setContent(undoContent);
+               // console.log("UNDO", undoContent);
+                this.base.setContent(undoContent.html);
+                this.base.importSelection(undoContent.caret || selection);
             }
         },
         destroy: function(){

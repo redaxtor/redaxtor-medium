@@ -11,24 +11,29 @@ class HistoryManager {
 
     registerChange(content) {
 
-        if(this.historyIndex>=0 && this.history[this.historyIndex] == content) {
+        if(this.historyIndex>=0 && this.history[this.historyIndex].html == content.html) {
+            // console.log("Skipped pushing");
             return; // Don't register same text as current history position
         }
 
         if (this.historyIndex < this.history.length - 1) {
+            // console.log("Deleting from ", this.historyIndex + 1);
             this.history.splice(this.historyIndex + 1);
         }
 
         this.history.push(content);
         this.historyIndex = this.history.length - 1;
+        // console.log("Pushed ", this.history[this.historyIndex]);
     }
 
     undo() {
         this.applied = true;
-        if (this.historyIndex >= 0) {
+        if (this.historyIndex > 0) {
             this.historyIndex--;
+            // console.log("Undo from history", this.historyIndex, this.history[this.historyIndex], this.history);
             return this.history[this.historyIndex];
         } else {
+            // console.log("Undo from initial state", this.historyIndex, this.startState);
             return this.startState;
         }
     }
@@ -37,6 +42,7 @@ class HistoryManager {
         if (this.historyIndex < this.history.length - 1) {
             this.historyIndex++;
             this.applied = true;
+            // console.log("Redo from history", this.historyIndex, this.history[this.historyIndex], this.history);
             return this.history[this.historyIndex];
         } else {
             return void 0;
@@ -46,7 +52,7 @@ class HistoryManager {
 
 export default class HTMLEditor {
     constructor(node, options) {
-        this.historyManager = new HistoryManager(node.innerHTML);
+        this.historyManager = new HistoryManager(null);
 
         var defaults = {
             buttonLabels: 'fontawesome',
@@ -135,11 +141,11 @@ export default class HTMLEditor {
         this.editor.subscribe('onToggleImagePopup', this.options.onToggleImagePopup);
 
         this.editor.historyManager = this.historyManager;
+        this.historyManager.startState = {html: this.editor.getContent(), caret: this.editor.exportSelection()};
 
         this.onChangeDebounceTimer = null;
         this.onChangeDebounced = ()=> {
-            console.log("History add", this.editor.getContent(), this.historyManager);
-            this.historyManager.registerChange(this.editor.getContent());
+            this.historyManager.registerChange({html: this.editor.getContent(), caret: this.editor.exportSelection()});
         };
         this.editor.subscribe('editableInput', ()=> {
             this.onChange();
@@ -159,7 +165,7 @@ export default class HTMLEditor {
             this.onChangeDebounceTimer = setTimeout(this.onChangeDebounced, 500);
         }
 
-        options.onNeedResizeCheck();
+        this.options.onNeedResizeCheck();
     }
 
     getEditorContent() {
