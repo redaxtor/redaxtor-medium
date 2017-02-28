@@ -32,17 +32,22 @@ export default class RedaxtorMedium extends Component {
     }
 
     onToggleImagePopup() {
+        let imageData = {};
         if (this.img) {
-            imageManagerApi.get().setImageData({
-                url: this.img.src,
-                alt: this.img.alt || "",
-                width: +this.img.width,
-                height: +this.img.height
-            })
+            imageData = {}; // set for use in setImageData
         }
-        this.medium.editor.saveSelection();
-        //this.saveSelection()
+
         imageManagerApi.get().setImageData({
+            url: imageData.src,
+            alt: imageData.alt || "",
+            width: +imageData.width,
+            height: +imageData.height,
+            pieceRef: {
+                type: this.props.type,
+                data: this.props.data,
+                id: this.props.id,
+                dataset: this.props.dataset
+            },
             onClose: this.cancelCallback.bind(this),
             onSave: this.saveCallback.bind(this),
             settings: {
@@ -50,6 +55,8 @@ export default class RedaxtorMedium extends Component {
                 editBackground: false
             }
         });
+
+        this.medium.editor.saveSelection();
         imageManagerApi.get().showPopup();
     }
 
@@ -59,6 +66,9 @@ export default class RedaxtorMedium extends Component {
         if (this.img) {
             this.img.src = data.url;
             this.img.alt = data.alt;
+            if(!this.img.style) {
+                this.img.style = {};
+            }
             this.img.style.width = data.width + "px";
             this.img.style.height = data.height + "px";
             this.img = null;
