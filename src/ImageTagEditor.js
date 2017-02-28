@@ -50,13 +50,12 @@ export default class RedaxtorImageTag extends Component {
             alt: this.targetImg.alt || "",
             width: this.targetImg.width,
             height: this.targetImg.height,
-            pieceData: {
+            pieceRef: {
                 type: this.props.type,
                 data: this.props.data,
-                id: this.props.id
-            }
-        });
-        imageManagerApi.get().setImageData({
+                id: this.props.id,
+                dataset: this.props.dataset
+            },
             onClose: this.cancelCallback.bind(this),
             onSave: this.saveCallback.bind(this),
             settings: {

@@ -43,13 +43,12 @@ export default class RedaxtorBackgroundEditor extends Component {
             bgSize: this.targetDiv.style.backgroundSize,
             bgPosition: this.targetDiv.style.backgroundPosition,
             alt: this.targetDiv.title || "",
-            pieceData: {
+            pieceRef: {
                 type: this.props.type,
                 data: this.props.data,
-                id: this.props.id
-            }
-        });
-        imageManagerApi.get().setImageData({
+                id: this.props.id,
+                dataset: this.props.dataset
+            },
             onClose: this.cancelCallback.bind(this),
             onSave: this.saveCallback.bind(this),
             settings: {
