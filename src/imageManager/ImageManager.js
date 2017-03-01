@@ -285,7 +285,7 @@ export default class ImageManager extends Component {
     render() {
         return (
             <div>
-                { this.state.isVisible && <Popup isOpen={this.state.isVisible}>
+                { this.state.isVisible && <Popup isOpen={this.state.isVisible} onClose={this.onClose.bind(this)}>
                     <div className="image-inputs-container">
                         <div className="image-left-part">
                             <div className="item-form">
