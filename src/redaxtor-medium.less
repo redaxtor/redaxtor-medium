@@ -1,16 +1,30 @@
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 @import 'imageManager/modal';
 
+
+// See `\redaxtor\src\styles\vars\md-colors.less`
+
+@rx-background-base: #1f2935;
+@rx-css-hover-base: #1f2935;
+@rx-css-hover-base-outline: #6b8eb7;
+@rx-background-dark: #090e14;
+@rx-border-base: #72787f;
+@rx-border-dark: #363f4a;
+@rx-text-base: #ffffff;
+@rx-text-dark: #cbcbcb;
+@rx-shadow: 0px 0px 10px fade(#090e14, 20%);
+
 // theme settings
-@bgcolor: #455a64;
-@border-color: lighten(@bgcolor, 10);
-@hover-color: darken(@bgcolor, 10);
-@link-color: #e8e8f0;
-@button-active-text-color: lighten(@link-color, 10);
-@placeholder-color: darken(@link-color, 10);;
+@bgcolor: @rx-background-base;
+@border-color: @rx-border-base;
+@hover-color: @rx-background-dark;
+@link-color: @rx-text-base;
+@button-active-text-color: @rx-text-base;
+@placeholder-color: darken(@rx-text-base, 20);
+
 @button-size: 30px;
 @padding: 5px;
-@border-radius: 5px;
+@border-radius: 0px;
 @arrow-size: 10px;
 
 // theme rules
