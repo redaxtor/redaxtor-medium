@@ -26,11 +26,21 @@ export default class RedaxtorImageTag extends Component {
         }
     }
 
+    deactivateEditor() {
+        if(this.props.editorActive && imageManagerApi.get().state.isVisible) {
+            this.closePopup();
+        }
+    }
+
 
     componentWillReceiveProps(newProps) {
         if(newProps.manualActivation) {
             this.props.onManualActivation(this.props.id);
             this.activateEditor();
+        }
+        if(newProps.manualDeactivation) {
+            this.props.onManualDeactivation(this.props.id);
+            this.deactivateEditor();
         }
     }
 
@@ -65,6 +75,10 @@ export default class RedaxtorImageTag extends Component {
         });
         imageManagerApi.get().showPopup();
         this.props.onEditorActive && this.props.onEditorActive(this.props.id, true);
+    }
+
+    closePopup() {
+        imageManagerApi.get().onClose();
     }
 
     saveCallback(data) {
