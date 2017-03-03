@@ -16,7 +16,8 @@ export default class RedaxtorMedium extends Component {
             container: ReactDOM.findDOMNode(this),
             id: this.props.id
         });
-        this.rect = this.props.node.getBoundingClientRect();
+        const nodeRect = this.props.api.getNodeRect(this.props);
+        this.rect = nodeRect.hover || nodeRect.node;
     };
 
     saveSelection() {
@@ -136,6 +137,10 @@ export default class RedaxtorMedium extends Component {
                  }*/
                 this.props.savePiece(this.props.id);
             },
+            __getBoundingRect: () => {
+                const nodeRect = this.props.api.getNodeRect(this.props);
+                return nodeRect.hover || nodeRect.node;
+            },
             onSetCurrentSourcePieceId: () => {
                 this.props.setCurrentSourcePieceId(this.props.id)
             },
@@ -214,7 +219,8 @@ export default class RedaxtorMedium extends Component {
     }
 
     checkifResized() {
-        const rect = this.props.node.getBoundingClientRect();
+        const nodeRect = this.props.api.getNodeRect(this.props);
+        const rect = nodeRect.hover || nodeRect.node;
         if (this.changedBoundingRect(rect)) {
             this.setBoundingRect(rect);
             this.props.onNodeResized && this.props.onNodeResized(this.props.id);

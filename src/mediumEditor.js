@@ -20,8 +20,9 @@ MediumEditor.extensions.toolbar.prototype.positionStaticToolbar = function (cont
     var scrollTop = (this.document.documentElement && this.document.documentElement.scrollTop) || this.document.body.scrollTop,
         windowWidth = this.window.innerWidth,
         toolbarElement = this.getToolbarElement(),
-        containerRect = container.getBoundingClientRect(),
+        containerRect = this.base.options.__getBoundingRect(),
         containerTop = containerRect.top + scrollTop,
+        containerHeight = containerRect.height,
         containerCenter = (containerRect.left + (containerRect.width / 2)),
         toolbarHeight = toolbarElement.offsetHeight,
         toolbarWidth = toolbarElement.offsetWidth,
@@ -37,14 +38,14 @@ MediumEditor.extensions.toolbar.prototype.positionStaticToolbar = function (cont
          * If editor can't be fit on top before container, and there IS place under element, push it there
          */
 
-        if(scrollTopBottom>containerTop - stickyOffsetTop && containerTop + container.offsetHeight + toolbarHeight + stickyOffsetTop<scrollTop+window.innerHeight) {
-            toolbarElement.style.top = (containerTop + container.offsetHeight + stickyOffsetTop) + "px";
+        if(scrollTopBottom>containerTop - stickyOffsetTop && containerTop + containerHeight + toolbarHeight + stickyOffsetTop<scrollTop+window.innerHeight) {
+            toolbarElement.style.top = (containerTop + containerHeight + stickyOffsetTop) + "px";
             toolbarElement.classList.remove('medium-editor-sticky-toolbar');
             toolbarElement.classList.add('medium-editor-on-bottom');
         } else
             // If it's beyond the height of the editor, position it at the bottom of the editor
         if (scrollTop > (containerTop + container.offsetHeight - toolbarHeight - stickyOffsetTop)) {
-            toolbarElement.style.top = (containerTop + container.offsetHeight - toolbarHeight) > 0 ? (containerTop + container.offsetHeight - toolbarHeight) : scrollTop + 'px';
+            toolbarElement.style.top = (containerTop + containerHeight - toolbarHeight) > 0 ? (containerTop + containerHeight - toolbarHeight) : scrollTop + 'px';
             toolbarElement.classList.remove('medium-editor-sticky-toolbar');
 
         } else

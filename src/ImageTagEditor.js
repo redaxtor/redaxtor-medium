@@ -50,7 +50,8 @@ export default class RedaxtorImageTag extends Component {
             container: ReactDOM.findDOMNode(this),
             id: this.props.id});
         this.check();
-        this.rect = this.props.node.getBoundingClientRect();
+        const nodeRect = this.props.api.getNodeRect(this.props);
+        this.rect = nodeRect.hover || nodeRect.node;
     };
 
 
@@ -161,7 +162,8 @@ export default class RedaxtorImageTag extends Component {
     }
 
     checkifResized() {
-        const rect = this.props.node.getBoundingClientRect();
+        const nodeRect = this.props.api.getNodeRect(this.props);
+        const rect = nodeRect.hover || nodeRect.node;
         if (this.nodeWasUpdated && this.changedBoundingRect(rect)) {
             this.setBoundingRect(rect);
             this.props.onNodeResized && this.props.onNodeResized(this.props.id);
