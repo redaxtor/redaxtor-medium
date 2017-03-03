@@ -252,4 +252,4 @@ export default class RedaxtorMedium extends Component {
  * @type {string}
  */
 RedaxtorMedium.__renderType = "BEFORE";
-RedaxtorMedium.__name = "Rich Text";
+RedaxtorMedium.__editLabel = "Edit Rich Text";
