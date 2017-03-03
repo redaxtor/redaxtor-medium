@@ -36,12 +36,13 @@ export default class RedaxtorBackgroundEditor extends Component {
     }
 
     onToggleImagePopup() {
+        const computedStyle = getComputedStyle(this.targetDiv);
         imageManagerApi.get().setImageData({
-            url: this.targetDiv.style.backgroundImage && this.targetDiv.style.backgroundImage.slice(4, -1).replace(/"/g, ""),
-            bgColor: this.targetDiv.style.backgroundColor,
-            bgRepeat: this.targetDiv.style.backgroundRepeat,
-            bgSize: this.targetDiv.style.backgroundSize,
-            bgPosition: this.targetDiv.style.backgroundPosition,
+            url: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ""),
+            bgColor: computedStyle.backgroundColor,
+            bgRepeat: computedStyle.backgroundRepeat,
+            bgSize: computedStyle.backgroundSize,
+            bgPosition: computedStyle.backgroundPosition,
             alt: this.targetDiv.title || "",
             pieceRef: {
                 type: this.props.type,
