@@ -195,3 +195,4 @@ export default class RedaxtorImageTag extends Component {
  */
 RedaxtorImageTag.__renderType = "BEFORE";
 RedaxtorImageTag.__editLabel = "Edit Image";
+RedaxtorImageTag.__name = "Images";
