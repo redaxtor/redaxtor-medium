@@ -6,9 +6,9 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         init: function () {
             this.button = this.document.createElement('button');
             this.button.classList.add('medium-editor-action');
-            this.button.innerHTML = '<i class="fa fa-file-image-o"></i>';
+            this.button.innerHTML = '<i class="rx_icon rx_icon-picture-o"></i>';
             this.button.title = "Image";
-            this.handleClickBinded = this.handleClick.bind(this)
+            this.handleClickBinded = this.handleClick.bind(this);
             this.on(this.button, 'click', this.handleClickBinded);
         },
         getButton: function () {
