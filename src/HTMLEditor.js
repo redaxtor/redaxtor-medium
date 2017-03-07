@@ -63,32 +63,24 @@ export default class HTMLEditor {
                 buttons: [
                     'undo',
                     'redo',
-                    'source',
-                    'removeFormat',
-                    'link',
-                    'imageInsert',
-                    'separator',
                     'bold',
                     'italic',
                     'underline',
                     'strikethrough',
-                    'subscript',
-                    'superscript',
                     'colorPicker',
-                    'h1',
-                    'h2',
-                    'h3',
-                    'h4',
-                    'quote',
-                    'pre',
-                    'orderedlist',
+                    'reset',
+                    'newLineSeparator',
                     'unorderedlist',
-                    'indent',
-                    'outdent',
+                    'orderedlist',
+                    'justifyFull',
                     'justifyLeft',
                     'justifyCenter',
                     'justifyRight',
-                    'justifyFull'
+                    'link',
+                    'quote',
+                    'imageInsert',
+                    'pre',
+                    'save'
                 ],
                 static: true,
                 updateOnEmptySelection: true,
@@ -101,10 +93,10 @@ export default class HTMLEditor {
                 'undo': new MediumEditor.extensions.undoButton(),
                 'reset': new MediumEditor.extensions.resetButton(),
                 'save': new MediumEditor.extensions.saveButton(),
-                'source': new MediumEditor.extensions.sourceButton(),
                 'imageInsert': new MediumEditor.extensions.imageInsertButton(),
                 'link': new MediumEditor.extensions.link(),
                 'separator': new MediumEditor.extensions.toolbarSeparator(),
+                'newLineSeparator': new MediumEditor.extensions.toolbarNewLineSeparator(),
                 'colorPicker': new MediumEditor.extensions.colorPicker({
                     pickerColors: options.pickerColors
                 })
@@ -156,6 +148,19 @@ export default class HTMLEditor {
         for (var index in toolbarSeparators) {
             toolbarSeparators[index].parentNode && toolbarSeparators[index].parentNode.classList.add('separator')
         }
+        //Add new-line  and new-line class on li node
+        var toolbarNewLineSeparators = this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('newLineSeparator');
+        for (var index in toolbarNewLineSeparators) {
+            toolbarNewLineSeparators[index].parentNode && toolbarNewLineSeparators[index].parentNode.classList.add('new-line')
+        }
+
+        //pull right buttons
+        Array.from(this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('save-button')).forEach( element => {
+            element.parentNode && element.parentNode.classList.add('pull-right');
+        });
+        Array.from(this.editor.getExtensionByName('toolbar').toolbar.getElementsByClassName('reset-button')).forEach( element => {
+            element.parentNode && element.parentNode.classList.add('pull-right');
+        });
     }
 
     onChange() {

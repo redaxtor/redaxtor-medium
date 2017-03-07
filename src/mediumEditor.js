@@ -9,6 +9,7 @@ require('./extensions/imageInsertButton');
 require('./extensions/link');
 require('./extensions/imageDrag');
 require('./extensions/ToolbarSeparator');
+require('./extensions/ToolbarNewLineSeparator');
 require('./extensions/ColorPicker');
 
 

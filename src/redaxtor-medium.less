@@ -22,8 +22,8 @@
 @button-active-text-color: @rx-text-base;
 @placeholder-color: darken(@rx-text-base, 20);
 
-@button-size: 30px;
-@padding: 5px;
+@button-size: 24px;
+@padding: 0px;
 @border-radius: 0px;
 @arrow-size: 10px;
 
@@ -38,7 +38,7 @@
 }
 
 #toolbarButton(){
-  margin: 1px;
+  margin: 4px;
   border-radius: @border-radius;
   background-color: transparent;
   border: none;
@@ -59,7 +59,9 @@
   border-radius: @border-radius;
   z-index: 200000;
   text-align: center;
-  max-width: 458px;
+  max-width: 522px;
+  width: 522px;
+
   &.medium-editor-on-bottom {
     &::before {
       content: '';
@@ -84,13 +86,14 @@
   }
   ul {
     border-radius: @border-radius;
-    padding: 5px;
+    padding: 13px 19px;
     background: @bgcolor;
   }
   li {
     background-color: @bgcolor;
     display: inline-block;
     vertical-align: top;
+    float: left;
 
     &:nth-child(1),
     &:nth-child(2),
