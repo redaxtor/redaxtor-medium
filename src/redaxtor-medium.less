@@ -14,6 +14,8 @@
 @rx-text-dark: #cbcbcb;
 @rx-shadow: 0px 0px 10px fade(#090e14, 20%);
 
+@toolbar-border-color: #888e94;
+
 // theme settings
 @bgcolor: @rx-background-base;
 @border-color: @rx-border-base;
@@ -25,7 +27,7 @@
 @button-size: 24px;
 @padding: 0px;
 @border-radius: 0px;
-@arrow-size: 10px;
+@arrow-size: 9px;
 
 // theme rules
 .medium-toolbar-arrow-under:after {
@@ -38,7 +40,7 @@
 }
 
 #toolbarButton(){
-  margin: 4px;
+  margin: 5px;
   border-radius: @border-radius;
   background-color: transparent;
   border: none;
@@ -62,15 +64,26 @@
   max-width: 522px;
   width: 522px;
 
+
   &.medium-editor-on-bottom {
     &::before {
       content: '';
       border: @arrow-size solid @bgcolor;
       border-color: transparent transparent @bgcolor transparent;
-      top: -2*@arrow-size;
+      top: (-2*@arrow-size)+1;
       left:50%;
       position: absolute;
       z-index: 20;
+    }
+
+    &::after {
+      content: '';
+      border: @arrow-size+1 solid @toolbar-border-color;
+      border-color: transparent transparent @toolbar-border-color transparent;
+      top: (-2*@arrow-size)-2;
+      left:calc(~"50% - 1px");
+      position: absolute;
+      z-index: 19;
     }
   }
   &.medium-editor-on-top {
@@ -78,16 +91,26 @@
       content: '';
       border: @arrow-size solid @bgcolor;
       border-color: @bgcolor transparent transparent transparent;
-      bottom: -2*@arrow-size;
+      bottom: (-2*@arrow-size)+1;
       left:50%;
       position: absolute;
       z-index: 20;
+    }
+    &::after {
+      content: '';
+      border: @arrow-size+1 solid @toolbar-border-color;
+      border-color: @toolbar-border-color transparent transparent transparent;
+      bottom: (-2*@arrow-size)-2;
+      left:calc(~"50% - 1px");
+      position: absolute;
+      z-index: 19;
     }
   }
   ul {
     border-radius: @border-radius;
     padding: 13px 19px;
     background: @bgcolor;
+    border: 1px solid @toolbar-border-color;
   }
   li {
     background-color: @bgcolor;
@@ -110,7 +133,7 @@
       //clear: left;
       width: 0;
       height: 3*@button-size/4;
-      margin-top: @button-size/8;
+      margin-top: 8px; //@button-size/8;
       margin-left: @button-size/2-1px;
       margin-right: @button-size/2-1px;
       border-left: 2px solid @border-color;
@@ -239,8 +262,10 @@
   position: absolute;
   width: 216px;
   padding: 5px;
-  background-color: #efefef;
-  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.3)
+  background-color: @rx-background-base;
+  border: 1px solid @toolbar-border-color;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.3);
+  z-index: 20;
 }
 
 .vanilla-color-picker-single-color {
