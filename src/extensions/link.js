@@ -70,7 +70,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         aria: 'link',
         tagNames: ['a'],
         contentDefault: '<b>#</b>',
-        contentFA: '<i class="fa fa-link"></i>',
+        contentFA: '<i class="rx_icon rx_icon-link"></i>',
 
 
         init: function () {

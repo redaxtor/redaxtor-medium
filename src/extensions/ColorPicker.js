@@ -28,7 +28,7 @@ import vanillaColorPicker from '../helpers/VanillaColorPicker';
             "#4fbbf7",
             "#ffffff"
         ],
-        contentDefault: "<i class='fa fa-paint-brush editor-color-picker' aria-hidden='true'></i>",
+        contentDefault: "<i class='rx_icon rx_icon-brush editor-color-picker' aria-hidden='true'></i>",
 
         handleClick: function (e) {
             e.preventDefault();

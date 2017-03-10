@@ -61,6 +61,8 @@ export default class HTMLEditor {
             stickyTopOffset: 5,
             toolbar: {
                 buttons: [
+                    'save',
+                    'reset',
                     'undo',
                     'redo',
                     'source',
@@ -72,8 +74,8 @@ export default class HTMLEditor {
                     'italic',
                     'underline',
                     'strikethrough',
-                    'subscript',
-                    'superscript',
+                   // 'subscript',
+                   // 'superscript',
                     'colorPicker',
                     'h1',
                     'h2',
