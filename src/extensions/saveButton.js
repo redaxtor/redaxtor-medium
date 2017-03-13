@@ -11,8 +11,6 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             this.handleClickBinded = this.handleClick.bind(this)
             this.on(this.button, 'click', this.handleClickBinded);
         },
-
-
         getButton: function () {
             return this.button;
         },

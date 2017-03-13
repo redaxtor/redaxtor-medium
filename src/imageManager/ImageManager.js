@@ -19,7 +19,7 @@ export default class ImageManager extends Component {
         this.props.api && this.props.api.getImageList && this.props.api.getImageList(this.state.pieceRef).then((list) => {
             // add index to item if not set by the server
             list.forEach((item, index) => {
-                if(!item.Id){
+                if(!item.id){
                     item.id = index;
                 }
             });
