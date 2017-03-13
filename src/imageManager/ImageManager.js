@@ -286,6 +286,12 @@ export default class ImageManager extends Component {
         return (
             <div>
                 { this.state.isVisible && <Popup isOpen={this.state.isVisible}>
+                    <div className="r_modal-title">
+                        <div className="r_modal-close" onClick={this.onClose.bind(this)}>
+                            <i className="rx_icon rx_icon-close">&nbsp;</i>
+                        </div>
+                        <span>Insert Image</span>
+                    </div>
                     <div className="image-inputs-container">
                         <div className="image-left-part">
                             <div className="item-form">
@@ -388,8 +394,7 @@ export default class ImageManager extends Component {
                                  onDelete={(id) => this.deleteGalleryItem.call(this, id)}
                         />
                     }
-                    <div className="actions-bar">
-                        <div className="button button-cancel" onClick={this.onClose.bind(this)}>Cancel</div>
+                    <div className="r_modal-actions-bar">
                         <div className="button button-save" onClick={this.onSave.bind(this)}>Save</div>
                     </div>
                 </Popup>

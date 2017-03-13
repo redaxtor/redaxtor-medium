@@ -1,3 +1,5 @@
+@editorWidth: 70%;
+
 #editorInput {
 
   #beforeCheckboxLabel{
@@ -18,7 +20,7 @@
   box-sizing: border-box;
   font-size: 15px;
   line-height: 15px;
-  width: 70%;
+  width: @editorWidth;
   &[type=checkbox] {
     position: absolute;
     z-index: -1000;
@@ -156,6 +158,8 @@
     .item-form {
       display: block;
       margin-bottom: 15px;
+      position: relative;
+
       .input-container {
         padding-right: 10px;
       }
@@ -194,9 +198,39 @@
       }
       input, textarea {
         #editorInput();
+        background-color: #bac3cb;
+        &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+          color: #6b757f;
+          font-style: italic;
+        }
+        &::-moz-placeholder { /* Firefox 19+ */
+          color: #6b757f;
+          font-style: italic;
+        }
+        &:-ms-input-placeholder { /* IE 10+ */
+          color: #6b757f;
+          font-style: italic;
+        }
+        &:-moz-placeholder { /* Firefox 18- */
+          color: #6b757f;
+          font-style: italic;
+        }
+
+        &+.number-badge{
+          font-size: 13px;
+          position: absolute;
+          left: calc(@editorWidth ~" - 22px");
+          top: 5px;
+        }
       }
 
     }
+
+    .codemirror-hint{
+      margin-top: 15px;
+      color: #6b757f;
+    }
+
     .image-inputs-container {
       display: flex;
       .image-left-part {
@@ -280,7 +314,6 @@
     transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
     font-size: 14px;
     letter-spacing: 0px;
-    text-transform: uppercase;
     font-weight: 500;
     border-radius: 2px;
     position: relative;
