@@ -369,22 +369,26 @@ export default class ImageManager extends Component {
                             }
                         </div>
                         <div className="image-right-part">
-                            <img src={this.state.url} alt={this.state.alt}/>
+                            {this.props.api.uploadImage &&
+                            <div>
+                                <div className="browse-wrap">
+                                    <div className="button button-default">{this.state.file ? this.state.file[0].name : "Choose File"}
+                                        <input type="file" className="upload" title="Choose a file to upload"
+                                               onChange={(e) => {
+                                                   this.setState({file: e.target.files})
+                                               }}/>
+                                    </div>
+                                    <div className="button">
+                                        <button type="submit" className="button" onClick={this.sendFile.bind(this)}>
+                                            Upload
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>}
+                            <div className="preview-wrapper"><img src={this.state.url} alt={this.state.alt}/></div>
                         </div>
                     </div>
-                    {
-                        this.props.api.uploadImage &&
-                        <div className="browse-wrap">
-                            <div
-                                className="title">{this.state.file ? this.state.file[0].name : "Choose a file to upload"}</div>
-                            <input type="file" className="upload" title="Choose a file to upload"
-                                   onChange={(e) => {
-                                       this.setState({file: e.target.files})
-                                   }}/>
-                            <button type="submit" className="button" onClick={this.sendFile.bind(this)}>Upload File
-                            </button>
-                        </div>
-                    }
+
                     {
                         this.state.gallery &&
                         <Gallery gallery={this.state.gallery} api={this.props.api}

@@ -20,24 +20,27 @@ export default class Gallery extends Component {
     render() {
         return (
             <div className="gallery-wrapper">
-                <h3>Uploaded images</h3>
+                <h5>Uploaded images</h5>
                 <div className="gallery-container">
                     {Object.keys(this.props.gallery).map(index =>
                         <div key={this.props.gallery[index].id} className="gallery-item-container">
                             <div className="gallery-item"
-                                 onClick={()=> {
+                                 onClick={() => {
                                      this.props.onChange(this.props.gallery[index])
                                  }}
                                  style={{backgroundImage: "url(" + (this.props.gallery[index].thumbnailUrl ? this.props.gallery[index].thumbnailUrl : this.props.gallery[index]) + ")"}}>
                                 {this.props.api.deleteImage &&
                                 <span className="delete-icon"
-                                      onClick={(e)=> {
+                                      onClick={(e) => {
                                           e.stopPropagation();
                                           this.setState({image: this.props.gallery[index]})
                                       }}>
                                     <i className="fa fa-trash-o" aria-hidden="true"></i>
                                 </span>}
                             </div>
+                            <div
+                                className="item-title">{this.props.gallery[index].url.split('/').pop() || "n/a"}, {this.props.gallery[index].width || "n/a"}
+                                X {this.props.gallery[index].height || "n/a"}</div>
                         </div>
                     )}
                 </div>
