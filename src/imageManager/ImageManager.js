@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import Popup from './components/Popup'
 import Gallery from './components/Gallery'
 import vanillaColorPicker from '../helpers/VanillaColorPicker';
+import RxCheckBox from './components/RxCheckBox';
 
 export default class ImageManager extends Component {
     constructor(props) {
@@ -298,10 +299,11 @@ export default class ImageManager extends Component {
                                 <input onChange={e => this.onUrlChange.call(this, {url: e.target.value})}
                                        placeholder="Enter image URL" value={this.state.url || ""}/>
                             </div>
+                            {!this.state.settings.editBackground &&
                             <div className="item-form">
                                 <input onChange={e => this.setState({alt: e.target.value})}
                                        placeholder="Enter image alt" value={this.state.alt || ""}/>
-                            </div>
+                            </div>}
                             {this.state.settings.editDimensions &&
                             <div className="sizes item-form">
                                 <div className="input-container">
@@ -315,13 +317,11 @@ export default class ImageManager extends Component {
                                            placeholder="height" value={this.state.height || ""}
                                            style={{width: "65px", marginLeft: "10px"}}/>
                                 </div>
-                                <div className="sizes-checkbox">
-                                    <input type="checkbox" id="proportions" name="proportions"
-                                           onChange={e => {
-                                               this.setState({proportions: e.target.checked})
-                                           }}
-                                           defaultChecked={this.state.proportions}/>
-                                    <label htmlFor="proportions">Constrain proportions</label>
+                                <div className="proportions-checkbox" onClick={e => {
+                                    this.setState({proportions: !this.state.proportions})
+                                }}>
+                                    <label>Constrain proportions</label>
+                                    <RxCheckBox checked={this.state.proportions}/>
                                 </div>
 
                             </div>

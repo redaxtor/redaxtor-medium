@@ -2,7 +2,7 @@
 
 #editorInput {
 
-  #beforeCheckboxLabel{
+  #beforeCheckboxLabel {
     content: '';
     width: 16px;
     height: 12px;
@@ -110,18 +110,18 @@
       }
       .image-right-part {
         flex: 1 1 210px;
-        height: 200px;
+        height: 240px;
         text-align: center;
 
-        .browse-wrap{
+        .browse-wrap {
           width: 214px;
           margin-bottom: 6px;
           margin-top: 6px;
 
           .button {
-            position:relative;
+            position: relative;
 
-            &.button-default{
+            &.button-default {
 
               padding: 0px 22px
             }
@@ -145,47 +145,57 @@
           max-height: 100%;
         }
 
-        .preview-wrapper{
+        .preview-wrapper {
           width: 100%;
-          height: 100%;
+          height: ~"calc(100% - 60px)";
         }
       }
     }
-    .gallery-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      max-height: 450px;
-      overflow: auto;
+    .gallery-wrapper {
       border-top: 1px solid #bdc5ce;
-      padding-top: 30px;
+      .gallery-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-height: 450px;
+        overflow: auto;
 
-      .gallery-item-container {
-        width: 200px;
-        height: 220px;
-        cursor: pointer;
-        margin-bottom: 10px;
+        padding-top: 30px;
 
+        .gallery-item-container {
+          width: 200px;
+          height: 230px;
+          cursor: pointer;
+          margin-bottom: 25px;
 
-        .gallery-item {
-          height: ~"calc(100% - 20px)";
-          width: 100%;
-          background-size: contain;
-          background-position: center center;
-          background-repeat: no-repeat;
+          .item-title {
+            margin-top: 13px;
+            font-size: 12px;
+          }
 
-          background-color: rgb(255, 255, 255);
-          color: rgba(0, 0, 0, 0.870588);
-          transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-          box-sizing: border-box;
-          font-family: Roboto, sans-serif;
-          -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-          box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
-          border-radius: 2px;
+          .gallery-item {
+            height: ~"calc(100% - 30px)";
+            width: 100%;
+            position:relative;
+            background-size: contain;
+            background-position: center center;
+            background-repeat: no-repeat;
+            border: 1px solid #ffffff;
+            background-color: #bac3cb;
+            color: rgba(0, 0, 0, 0.870588);
+            transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+            box-sizing: border-box;
+            font-family: Roboto, sans-serif;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+            border-radius: 2px;
+          }
         }
       }
-
     }
+  }
+
+
     .actions-bar {
       box-sizing: border-box;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -193,6 +203,26 @@
       margin-bottom: 8px;
       width: 100%;
       text-align: right;
+    }
+
+    .proportions-checkbox {
+      display: inline-block;
+      margin-left: 20px;
+
+      label{
+        font-size: 13px;
+        font-weight: normal;
+      }
+
+      .r_checkbox {
+        font-size: 20px;
+        color: #ffffff;
+        margin-left: 15px;
+
+        &.r_item-right{
+          float: right;
+        }
+      }
     }
 
     .item-form {
@@ -211,10 +241,7 @@
         padding-bottom: 5px;
         font-weight: 100;
       }
-      .sizes-checkbox {
-        display: inline-block;
-        margin-left: 20px;
-      }
+
       select {
         border: 1px solid #b9b9b9;
         border-radius: 2px;
@@ -256,7 +283,7 @@
           font-style: italic;
         }
 
-        &+.number-badge{
+        & + .number-badge {
           font-size: 13px;
           position: absolute;
           left: calc(@editorWidth ~" - 22px");
@@ -266,7 +293,7 @@
 
     }
 
-    .codemirror-hint{
+    .codemirror-hint {
       margin-top: 15px;
       color: #6b757f;
     }
@@ -286,10 +313,10 @@
       }
       .image-right-part {
         flex: 1 1 200px;
-        height: 200px;
+        height: 240px;
         img {
           max-width: 100%;
-          max-height: 100%;
+          max-height: ~"calc(100% - 60px)";
         }
       }
     }
@@ -301,20 +328,21 @@
       .gallery-item-container {
 
         width: 200px;
-        height: 220px;
+        height: 230px;
         cursor: pointer;
-        margin-bottom: 10px;
+        margin-bottom: 25px;
 
         position: relative;
 
         .gallery-item {
-          height: ~"calc(100% - 20px)";
+          height: ~"calc(100% - 30px)";
           width: 100%;
           background-size: contain;
           background-position: center center;
           background-repeat: no-repeat;
-
-          background-color: rgb(255, 255, 255);
+          border: 1px solid #ffffff;
+          position:relative;
+          background-color: #bac3cb;
           color: rgba(0, 0, 0, 0.870588);
           transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
           box-sizing: border-box;
@@ -323,11 +351,37 @@
           box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
           border-radius: 2px;
 
+          .hover-shadow{
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.6;
+            background-color: #2b3540;
+          }
+
           .delete-icon {
             position: absolute;
             right: 5px;
             top: 5px;
+            color: #ffffff;
+            font-size: 16px;
+            display: none
           }
+
+        }
+
+        &:hover {
+          .hover-shadow{
+            display: block;
+          }
+
+          .delete-icon {
+            display: block;
+          }
+
         }
       }
 
@@ -344,7 +398,7 @@
       }
     }
 
-  }
+
 
   .button {
     border: 10px;

@@ -29,6 +29,7 @@ export default class Gallery extends Component {
                                      this.props.onChange(this.props.gallery[index])
                                  }}
                                  style={{backgroundImage: "url(" + (this.props.gallery[index].thumbnailUrl ? this.props.gallery[index].thumbnailUrl : this.props.gallery[index]) + ")"}}>
+                                <span className="hover-shadow"></span>
                                 {this.props.api.deleteImage &&
                                 <span className="delete-icon"
                                       onClick={(e) => {
