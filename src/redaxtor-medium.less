@@ -177,6 +177,8 @@
   &.medium-editor-link-form-toolbar{
     padding-bottom: 8px;
     padding-top: 8px;
+    background-color: #d4dae1;
+    color: #2b3540;
 
     .medium-editor-toolbar-form-row{
       text-align: left;
@@ -193,7 +195,7 @@
 
     .inline-label{
       width: 45px;
-      color: #e8e8f0;
+
     }
 
     input{
@@ -202,11 +204,10 @@
       height: 30px;
       margin: 9px 10px;
       border: 0;
-      background-color: #253A44;
-      color: #e8e8f0;
+
+
 
       &+label{
-        color: #e8e8f0;
       }
       &[type=checkbox]+label:before{
         background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAwCAYAAAALiLqjAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTM0A1t6AAABm0lEQVRYR+2WMUoDURCGQxARsRARCysPIJ7AytoDWHgAsRIL8RoewFrEIngAS4scQKwsLKwsrCxl/b/HzrKru+a9txOQJQPf8N4k+f/sZLNvRkVRzJOxLZbFibgWt5mcirp4gLQhngQxFfeZnAn0VsRquQ4GfOsPsWfFHowFBuuCrgSDN3HFxglMqj2JOBJVMYO6aNUeIBF9DYzQFkGbQo1EeFzBUrneF6/lei4tQosIexLh1SKIMmjcCYlEGVg/c/gfV9CHhcFMBmjwJY6t4ABaaIY96VlMrOAAWmiGPelc4HgptihmwmfRQAvNUCfxr+VE44W+gQZa1ZPA3GFbHAp+pBz4LBp1zYaBN5xqO7bxnos4lx/ElI3XXHQh6uLvYpeC51zUEKdG0Wsu+iUOJIK7oP7mVFrFgUT0MWgTd5uL2sTd5qKutqBFhD2JSDXo7LmIMtgUXZPFX+IQZfAi7sTP+WiWOEQZHIhPwSPAriRGHKIMwExuxJqIEYdoAzAThGPEIckAMHkUMeKQbJDKAA04qBdzEQxyLipG34KpVRG+Jz6uAAAAAElFTkSuQmCC);
@@ -226,19 +227,19 @@
 
     &::-webkit-input-placeholder {
       color: @placeholder-color;
-      color: fade(@placeholder-color, .8);
+      color: fade(@placeholder-color, 80);
     }
     &:-moz-placeholder { /* Firefox 18- */
       color: @placeholder-color;
-      color: fade(@placeholder-color, .8);
+      color: fade(@placeholder-color, 80);
     }
     &::-moz-placeholder { /* Firefox 19+ */
       color: @placeholder-color;
-      color: fade(@placeholder-color, .8);
+      color: fade(@placeholder-color, 80);
     }
     &:-ms-input-placeholder {
       color: @placeholder-color;
-      color: fade(@placeholder-color, .8);
+      color: fade(@placeholder-color, 80);
     }
   }
 
@@ -280,8 +281,17 @@
   background: linear-gradient(45deg, #ffffff 0%, #ffffff 47%, #ff0f0f 51%, #ff0f0f 51%, #ff0f0f 51%, #ffffff 55%, #ffffff 100%);
 }
 
-.medium-editor-anchor-preview a {
-  color: black;
+.medium-editor-anchor-preview {
+
+  a {
+    color: #ffffff;
+    font-size: 14px;
+    margin: 10px;
+
+    &:hover{
+      color: #ffffff;
+    }
+  }
 }
 
 .medium-editor-toolbar-form .medium-editor-toolbar-input, .medium-editor-toolbar-form label {

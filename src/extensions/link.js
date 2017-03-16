@@ -127,7 +127,6 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
             var template = [
                 '<div class="medium-editor-toolbar-form-row">',
-                '<label for="urlInput' + this.getEditorId() + '" class="inline-label">', this.urlInputText, '</label>',
                 '<input type="text" id="urlInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="',this.placeholderText, '">'
             ];
 
@@ -147,8 +146,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
             //the rel editor
             template.push('<div class="medium-editor-toolbar-form-row">');
-            template.push('<label for="relInput' + this.getEditorId() + '" class="inline-label">', this.relInputText, '</label>',
-                '<input type="text" id="relInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="',this.placeholderRelText, '">');
+            template.push('<input type="text" id="relInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="',this.placeholderRelText, '">');
             template.push('</div>');
 
             // both of these options are slightly moot with the ability to

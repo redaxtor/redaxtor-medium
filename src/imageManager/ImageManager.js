@@ -352,13 +352,16 @@ export default class ImageManager extends Component {
                                         <option value="0px 0px">Top Left</option>
                                     </select>
                                 </div>
+                            </div>}
+                            {this.state.settings.editBackground &&
+                            <div className="sizes item-form">
                                 <div className="input-container">
                                     <input ref={(input) => {
                                         this.colorInput = input;
                                     }} onChange={this.setBgColor.bind(this)}
                                            onClick={this.pickBgColor.bind(this)}
                                            placeholder="Color" value={this.state.bgColor || ""}
-                                           style={{width: "150px", marginRight: "5px"}}/>
+                                           style={{width: "130px", marginRight: "5px"}}/>
                                     <div color={this.state.bgColor} ref={(div) => {
                                         this.colorDiv = div;
                                     }} onClick={this.pickBgColor.bind(this)} className="color-pick"
