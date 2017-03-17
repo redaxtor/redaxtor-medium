@@ -131,12 +131,12 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             ];
 
             template.push(
-                '<a href="#" class="medium-editor-button medium-editor-toolbar-save">',
+                '<a href="#" class="medium-editor-button medium-editor-toolbar-save pull-right">',
                 this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="fa fa-check"></i>' : this.formSaveLabel,
                 '</a>'
             );
 
-            template.push('<a href="#" class="medium-editor-button medium-editor-toolbar-close">',
+            template.push('<a href="#" class="medium-editor-button medium-editor-toolbar-close pull-right">',
                 this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="fa fa-times"></i>' : this.formCloseLabel,
                 '</a>');
 
