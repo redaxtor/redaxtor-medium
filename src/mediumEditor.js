@@ -32,6 +32,8 @@ MediumEditor.extensions.toolbar.prototype.positionStaticToolbar = function (cont
         stickyOffsetTop = this.options && this.options.stickyTopOffset || 5,
         targetLeft;
 
+    toolbarElement.classList.add('redaxtor-medium-editor');
+
     if (this.sticky) {
         toolbarElement.classList.remove('medium-editor-on-top');
         toolbarElement.classList.remove('medium-editor-on-bottom');

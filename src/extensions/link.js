@@ -86,7 +86,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             event.stopPropagation();
 
             var range = MediumEditor.selection.getSelectionRange(this.document),
-            opts = {url:""};
+                opts = {url: ""};
 
             if (range.startContainer.nodeName.toLowerCase() === 'a' ||
                 range.endContainer.nodeName.toLowerCase() === 'a' ||
@@ -127,26 +127,26 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
             var template = [
                 '<div class="medium-editor-toolbar-form-row">',
-                '<input type="text" id="urlInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="',this.placeholderText, '">'
+                '<input type="text" id="urlInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="', this.placeholderText, '">'
             ];
 
             template.push(
                 '<a href="#" class="medium-editor-button medium-editor-toolbar-save pull-right">',
-                this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="fa fa-check"></i>' : this.formSaveLabel,
+                this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="rx_icon rx_icon-check"></i>' : this.formSaveLabel,
                 '</a>'
             );
 
             template.push('<a href="#" class="medium-editor-button medium-editor-toolbar-close pull-right">',
-                this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="fa fa-times"></i>' : this.formCloseLabel,
+                this.getEditorOption('buttonLabels') === 'fontawesome' ? '<i class="rx_icon rx_icon-close"></i>' : this.formCloseLabel,
                 '</a>');
 
-            template.push('<a href="#" class="medium-editor-button medium medium-editor-toolbar-unlink" title="Unlink">','<i class="fa fa-chain-broken"></i></a>');
+            template.push('<a href="#" class="medium-editor-button medium medium-editor-toolbar-unlink" title="Unlink">', '<i class="rx_icon rx_icon-chain-broken"></i></a>');
 
             template.push('</div>'); //close tag for the <div class="medium-editor-toolbar-form-row">
 
             //the rel editor
             template.push('<div class="medium-editor-toolbar-form-row">');
-            template.push('<input type="text" id="relInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="',this.placeholderRelText, '">');
+            template.push('<input type="text" id="relInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="', this.placeholderRelText, '">');
             template.push('</div>');
 
             // both of these options are slightly moot with the ability to
@@ -210,7 +210,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 excludeCheckbox = this.getAnchorExcludeCheckbox(),
                 buttonCheckbox = this.getAnchorButtonCheckbox(),
                 buttonUnlink = this.getUnlink();
-            opts = opts || { url: '' };
+            opts = opts || {url: ''};
             // TODO: This is for backwards compatability
             // We don't need to support the 'string' argument in 6.0.0
             if (typeof opts === 'string') {
@@ -218,7 +218,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                     url: opts
                 };
             }
-            if (opts.url){
+            if (opts.url) {
                 input.style.width = "calc(100% - 161px)"; //update input width pto place all the buttons in one line
                 relInput.style.width = "calc(100% - 161px)";
                 buttonUnlink.style.display = "inline-block"
@@ -238,7 +238,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
             let relValue = opts.rel ? opts.rel.split(' ') : [];
             let index = relValue.indexOf('nofollow');
-            if(index >=0){
+            if (index >= 0) {
                 relValue.splice(index, 1);
             }
             excludeCheckbox.checked = index >= 0;
@@ -294,7 +294,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             }
 
             opts.rel = relInput.value.trim(); // trim from input
-            if(excludeCheckbox && excludeCheckbox.checked){
+            if (excludeCheckbox && excludeCheckbox.checked) {
                 opts.rel += ' nofollow'
             }
             opts.rel = opts.rel.trim(); //trim for 'nofollow'
@@ -329,7 +329,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             // Matches protocol relative "//"
             // Matches common external protocols "mailto:" "tel:" "maps:"
             var urlSchemeRegex = /^([a-z]+:)?\/\/|^(mailto|tel|maps):/i,
-            // var te is a regex for checking if the string is a telephone number
+                // var te is a regex for checking if the string is a telephone number
                 telRegex = /^\+?\s?\(?(?:\d\s?\-?\)?){3,20}$/;
             if (telRegex.test(value)) {
                 return 'tel:' + value;

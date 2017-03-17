@@ -1,6 +1,4 @@
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 @import 'imageManager/modal';
-
 
 // See `\redaxtor\src\styles\vars\md-colors.less`
 
@@ -39,7 +37,7 @@
   border-color: transparent transparent @bgcolor transparent;
 }
 
-#toolbarButton(){
+#toolbarButton() {
   margin: 5px;
   border-radius: @border-radius;
   background-color: transparent;
@@ -64,14 +62,13 @@
   max-width: 522px;
   width: 522px;
 
-
   &.medium-editor-on-bottom {
     &::before {
       content: '';
       border: @arrow-size solid @bgcolor;
       border-color: transparent transparent @bgcolor transparent;
-      top: (-2*@arrow-size)+1;
-      left:50%;
+      top: (-2*@arrow-size)+3;
+      left: 50%;
       position: absolute;
       z-index: 20;
     }
@@ -80,8 +77,8 @@
       content: '';
       border: @arrow-size+1 solid @toolbar-border-color;
       border-color: transparent transparent @toolbar-border-color transparent;
-      top: (-2*@arrow-size)-2;
-      left:calc(~"50% - 1px");
+      top: (-2*@arrow-size)-1;
+      left: calc(~"50% - 2px");
       position: absolute;
       z-index: 19;
     }
@@ -91,8 +88,8 @@
       content: '';
       border: @arrow-size solid @bgcolor;
       border-color: @bgcolor transparent transparent transparent;
-      bottom: (-2*@arrow-size)+1;
-      left:50%;
+      bottom: (-2*@arrow-size)+3;
+      left: 50%;
       position: absolute;
       z-index: 20;
     }
@@ -100,8 +97,8 @@
       content: '';
       border: @arrow-size+1 solid @toolbar-border-color;
       border-color: @toolbar-border-color transparent transparent transparent;
-      bottom: (-2*@arrow-size)-2;
-      left:calc(~"50% - 1px");
+      bottom: (-2*@arrow-size)-1;
+      left: calc(~"50% - 2px");
       position: absolute;
       z-index: 19;
     }
@@ -174,29 +171,35 @@
   border-radius: @border-radius;
   color: #ffedd5;
 
-  &.medium-editor-link-form-toolbar{
+  &.medium-editor-link-form-toolbar {
     padding-bottom: 15px;
     padding-top: 15px;
 
-    .medium-editor-toolbar-form-row{
+    .medium-editor-toolbar-form-row {
       text-align: left;
       padding: 1px 10px;
     }
 
-    .medium-editor-button{
+    .medium-editor-button {
       #toolbarButton();
 
       text-align: center;
       line-height: 20px;
-      font-size: 14px
+      font-size: 14px;
+      &:hover {
+        text-decoration: none;
+      }
+      i::before {
+        line-height: 24px;
+      }
     }
 
-    .inline-label{
+    .inline-label {
       width: 45px;
       color: #e8e8f0;
     }
 
-    input{
+    input {
       #editorInput();
 
       height: 30px;
@@ -205,11 +208,13 @@
       background-color: #253A44;
       color: #e8e8f0;
 
-      &+label{
+      & + label {
         color: #e8e8f0;
         padding: 6px 10px;
+        font-weight: normal;
+        font-size: 12px;
       }
-      &[type=checkbox]+label:before{
+      &[type=checkbox] + label:before {
 
       }
     }
@@ -252,6 +257,18 @@
   background: @bgcolor;
   border-radius: @border-radius;
   color: @link-color;
+  padding: 10px 15px;
+  a {
+    font-size: 12px;
+    color: @link-color;
+    &:hover {
+      color: @link-color;
+    }
+  }
+}
+
+.medium-toolbar-arrow-over:before {
+  top: -7px;
 }
 
 .medium-editor-placeholder:after {
@@ -279,19 +296,6 @@
 
 .no-color {
   background: linear-gradient(45deg, #ffffff 0%, #ffffff 47%, #ff0f0f 51%, #ff0f0f 51%, #ff0f0f 51%, #ffffff 55%, #ffffff 100%);
-}
-
-.medium-editor-anchor-preview {
-
-  a {
-    color: #ffffff;
-    font-size: 14px;
-    margin: 10px;
-
-    &:hover{
-      color: #ffffff;
-    }
-  }
 }
 
 .medium-editor-toolbar-form .medium-editor-toolbar-input, .medium-editor-toolbar-form label {
