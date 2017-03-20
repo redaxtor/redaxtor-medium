@@ -310,7 +310,7 @@ export default class ImageManager extends Component {
                                     <input onChange={this.onWidthChange.bind(this)}
                                            placeholder="width" value={this.state.width || ""}
                                            style={{width: "65px", marginRight: "10px"}}/>
-                                </div>&times;<div className="input-container">
+                                </div>×<div className="input-container">
                                     <input onChange={this.onHeightChange.bind(this)}
                                            placeholder="height" value={this.state.height || ""}
                                            style={{width: "65px", marginLeft: "10px"}}/>
@@ -370,24 +370,19 @@ export default class ImageManager extends Component {
                             }
                         </div>
                         <div className="image-right-part">
-                            {this.props.api.uploadImage &&
-                            <div>
-                                <div className="browse-wrap">
-                                    <div className="button button-default">{this.state.file ? this.state.file[0].name : "Choose File"}
-                                        <input type="file" className="upload" title="Choose a file to upload"
-                                               onChange={(e) => {
-                                                   this.setState({file: e.target.files})
-                                               }}/>
-                                    </div>
-                                    <div className="button">
-                                        <button type="submit" className="button" onClick={this.sendFile.bind(this)}>
-                                            Upload
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>}
-                            <div className="preview-wrapper"><img src={this.state.url} alt={this.state.alt}/></div>
+                            <div className={"preview-wrapper " + (this.props.api.uploadImage ? "upload" : "no-upload")} style={{backgroundImage: `url(${this.state.url})`}}>
+                                {this.props.api.uploadImage && <input type="file" className="upload" title="Choose a file to upload"
+                                       onChange={(e) => {
+                                           this.setState({file: e.target.files});
+                                           this.sendFile();
+                                       }}/>}
+                            </div>
+                            {this.props.api.uploadImage && <p style={{textAlign:"center"}}>Click Image to Upload</p>}
                         </div>
+                    </div>
+
+                    <div className="r_modal-actions-bar r_modal-actions-bar-im">
+                        <div className="button button-save" onClick={this.onSave.bind(this)}>Save</div>
                     </div>
 
                     {
@@ -399,9 +394,7 @@ export default class ImageManager extends Component {
                                  onDelete={(id) => this.deleteGalleryItem.call(this, id)}
                         />
                     }
-                    <div className="r_modal-actions-bar">
-                        <div className="button button-save" onClick={this.onSave.bind(this)}>Save</div>
-                    </div>
+
                 </Popup>
                 }
             </div>

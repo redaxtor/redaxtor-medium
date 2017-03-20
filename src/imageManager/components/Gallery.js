@@ -20,7 +20,7 @@ export default class Gallery extends Component {
     render() {
         return (
             <div className="gallery-wrapper">
-                <h5>Uploaded images</h5>
+                <h5 style={{textAlign: "center"}}>Pick From Uploaded</h5>
                 <div className="gallery-container">
                     {Object.keys(this.props.gallery).map(index =>
                         <div key={this.props.gallery[index].id} className="gallery-item-container">
@@ -41,10 +41,17 @@ export default class Gallery extends Component {
                             </div>
                             <div
                                 className="item-title">{this.props.gallery[index].url.split('/').pop() || "N/A"}
-                                {(this.props.gallery[index].width && this.props.gallery[index].height) && (this.props.gallery[index].width + "&times;" + this.props.gallery[index].height)}
+                                {(this.props.gallery[index].width && this.props.gallery[index].height) && (this.props.gallery[index].width + "×" + this.props.gallery[index].height)}
                             </div>
                         </div>
                     )}
+                    {Object.keys(this.props.gallery).length==0 &&
+                        <div style={{textAlign: "center"}}>
+                            <p>&nbsp;</p>
+                            <p>No Images Uploaded</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    }
                 </div>
                 {this.state.image &&
                 <Portal portalId={"confirm"}>
