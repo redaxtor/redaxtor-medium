@@ -310,9 +310,7 @@ export default class ImageManager extends Component {
                                     <input onChange={this.onWidthChange.bind(this)}
                                            placeholder="width" value={this.state.width || ""}
                                            style={{width: "65px", marginRight: "10px"}}/>
-                                </div>
-                                X
-                                <div className="input-container">
+                                </div>&times;<div className="input-container">
                                     <input onChange={this.onHeightChange.bind(this)}
                                            placeholder="height" value={this.state.height || ""}
                                            style={{width: "65px", marginLeft: "10px"}}/>
