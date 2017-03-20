@@ -74,9 +74,14 @@ export default class RedaxtorMedium extends Component {
             this.img.style.height = data.height + "px";
             this.img = null;
         } else {
-            this.medium.editor.pasteHTML('<img src="' + (data.url || "") + '" alt="' +
-                (data.alt || "") + 'style="' + 'width: "' + (data.width || "") +
-                'px; height: "' + (data.height || "") + 'px">');
+            var html = [`src="${data.url}"`];
+            if(data.width && data.height) {
+                html.push (`style="width: ${data.width}px; height: ${data.height}px"`)
+            }
+            if(data.alt) {
+                html.push (`alt="${encodeURIComponent(data.alt)}"`);
+            }
+            this.medium.editor.pasteHTML(`<img ${html.join(' ')}/>`);
             this.medium.onChange();
         }
         this.props.updatePiece(this.props.id, {data: {html: this.medium.editor.getContent()}})
