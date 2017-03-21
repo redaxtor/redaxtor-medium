@@ -16,11 +16,11 @@ export default class ImageManager extends Component {
 
     }
 
-    updateImageList(){
+    updateImageList() {
         this.props.api && this.props.api.getImageList && this.props.api.getImageList(this.state.pieceRef).then((list) => {
             // add index to item if not set by the server
             list.forEach((item, index) => {
-                if(!item.id){
+                if (!item.id) {
                     item.id = index;
                 }
             });
@@ -53,7 +53,7 @@ export default class ImageManager extends Component {
     getImageSize(imageData, getOriginalSizeOnly) {
 
         //if is image from gallery
-        if(imageData.width &&  imageData.height) {
+        if (imageData.width && imageData.height) {
             !getOriginalSizeOnly && this.setState({width: imageData.width, height: imageData.height});
             this.setState({originalWidth: imageData.width, originalHeight: imageData.height});
         } else {
@@ -63,7 +63,7 @@ export default class ImageManager extends Component {
             img.onload = function () {
                 !getOriginalSizeOnly && that.setState({width: this.width, height: this.height});
                 that.setState({originalWidth: this.width, originalHeight: this.height});
-            }
+            };
             img.src = imageData.url;
         }
 
@@ -217,14 +217,13 @@ export default class ImageManager extends Component {
         this.updateImageList();
     }
 
-    sendFile() {
+    sendFile(file) {
         if (this.props.api.uploadImage) {
-            if (!this.state.file || !this.state.file[0]) return;
-            var file = this.state.file[0],
-                formdata = new FormData();
+            //if (!this.state.file || !this.state.file[0]) return;
+            var formdata = new FormData();
 
             formdata.append("image", file);
-
+            this.setState({uploading: true});
             this.props.api.uploadImage(formdata).then((response) => {
                 let newImageData = {
                     url: response.url,
@@ -237,9 +236,13 @@ export default class ImageManager extends Component {
                 this.onUrlChange(newImageData);
                 if (this.state.gallery) {
                     this.state.gallery.push(newImageData);
-                    this.setState({file: null})
                 }
-            })
+                this.setState({file: null, uploading: false});
+            }, (e)=> {
+                this.setState({file: null, uploading: false});
+                console.error(e);
+                alert("Failed to upload");
+            });
         }
     }
 
@@ -250,7 +253,7 @@ export default class ImageManager extends Component {
     selectGalleryItem(data) {
 
         //change URL
-        if(data.url != this.state.url){
+        if (data.url != this.state.url) {
             this.onUrlChange(data)
         }
         data.pieceRef = this.state.pieceRef;
@@ -310,7 +313,9 @@ export default class ImageManager extends Component {
                                     <input onChange={this.onWidthChange.bind(this)}
                                            placeholder="width" value={this.state.width || ""}
                                            style={{width: "65px", marginRight: "10px"}}/>
-                                </div>×<div className="input-container">
+                                </div>
+                                ×
+                                <div className="input-container">
                                     <input onChange={this.onHeightChange.bind(this)}
                                            placeholder="height" value={this.state.height || ""}
                                            style={{width: "65px", marginLeft: "10px"}}/>
@@ -370,14 +375,16 @@ export default class ImageManager extends Component {
                             }
                         </div>
                         <div className="image-right-part">
-                            <div className={"preview-wrapper " + (this.props.api.uploadImage ? "upload" : "no-upload")} style={{backgroundImage: `url(${this.state.url})`}}>
-                                {this.props.api.uploadImage && <input type="file" className="upload" title="Choose a file to upload"
+                            <div className={"preview-wrapper " + (this.props.api.uploadImage ? "upload" : "no-upload")}
+                                 style={{backgroundImage: `url(${this.state.url})`}}>
+                                {this.props.api.uploadImage &&
+                                <input type="file" className="upload" title="Choose a file to upload"
                                        onChange={(e) => {
                                            this.setState({file: e.target.files});
-                                           this.sendFile();
+                                           this.sendFile({file: e.target.files});
                                        }}/>}
                             </div>
-                            {this.props.api.uploadImage && <p style={{textAlign:"center"}}>Click Image to Upload</p>}
+                            {this.props.api.uploadImage && <p style={{textAlign: "center"}}>Click Image to Upload</p>}
                         </div>
                     </div>
 
