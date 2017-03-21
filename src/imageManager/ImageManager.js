@@ -337,7 +337,7 @@ export default class ImageManager extends Component {
                             </div>
                             }
                             {this.state.settings.editBackground &&
-                            <div className="item-form">
+                            <div className="sizes item-form">
                                 <label>Customize Background Tiling &amp; Fitting</label>
                                 <div className="input-container">
                                     <select name="background-size" value={this.state.bgSize}
@@ -364,8 +364,9 @@ export default class ImageManager extends Component {
                                     </select>
                                 </div>
                             </div>}
+                            <div></div>
                             {this.state.settings.editBackground &&
-                            <div className="item-form">
+                            <div className="sizes item-form">
                                 <label>Specify Background Color</label>
                                 <div className="input-container">
                                     <input ref={(input) => {
