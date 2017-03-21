@@ -25,7 +25,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         /* placeholderText: [string]  (previously options.anchorInputPlaceholder)
          * text to be shown as placeholder of the anchor input.
          */
-        placeholderText: 'Paste or type a link',
+        placeholderText: 'URL: http://example.com/link',
 
         /* urlInputText: [string]
          * text to be shown as the label of the anchor input.
@@ -35,7 +35,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         /* placeholderRelText: [string]
          * text to be shown as placeholder of the rel input.
          */
-        placeholderRelText: 'Paste or type a rel value',
+        placeholderRelText: 'Rel attribute: nofollow external',
 
         /* relInputText: [string]
          * text to be shown as the label of the rel input.
@@ -67,7 +67,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         // Options for the Button base class
         name: 'link',
         action: 'createLink',
-        aria: 'link',
+        aria: 'Edit Link',
         tagNames: ['a'],
         contentDefault: '<b>#</b>',
         contentFA: '<i class="rx_icon rx_icon-chain"></i>',
@@ -93,7 +93,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(range), 'a')) {
                 var node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(range), 'a');
                 opts = {
-                    url: node.getAttribute('href') || "http://",
+                    url: node.getAttribute('href'),
                     target: node.target || "",
                     rel: node.rel || ""
                 };
