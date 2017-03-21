@@ -63,28 +63,178 @@ export default class HTMLEditor {
                 buttons: [
                     'undo',
                     'redo',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikethrough',
+                    {
+                        name: 'bold',
+                        action: 'bold',
+                        aria: options.i18n.button.bold,
+                        tagNames: ['b', 'strong'],
+                        style: {
+                            prop: 'font-weight',
+                            value: '700|bold'
+                        },
+                        useQueryState: true,
+                        contentDefault: '<b>B</b>',
+                        contentFA: '<i class="fa fa-bold"></i>'
+                    },
+                    {
+                        name: 'italic',
+                        action: 'italic',
+                        aria: options.i18n.button.italic,
+                        tagNames: ['i', 'em'],
+                        style: {
+                            prop: 'font-style',
+                            value: 'italic'
+                        },
+                        useQueryState: true,
+                        contentDefault: '<b><i>I</i></b>',
+                        contentFA: '<i class="fa fa-italic"></i>'
+                    },
+                    {
+                        name: 'underline',
+                        action: 'underline',
+                        aria: options.i18n.button.underline,
+                        tagNames: ['u'],
+                        style: {
+                            prop: 'text-decoration',
+                            value: 'underline'
+                        },
+                        useQueryState: true,
+                        contentDefault: '<b><u>U</u></b>',
+                        contentFA: '<i class="fa fa-underline"></i>'
+                    },
+                    {
+                        name: 'strikethrough',
+                        action: 'strikethrough',
+                        aria: options.i18n.button.strikethrough,
+                        tagNames: ['strike'],
+                        style: {
+                            prop: 'text-decoration',
+                            value: 'line-through'
+                        },
+                        useQueryState: true,
+                        contentDefault: '<s>A</s>',
+                        contentFA: '<i class="fa fa-strikethrough"></i>'
+                    },
                     'colorPicker',
                     'reset',
                     'separator',
-                    'h1',
-                    'h2',
-                    'h3',
-                    'h4',
+                    {
+                        name: 'h1',
+                        action: 'append-h1',
+                        aria: options.i18n.button.h1,
+                        tagNames: ['h1'],
+                        contentDefault: '<b>H1</b>',
+                        contentFA: '<i class="fa fa-header"><sup>1</sup>'
+                    },
+                    {
+                        name: 'h2',
+                        action: 'append-h2',
+                        aria: options.i18n.button.h2,
+                        tagNames: ['h2'],
+                        contentDefault: '<b>H2</b>',
+                        contentFA: '<i class="fa fa-header"><sup>2</sup>'
+                    },
+                    {
+                        name: 'h3',
+                        action: 'append-h3',
+                        aria: options.i18n.button.h3,
+                        tagNames: ['h3'],
+                        contentDefault: '<b>H3</b>',
+                        contentFA: '<i class="fa fa-header"><sup>3</sup>'
+                    },
+                    {
+                        name: 'h4',
+                        action: 'append-h4',
+                        aria: options.i18n.button.h4,
+                        tagNames: ['h4'],
+                        contentDefault: '<b>H4</b>',
+                        contentFA: '<i class="fa fa-header"><sup>4</sup>'
+                    },
                     'newLineSeparator',
-                    'unorderedlist',
-                    'orderedlist',
-                    'justifyFull',
-                    'justifyCenter',
-                    'justifyLeft',
-                    'justifyRight',
+                    {
+                        name: 'unorderedlist',
+                        action: 'insertunorderedlist',
+                        aria: options.i18n.button.unorderedlist,
+                        tagNames: ['ul'],
+                        useQueryState: true,
+                        contentDefault: '<b>&bull;</b>',
+                        contentFA: '<i class="fa fa-list-ul"></i>'
+                    },
+                    {
+                        name: 'orderedlist',
+                        action: 'insertorderedlist',
+                        aria: options.i18n.button.orderedlist,
+                        tagNames: ['ol'],
+                        useQueryState: true,
+                        contentDefault: '<b>1.</b>',
+                        contentFA: '<i class="fa fa-list-ol"></i>'
+                    },
+                    {
+                        name: 'justifyFull',
+                        action: 'justifyFull',
+                        aria: options.i18n.button.justifyFull,
+                        tagNames: [],
+                        style: {
+                            prop: 'text-align',
+                            value: 'justify'
+                        },
+                        contentDefault: '<b>J</b>',
+                        contentFA: '<i class="fa fa-align-justify"></i>'
+                    },
+                    {
+                        name: 'justifyCenter',
+                        action: 'justifyCenter',
+                        aria: options.i18n.button.justifyCenter,
+                        tagNames: [],
+                        style: {
+                            prop: 'text-align',
+                            value: 'center'
+                        },
+                        contentDefault: '<b>C</b>',
+                        contentFA: '<i class="fa fa-align-center"></i>'
+                    },
+                    {
+                        name: 'justifyLeft',
+                        action: 'justifyLeft',
+                        aria: options.i18n.button.justifyLeft,
+                        tagNames: [],
+                        style: {
+                            prop: 'text-align',
+                            value: 'left'
+                        },
+                        contentDefault: '<b>L</b>',
+                        contentFA: '<i class="fa fa-align-left"></i>'
+                    },
+                    {
+                        name: 'justifyRight',
+                        action: 'justifyRight',
+                        aria: options.i18n.button.justifyRight,
+                        tagNames: [],
+                        style: {
+                            prop: 'text-align',
+                            value: 'right'
+                        },
+                        contentDefault: '<b>R</b>',
+                        contentFA: '<i class="fa fa-align-right"></i>'
+                    },
                     'link',
-                    'quote',
+                    {
+                        name: 'quote',
+                        action: 'append-blockquote',
+                        aria: options.i18n.button.blockquote,
+                        tagNames: ['blockquote'],
+                        contentDefault: '<b>&ldquo;</b>',
+                        contentFA: '<i class="fa fa-quote-right"></i>'
+                    },
                     'imageInsert',
-                    'pre',
+                    {
+                        name: 'pre',
+                        action: 'append-pre',
+                        aria: options.i18n.button.pre,
+                        tagNames: ['pre'],
+                        contentDefault: '<b>0101</b>',
+                        contentFA: '<i class="fa fa-code fa-lg"></i>'
+                    },
                     'save'
                 ],
                 static: true,

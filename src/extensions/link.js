@@ -62,7 +62,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         /* excludeCheckboxText: [string]
          * text to be shown in the checkbox enabled via the __excludeCheckbox__ option.
          */
-        excludeCheckboxText: 'Exclude url from search engines',
+        excludeCheckboxText: 'Prevent search crawlers from following this link',
 
         // Options for the Button base class
         name: 'link',
@@ -70,7 +70,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         aria: 'link',
         tagNames: ['a'],
         contentDefault: '<b>#</b>',
-        contentFA: '<i class="rx_icon rx_icon-link"></i>',
+        contentFA: '<i class="rx_icon rx_icon-chain"></i>',
 
 
         init: function () {

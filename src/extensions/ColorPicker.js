@@ -6,7 +6,7 @@ import vanillaColorPicker from '../helpers/VanillaColorPicker';
     var ColorPicker = MediumEditor.extensions.button.extend({
         name: "colorPicker",
         action: "applyForeColor",
-        aria: "color picker",
+        aria: "Choose a Color",
         pickerColors: [
             "inherit",
             "#9b59b6",

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import _MediumEditor from './HTMLEditor';
+import i18n from './i18n';
 import {imageManagerApi} from './imageManager/index';
 
 export default class RedaxtorMedium extends Component {
@@ -34,8 +35,14 @@ export default class RedaxtorMedium extends Component {
 
     onToggleImagePopup() {
         let imageData = {};
+        console.trace("Having image?", this.img);
         if (this.img) {
-            imageData = {}; // set for use in setImageData
+            imageData = {
+                src: this.img.getAttribute("src"),
+                alt: this.img.getAttribute("alt"),
+                width: this.img.width,
+                height: this.img.height,
+            };
         }
 
         imageManagerApi.get().setImageData({
@@ -63,7 +70,7 @@ export default class RedaxtorMedium extends Component {
 
     saveCallback(data) {
         this.medium.editor.restoreSelection();
-        //this.restoreSelection()
+
         if (this.img) {
             this.img.src = data.url;
             this.img.alt = data.alt;
@@ -97,7 +104,7 @@ export default class RedaxtorMedium extends Component {
      * @param e
      */
     onClick(e) {
-        // console.trace("Prevent click 2", e);
+        console.trace("Prevent click 2", e);
         e.preventDefault();
         e.stopPropagation();
 
@@ -105,6 +112,7 @@ export default class RedaxtorMedium extends Component {
             this.img = null;
         } else {
             this.img = e.target;
+            console.trace("Found Image");
         }
         if (e.target.tagName.toLowerCase() !== 'img') return;
         var sel = window.getSelection();
@@ -151,7 +159,7 @@ export default class RedaxtorMedium extends Component {
             },
             onToggleImagePopup: this.onToggleImagePopup.bind(this),
             pickerColors: this.props.options.pickerColors,
-
+            i18n: i18n.medium,
             onEditorActive: (active) => {
                 this.props.onEditorActive && this.props.onEditorActive(this.props.id, active);
             }
@@ -263,5 +271,5 @@ export default class RedaxtorMedium extends Component {
  * @type {string}
  */
 RedaxtorMedium.__renderType = "BEFORE";
-RedaxtorMedium.__editLabel = "Edit Rich Text";
-RedaxtorMedium.__name = "Rich Text";
+RedaxtorMedium.__editLabel = i18n.richText.__floatingEditLabel;
+RedaxtorMedium.__name = i18n.richText.__checkboxName;
