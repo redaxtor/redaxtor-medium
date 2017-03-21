@@ -188,7 +188,7 @@ export default class RedaxtorMedium extends Component {
      * Here that updates styles of background
      */
     renderNonReactAttributes(data) {
-        console.log('Re-Rendered?', this.props.id);
+        // console.log('Re-Rendered?', this.props.id);
         if (this.props.editorActive) {
             if (!this.medium) {
                 this.createEditor();
@@ -207,14 +207,14 @@ export default class RedaxtorMedium extends Component {
         if (this.medium) {
             let content = this.medium.getEditorContent();
             if (content != data.html) {
-                console.log('Re-Rendered HARD', this.props.id);
+               // console.log('Re-Rendered HARD', this.props.id);
                 this.medium.editor.setContent(data.html);
                 this.nodeWasUpdated = true;
             }
         } else {
             let content = this.props.node.innerHTML;
             if (content != data.html) {
-                console.log('Re-Rendered HARD', this.props.id);
+               // console.log('Re-Rendered HARD', this.props.id);
                 this.props.node.innerHTML = data.html;
                 this.nodeWasUpdated = true;
             }
