@@ -182,6 +182,7 @@ export default class ImageManager extends Component {
         let data = {
             url: this.state.url,
             alt: this.state.alt || "",
+            title: this.state.title || "",
         };
 
         /**
@@ -212,7 +213,8 @@ export default class ImageManager extends Component {
     }
 
     setImageData(data) {
-        (!data.alt && data.url) && (data.alt = "");
+        data.alt = data.alt || "";
+        data.title = data.title || "";
         this.setState(data);
         data.url && this.getImageSize(data, !!data.width);
         this.updateImageList();
@@ -276,6 +278,7 @@ export default class ImageManager extends Component {
         this.setState({
             url: null,
             alt: null,
+            title: null,
             api: {},
             width: null,
             height: null,
@@ -305,14 +308,18 @@ export default class ImageManager extends Component {
                                        placeholder="http://domain.com/image.png" value={this.state.url || ""}/>
                             </div>
                             {!this.state.settings.editBackground &&
-                            <div className="item-form"
-                                 title="The alt attribute provides alternative information for an image if a user for some reason cannot view it (because of slow connection, an error in the src attribute, or if the user uses a screen reader).">
-                                <label>Add Image Alt Text</label>
+                            <div className="item-form">
+                                <label title="The term ALT tag is a common shorthand term used to refer to the ALT attribute within in the IMG tag. Any time you use an image, be sure to include an ALT tag or ALT text within the IMG tag. Doing so will provide a clear text alternative of the image for screen reader users. If you have an image that’s used as a button to buy product X, the alt text would say: “button to buy product X”">Add Image Alt Tag <i className="rx_icon rx_icon-info_outline"></i></label>
                                 <input onChange={e => this.setState({alt: e.target.value})}
                                        placeholder="Example: Dalmatian puppy playing fetch"
                                        value={this.state.alt || ""}/>
                             </div>
                             }
+                            <div className="item-form">
+                                <label>Enter Title Tag</label>
+                                <input onChange={e => this.setState({title: e.target.value})}
+                                       placeholder="Image title" value={this.state.title || ""}/>
+                            </div>
                             {this.state.settings.editDimensions &&
                             <div className="sizes item-form">
                                 <label>Customize Image Dimensions</label>

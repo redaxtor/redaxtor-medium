@@ -52,7 +52,7 @@ export default class RedaxtorBackgroundEditor extends Component {
             bgRepeat: computedStyle.backgroundRepeat,
             bgSize: computedStyle.backgroundSize,
             bgPosition: computedStyle.backgroundPosition,
-            alt: this.targetDiv.title || "",
+            title: this.targetDiv.getAttribute("title") || "",
             pieceRef: {
                 type: this.props.type,
                 data: this.props.data,
@@ -79,7 +79,7 @@ export default class RedaxtorBackgroundEditor extends Component {
         this.props.updatePiece(this.props.id, {
             data: {
                 url: data.url,
-                alt: data.alt,
+                title: data.title,
                 bgSize: data.bgSize,
                 bgRepeat: data.bgRepeat,
                 bgPosition: data.bgPosition,
@@ -169,7 +169,7 @@ export default class RedaxtorBackgroundEditor extends Component {
             this.targetDiv.style.backgroundRepeat = data.bgRepeat;
             this.targetDiv.style.backgroundPosition = data.bgPosition;
             this.targetDiv.style.backgroundColor = data.bgColor;
-            this.targetDiv.title = data.alt;
+            this.targetDiv.title = data.title;
         }
     }
 

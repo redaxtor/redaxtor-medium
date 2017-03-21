@@ -40,6 +40,7 @@ export default class RedaxtorMedium extends Component {
             imageData = {
                 src: this.img.getAttribute("src"),
                 alt: this.img.getAttribute("alt"),
+                title: this.img.getAttribute("title"),
                 width: this.img.width,
                 height: this.img.height,
             };
@@ -48,6 +49,7 @@ export default class RedaxtorMedium extends Component {
         imageManagerApi.get().setImageData({
             url: imageData.src,
             alt: imageData.alt || "",
+            title: imageData.title || "",
             width: +imageData.width,
             height: +imageData.height,
             pieceRef: {
@@ -74,6 +76,7 @@ export default class RedaxtorMedium extends Component {
         if (this.img) {
             this.img.src = data.url;
             this.img.alt = data.alt;
+            this.img.title = data.title;
             if(!this.img.style) {
                 this.img.style = {};
             }
@@ -87,6 +90,9 @@ export default class RedaxtorMedium extends Component {
             }
             if(data.alt) {
                 html.push (`alt="${encodeURIComponent(data.alt)}"`);
+            }
+            if(data.title) {
+                html.push (`title="${encodeURIComponent(data.title)}"`);
             }
             this.medium.editor.pasteHTML(`<img ${html.join(' ')}/>`);
             this.medium.onChange();

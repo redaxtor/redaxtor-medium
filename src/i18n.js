@@ -1,10 +1,10 @@
 module.exports = {
   medium: {
       button: {
-          h1: 'Header 1 Tag: The header tag, or the <h1> tag in HTML, will usually be the title of a post, or other emphasized text on the page. It will usually be the largest text that stands out.',
-          h2: 'Header 2 Tag: The header tag, or the <h2> tag in HTML, will usually be the title of a post, or other emphasized text on the page. It will usually be the largest text that stands out.',
-          h3: 'Header 3 Tag: The header tag, or the <h3> tag in HTML, will usually be the title of a post, or other emphasized text on the page. It will usually be the largest text that stands out.',
-          h4: 'Header 4 Tag: The header tag, or the <h4> tag in HTML, will usually be the title of a post, or other emphasized text on the page. It will usually be the largest text that stands out.',
+          h1: 'H1 Tag',
+          h2: 'H2 Tag',
+          h3: 'H3 Tag',
+          h4: 'H4 Tag',
           justifyRight: "Right Align",
           justifyLeft: "Left Align",
           justifyFull: "Justify",

@@ -59,6 +59,7 @@ export default class RedaxtorImageTag extends Component {
         imageManagerApi.get().setImageData({
             url: this.targetImg.src,
             alt: this.targetImg.alt || "",
+            title: this.targetImg.getAttribute("title") || "",
             width: this.targetImg.width,
             height: this.targetImg.height,
             pieceRef: {
@@ -83,7 +84,7 @@ export default class RedaxtorImageTag extends Component {
     }
 
     saveCallback(data) {
-        this.props.updatePiece(this.props.id, {data: {src: data.url, alt: data.alt}});
+        this.props.updatePiece(this.props.id, {data: {src: data.url, alt: data.alt, title: data.title}});
         this.props.savePiece(this.props.id);
         this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
@@ -111,7 +112,10 @@ export default class RedaxtorImageTag extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return (nextProps.data.src !== this.targetImg.src || nextProps.data.alt !== this.targetImg.alt || nextState.editorActive !== this.props.editorActive);
+        return (nextProps.data.src !== this.targetImg.src
+        || nextProps.data.alt !== this.targetImg.alt
+        || nextProps.data.title !== this.targetImg.title
+        || nextState.editorActive !== this.props.editorActive);
     }
 
     /**
@@ -144,6 +148,7 @@ export default class RedaxtorImageTag extends Component {
     renderNonReactAttributes(data) {
         this.targetImg.src = data.src;
         this.targetImg.alt = data.alt;
+        this.targetImg.setAttribute("title", data.title);
     }
 
     componentWillUnmount(){
