@@ -191,5 +191,5 @@ export default class RedaxtorBackgroundEditor extends Component {
  * @type {string}
  */
 RedaxtorBackgroundEditor.__renderType = "BEFORE";
-RedaxtorBackgroundEditor.__editLabel = "Edit Block Background";
+RedaxtorBackgroundEditor.__editLabel = "Click to Edit the Background";
 RedaxtorBackgroundEditor.__name = "Backgrounds";
