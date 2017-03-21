@@ -3,6 +3,7 @@ import Popup from './components/Popup'
 import Gallery from './components/Gallery'
 import vanillaColorPicker from '../helpers/VanillaColorPicker';
 import RxCheckBox from './components/RxCheckBox';
+import i18n from '../i18n';
 
 export default class ImageManager extends Component {
     constructor(props) {
@@ -299,16 +300,22 @@ export default class ImageManager extends Component {
                     <div className="image-inputs-container">
                         <div className="image-left-part">
                             <div className="item-form">
+                                <label>Enter Image URL</label>
                                 <input onChange={e => this.onUrlChange.call(this, {url: e.target.value})}
-                                       placeholder="Enter image URL" value={this.state.url || ""}/>
+                                       placeholder="http://domain.com/image.png" value={this.state.url || ""}/>
                             </div>
                             {!this.state.settings.editBackground &&
-                            <div className="item-form">
+                            <div className="item-form"
+                                 title="The alt attribute provides alternative information for an image if a user for some reason cannot view it (because of slow connection, an error in the src attribute, or if the user uses a screen reader).">
+                                <label>Add Image Alt Text</label>
                                 <input onChange={e => this.setState({alt: e.target.value})}
-                                       placeholder="Enter image alt" value={this.state.alt || ""}/>
-                            </div>}
+                                       placeholder="Example: Dalmatian puppy playing fetch"
+                                       value={this.state.alt || ""}/>
+                            </div>
+                            }
                             {this.state.settings.editDimensions &&
                             <div className="sizes item-form">
+                                <label>Customize Image Dimensions</label>
                                 <div className="input-container">
                                     <input onChange={this.onWidthChange.bind(this)}
                                            placeholder="width" value={this.state.width || ""}
@@ -323,14 +330,15 @@ export default class ImageManager extends Component {
                                 <div className="proportions-checkbox" onClick={e => {
                                     this.setState({proportions: !this.state.proportions})
                                 }}>
-                                    <label>Constrain proportions</label>
                                     <RxCheckBox checked={this.state.proportions}/>
+                                    <label>Constrain proportions</label>
                                 </div>
 
                             </div>
                             }
                             {this.state.settings.editBackground &&
-                            <div className="sizes item-form">
+                            <div className="item-form">
+                                <label>Customize Background Tiling &amp; Fitting</label>
                                 <div className="input-container">
                                     <select name="background-size" value={this.state.bgSize}
                                             onChange={this.setBgSize.bind(this)}>
@@ -357,20 +365,23 @@ export default class ImageManager extends Component {
                                 </div>
                             </div>}
                             {this.state.settings.editBackground &&
-                            <div className="sizes item-form">
+                            <div className="item-form">
+                                <label>Specify Background Color</label>
                                 <div className="input-container">
                                     <input ref={(input) => {
                                         this.colorInput = input;
                                     }} onChange={this.setBgColor.bind(this)}
                                            onClick={this.pickBgColor.bind(this)}
-                                           placeholder="Color" value={this.state.bgColor || ""}
+                                           placeholder="CSS Color" value={this.state.bgColor || ""}
                                            style={{width: "130px", marginRight: "5px"}}/>
                                     <div color={this.state.bgColor} ref={(div) => {
                                         this.colorDiv = div;
                                     }} onClick={this.pickBgColor.bind(this)} className="color-pick"
-                                         style={{backgroundColor: this.state.bgColor || ""}}>
+                                         style={{backgroundColor: this.state.bgColor || ""}}><i
+                                        className="rx_icon rx_icon-brush"></i>
                                     </div>
                                 </div>
+                                <div className="description">Click to pick a Color</div>
                             </div>
                             }
                         </div>
