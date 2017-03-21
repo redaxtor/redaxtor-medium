@@ -93,7 +93,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
                 MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(range), 'a')) {
                 var node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(range), 'a');
                 opts = {
-                    url: node.getAttribute('href'),
+                    url: node.getAttribute('href') || "http://",
                     target: node.target || "",
                     rel: node.rel || ""
                 };
@@ -315,6 +315,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
             this.base.restoreSelection();
             var node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(MediumEditor.selection.getSelectionRange(this.document)), 'a');
             node && this.base.selectElement(node);
+
             this.execAction(this.action, opts);
 
             //a node an be crated after exec action. MediumEditor have no options to set the rel attribute
