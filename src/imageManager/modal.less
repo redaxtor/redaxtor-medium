@@ -45,7 +45,7 @@
       user-select: none;
 
       &:before {
-        content: "\E920";
+        content: "\E904";
         font-family: 'redaxtor' !important;
         speak: none;
         font-style: normal;
@@ -67,7 +67,7 @@
     }
     &:checked + label {
       &:before {
-        content: "\E904";
+        content: "\E920";
       }
     }
   }
@@ -180,9 +180,14 @@
           background-size: contain;
           overflow: hidden;
 
+          &.uploading {
+            opacity: 0.5;
+            cursor: wait;
+          }
+
           input[type=file] {
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 200px;
             opacity: 0;
             cursor: pointer;
           }
@@ -253,14 +258,16 @@
     label {
       font-size: 13px;
       display: inline-block;
+      cursor: pointer;
     }
 
     .r_checkbox {
       font-size: 20px;
       color: black;
       margin-left: 5px;
-      margin-right: 15px;
+      margin-right: 5px;
       float: left;
+      cursor: pointer;
     }
   }
 

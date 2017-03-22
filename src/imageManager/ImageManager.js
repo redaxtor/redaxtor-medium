@@ -10,7 +10,10 @@ export default class ImageManager extends Component {
         super(props);
         this.state = {
             isVisible: false,
-            settings: {}
+            settings: {},
+            proportions: true,
+            uploading: false,
+            uploadError: null
         };
 
         this.updateImageList();
@@ -240,11 +243,10 @@ export default class ImageManager extends Component {
                 if (this.state.gallery) {
                     this.state.gallery.push(newImageData);
                 }
-                this.setState({file: null, uploading: false});
+                this.setState({file: null, uploading: false, uploadError: null});
             }, (e)=> {
-                this.setState({file: null, uploading: false});
+                this.setState({file: null, uploading: false, uploadError: "Failed to Upload, Sorry"});
                 console.error(e);
-                alert("Failed to upload");
             });
         }
     }
@@ -326,10 +328,8 @@ export default class ImageManager extends Component {
                                 <div className="input-container">
                                     <input onChange={this.onWidthChange.bind(this)}
                                            placeholder="width" value={this.state.width || ""}
-                                           style={{width: "65px", marginRight: "10px"}}/>
-                                </div>
-                                ×
-                                <div className="input-container">
+                                           style={{width: "65px", marginRight: "5px"}}/>
+                                </div>×<div className="input-container">
                                     <input onChange={this.onHeightChange.bind(this)}
                                            placeholder="height" value={this.state.height || ""}
                                            style={{width: "65px", marginLeft: "10px"}}/>
@@ -394,7 +394,7 @@ export default class ImageManager extends Component {
                             }
                         </div>
                         <div className="image-right-part">
-                            <div className={"preview-wrapper " + (this.props.api.uploadImage ? "upload" : "no-upload")}
+                            <div className={"preview-wrapper " + (this.props.api.uploadImage ? "upload" : "no-upload") + (this.state.uploading ? " uploading": "")}
                                  style={{backgroundImage: `url(${this.state.url})`}}>
                                 {this.props.api.uploadImage &&
                                 <input type="file" className="upload" title="Choose a file to upload"
@@ -403,7 +403,8 @@ export default class ImageManager extends Component {
                                            this.sendFile({file: e.target.files});
                                        }}/>}
                             </div>
-                            {this.props.api.uploadImage && <p style={{textAlign: "center"}}>Click Image to Upload</p>}
+                            {!this.state.uploadError && this.props.api.uploadImage && <p style={{textAlign: "center"}}>Click Image to Upload</p>}
+                            {this.state.uploadError && <p style={{color: "red", textAlign: "center"}}>{this.state.uploadError}</p>}
                         </div>
                     </div>
 

@@ -146,7 +146,20 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
             //the rel editor
             template.push('<div class="medium-editor-toolbar-form-row">');
-            template.push('<input type="text" id="relInput' + this.getEditorId() + '" class="medium-editor-toolbar-input" placeholder="', this.placeholderRelText, '">');
+            template.push(`<select id="relInput${this.getEditorId()}" class="medium-editor-toolbar-input">
+                <option value="">No additional relationship value</option>
+                <option value="noreferrer">'noreferrer' - Browser won't not send an HTTP referer header</option>
+                <option value="prev">'prev' - Provides a link to the previous document in the series</option>
+                <option value="next">'next' - Provides a link to the next document in the series</option>
+                <option value="alternate">'alternate' - Alternate representation of the document</option>
+                <option value="author">'author' - Author of the document</option>
+                <option value="bookmark">'bookmark' - Permanent URL used for bookmarking</option>
+                <option value="external">'external' - URL is not part of the same site</option>
+                <option value="help">'help' - Link to a help document</option>
+                <option value="noopener">'noopener' - Hyperlink won't not have an opener browsing context</option>                
+                <option value="search">'search' - Links to a search tool for the document</option>
+                <option value="tag">'tag' - A tag (keyword) for the current document</option>
+            </select>`);
             template.push('</div>');
 
             // both of these options are slightly moot with the ability to
@@ -390,7 +403,7 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         },
 
         getRelInput: function () {
-            return this.getForm().querySelector('input#relInput' + this.getEditorId() + '.medium-editor-toolbar-input');
+            return this.getForm().querySelector('#relInput' + this.getEditorId() + '.medium-editor-toolbar-input');
         },
 
         getUnlink: function () {
