@@ -229,7 +229,7 @@ export default class ImageManager extends Component {
       var formdata = new FormData();
 
       for(let i = 0; i < files.file.length; i++ ) {
-        formdata.append("image[]", files.file[i], files.file[i].name);
+        formdata.append("images[]", files.file[i], files.file[i].name);
       }
       this.setState({uploading: true});
       this.props.api.uploadImage(formdata).then((response) => {
