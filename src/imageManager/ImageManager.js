@@ -223,33 +223,35 @@ export default class ImageManager extends Component {
         this.updateImageList();
     }
 
-    sendFile(file) {
-        if (this.props.api.uploadImage) {
-            //if (!this.state.file || !this.state.file[0]) return;
-            var formdata = new FormData();
+  sendFile(files) {
+    if (this.props.api.uploadImage) {
+      //if (!this.state.file || !this.state.file[0]) return;
+      var formdata = new FormData();
 
-            formdata.append("image", file);
-            this.setState({uploading: true});
-            this.props.api.uploadImage(formdata).then((response) => {
-                let newImageData = {
-                    url: response.url,
-                    thumbnailUrl: response.thumbnailUrl,
-                    width: response.width,
-                    height: response.height,
-                    id: response.id || this.state.gallery.length
-                };
+      for(let i = 0; i < files.file.length; i++ ) {
+        formdata.append("image[]", files.file[i], files.file[i].name);
+      }
+      this.setState({uploading: true});
+      this.props.api.uploadImage(formdata).then((response) => {
+        let newImageData = {
+          url: response.url,
+          thumbnailUrl: response.thumbnailUrl,
+          width: response.width,
+          height: response.height,
+          id: response.id || this.state.gallery.length
+        };
 
-                this.onUrlChange(newImageData);
-                if (this.state.gallery) {
-                    this.state.gallery.push(newImageData);
-                }
-                this.setState({file: null, uploading: false, uploadError: null});
-            }, (e)=> {
-                this.setState({file: null, uploading: false, uploadError: "Failed to Upload, Sorry"});
-                console.error(e);
-            });
+        this.onUrlChange(newImageData);
+        if (this.state.gallery) {
+          this.state.gallery.push(newImageData);
         }
+        this.setState({file: null, uploading: false, uploadError: null});
+      }, (e)=> {
+        this.setState({file: null, uploading: false, uploadError: "Failed to Upload, Sorry"});
+        console.error(e);
+      });
     }
+  }
 
     /**
      * save new images data
