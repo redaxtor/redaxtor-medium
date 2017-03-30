@@ -228,9 +228,11 @@ export default class ImageManager extends Component {
       //if (!this.state.file || !this.state.file[0]) return;
       var formdata = new FormData();
 
-      for(let i = 0; i < files.file.length; i++ ) {
+      //save code. If it will necessary use multiple files uploadin then just uncomment this code
+    /*  for(let i = 0; i < files.file.length; i++ ) {
         formdata.append("images[]", files.file[i], files.file[i].name);
-      }
+      }*/
+      formdata.append("image", files.file[0]);
       this.setState({uploading: true});
       this.props.api.uploadImage(formdata).then((response) => {
         let newImageData = {
