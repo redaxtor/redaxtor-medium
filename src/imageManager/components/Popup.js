@@ -17,7 +17,7 @@ export default class Popup extends Component {
     render() {
         var contentClasses = "r_modal-content " + (this.props.contentClass?this.props.contentClass:"");
         return (
-            <div className={classNames({"r_modal-overlay": true, "r_visible": this.state.show})}>
+            <div className={classNames({"r_modal-overlay": true, "r_reset": true, "r_visible": this.state.show})}>
                 <div className={contentClasses}>
                     {this.props.children}
                 </div>
