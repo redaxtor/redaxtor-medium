@@ -398,7 +398,46 @@ export default class HTMLEditor {
     }
 
     updatePiece() {
-        this.needSave() && this.options.onUpdate && this.options.onUpdate();
+        if(this.needSave()){
+          this.applyEditor();
+          this.options.onUpdate && this.options.onUpdate();
+        }
+    }
+
+    applyEditor(){
+        const convertRgbToHex = value => ('0' + parseInt(value).toString(16)).slice(-2);
+
+        //insert inline styles
+        const checkedStyleAttributes = ['font-family', 'font-size', 'font-weight', 'font-style', 'margin-top', 'margin-bottom', 'line-height', 'color'];
+        let editDomString = this.editor.getContent();
+        let rootNode = document.createElement('div');
+        rootNode.innerHTML = editDomString;
+        rootNode.childNodes.forEach((node, nodeIndex) => {
+            //fill inline styles
+            let ownStyle = node.style;
+            checkedStyleAttributes.forEach((attribute) => {
+              if (!ownStyle[attribute]){
+                let computedStyle = window.getComputedStyle(this.editor.elements[0].children[nodeIndex]); //take style from real element in DOM
+                node.style[attribute] = computedStyle[attribute];
+              }
+            });
+
+            // convert color rgb -> hex
+            if(node.style.color){
+              //parses rgb / rgba
+              let rgbData = /rgba?\((\d*),\s?(\d*),\s?(\d*)\)/gi.exec(node.style.color);
+              //if it is correct then converts
+              if(rgbData){
+                // !!! NOTE if use <element>.style.color = '#ffffff' or <element>.style.cssText = <some css string> than color converted to 'rgb(255,255,255)' automatically
+                const hexColor = `#${convertRgbToHex(rgbData[1])}${convertRgbToHex(rgbData[2])}${convertRgbToHex(rgbData[3])}`;
+                let inlineStyle = node.style.cssText;
+                inlineStyle = inlineStyle.replace(node.style.color, hexColor);
+                node.setAttribute('style', inlineStyle);
+              }
+            }
+        });
+
+      this.editor.setContent(rootNode.innerHTML);
     }
 
     destroy() {
