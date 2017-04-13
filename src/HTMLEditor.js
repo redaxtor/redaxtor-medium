@@ -410,20 +410,24 @@ export default class HTMLEditor {
         //insert inline styles
         const checkedStyleAttributes = ['font-family', 'font-size', 'font-weight', 'font-style', 'margin-top', 'margin-bottom', 'line-height', 'color'];
         let editDomString = this.editor.getContent();
+
+        let domList = [].slice.call(this.editor.elements[0].children).filter(value => value.nodeType !== 3); //it isn't text node
+
         let rootNode = document.createElement('div');
         rootNode.innerHTML = editDomString;
-        rootNode.childNodes.forEach((node, nodeIndex) => {
+        [].slice.call(rootNode.childNodes).filter(value => value.nodeType !== 3) //it isn't text node
+            .forEach((node, nodeIndex) => {
             //fill inline styles
             let ownStyle = node.style;
-            checkedStyleAttributes.forEach((attribute) => {
+            ownStyle && checkedStyleAttributes.forEach((attribute) => {
               if (!ownStyle[attribute]){
-                let computedStyle = window.getComputedStyle(this.editor.elements[0].children[nodeIndex]); //take style from real element in DOM
+                let computedStyle = window.getComputedStyle(domList[nodeIndex]); //take style from real element in DOM
                 node.style[attribute] = computedStyle[attribute];
               }
             });
 
             // convert color rgb -> hex
-            if(node.style.color){
+            if(node.style && node.style.color){
               //parses rgb / rgba
               let rgbData = /rgba?\((\d*),\s?(\d*),\s?(\d*)\)/gi.exec(node.style.color);
               //if it is correct then converts
