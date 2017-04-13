@@ -77,7 +77,7 @@ export default class RedaxtorMedium extends Component {
             this.img.src = data.url;
             this.img.alt = data.alt;
             this.img.title = data.title;
-            if(!this.img.style) {
+            if (!this.img.style) {
                 this.img.style = {};
             }
             this.img.style.width = data.width + "px";
@@ -85,14 +85,14 @@ export default class RedaxtorMedium extends Component {
             this.img = null;
         } else {
             var html = [`src="${data.url}"`];
-            if(data.width && data.height) {
-                html.push (`style="width: ${data.width}px; height: ${data.height}px"`)
+            if (data.width && data.height) {
+                html.push(`style="width: ${data.width}px; height: ${data.height}px"`)
             }
-            if(data.alt) {
-                html.push (`alt="${encodeURIComponent(data.alt)}"`);
+            if (data.alt) {
+                html.push(`alt="${encodeURIComponent(data.alt)}"`);
             }
-            if(data.title) {
-                html.push (`title="${encodeURIComponent(data.title)}"`);
+            if (data.title) {
+                html.push(`title="${encodeURIComponent(data.title)}"`);
             }
             this.medium.editor.pasteHTML(`<img ${html.join(' ')}/>`);
             this.medium.onChange();
@@ -137,7 +137,7 @@ export default class RedaxtorMedium extends Component {
                 this.checkifResized();
                 this.props.updatePiece(this.props.id, {data: {html: this.medium ? this.medium.getEditorContent() : this.editorData}})
             },
-            onNeedResizeCheck: ()=> {
+            onNeedResizeCheck: () => {
                 this.checkifResized();
             },
             onSave: () => {
@@ -213,17 +213,12 @@ export default class RedaxtorMedium extends Component {
         if (this.medium) {
             let content = this.medium.getEditorContent();
             if (content != data.html) {
-               // console.log('Re-Rendered HARD', this.props.id);
+                // console.log('Re-Rendered HARD', this.props.id);
                 this.medium.editor.setContent(data.html);
                 this.nodeWasUpdated = true;
             }
         } else {
-            let content = this.props.node.innerHTML;
-            if (content != data.html) {
-               // console.log('Re-Rendered HARD', this.props.id);
-                this.props.node.innerHTML = data.html;
-                this.nodeWasUpdated = true;
-            }
+            this.nodeWasUpdated = RedaxtorMedium.applyEditor(this.props.node, data);
         }
 
     }
@@ -279,3 +274,15 @@ export default class RedaxtorMedium extends Component {
 RedaxtorMedium.__renderType = "BEFORE";
 RedaxtorMedium.__editLabel = i18n.richText.__floatingEditLabel;
 RedaxtorMedium.__name = i18n.richText.__checkboxName;
+RedaxtorMedium.applyEditor = function (node, data) {
+    if (node) {
+
+        let content = node.innerHTML;
+        if (content != data.html) {
+            node.innerHTML = data.html;
+            return true;
+        }
+    }
+
+    return false;
+};

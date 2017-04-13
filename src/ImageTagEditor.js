@@ -21,24 +21,24 @@ export default class RedaxtorImageTag extends Component {
      * That is a common public method that should activate component editor if it presents
      */
     activateEditor() {
-        if(this.props.editorActive && !imageManagerApi.get().state.isVisible) {
+        if (this.props.editorActive && !imageManagerApi.get().state.isVisible) {
             this.onToggleImagePopup();
         }
     }
 
     deactivateEditor() {
-        if(this.props.editorActive && imageManagerApi.get().state.isVisible) {
+        if (this.props.editorActive && imageManagerApi.get().state.isVisible) {
             this.closePopup();
         }
     }
 
 
     componentWillReceiveProps(newProps) {
-        if(newProps.manualActivation) {
+        if (newProps.manualActivation) {
             this.props.onManualActivation(this.props.id);
             this.activateEditor();
         }
-        if(newProps.manualDeactivation) {
+        if (newProps.manualDeactivation) {
             this.props.onManualDeactivation(this.props.id);
             this.deactivateEditor();
         }
@@ -48,7 +48,8 @@ export default class RedaxtorImageTag extends Component {
         imageManagerApi.init({
             api: this.props.api,
             container: ReactDOM.findDOMNode(this),
-            id: this.props.id});
+            id: this.props.id
+        });
         this.check();
         const nodeRect = this.props.api.getNodeRect(this.props);
         this.rect = nodeRect.hover || nodeRect.node;
@@ -146,12 +147,10 @@ export default class RedaxtorImageTag extends Component {
      * Here that updates IMG tag src and alt
      */
     renderNonReactAttributes(data) {
-        this.targetImg.src = data.src;
-        this.targetImg.alt = data.alt;
-        this.targetImg.setAttribute("title", data.title);
+        RedaxtorImageTag.applyEditor(this.targetImg, data);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.die();
         console.log(`Image editor ${this.props.id} unmounted`);
     }
@@ -203,3 +202,12 @@ export default class RedaxtorImageTag extends Component {
 RedaxtorImageTag.__renderType = "BEFORE";
 RedaxtorImageTag.__editLabel = "Click to Edit Image";
 RedaxtorImageTag.__name = "Images";
+RedaxtorImageTag.applyEditor = function (node, data) {
+    if (!node) {
+        return;
+    }
+
+    node.src = data.src;
+    node.alt = data.alt;
+    node.setAttribute("title", data.title);
+};
