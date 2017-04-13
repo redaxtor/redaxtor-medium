@@ -15,7 +15,8 @@ export default class RedaxtorBackgroundEditor extends Component {
         imageManagerApi.init({
             api: this.props.api,
             container: ReactDOM.findDOMNode(this),
-            id: this.props.id});
+            id: this.props.id
+        });
         this.check();
     };
 
@@ -27,6 +28,7 @@ export default class RedaxtorBackgroundEditor extends Component {
             this.onToggleImagePopup();
         }
     }
+
     deactivateEditor() {
         if (this.props.editorActive && imageManagerApi.get().state.isVisible) {
             this.closePopup();
@@ -163,14 +165,7 @@ export default class RedaxtorBackgroundEditor extends Component {
      * Here that updates styles of background
      */
     renderNonReactAttributes(data) {
-        if (this.targetDiv) {
-            this.targetDiv.style.backgroundImage = `url(${data.url})`;
-            this.targetDiv.style.backgroundSize = data.bgSize;
-            this.targetDiv.style.backgroundRepeat = data.bgRepeat;
-            this.targetDiv.style.backgroundPosition = data.bgPosition;
-            this.targetDiv.style.backgroundColor = data.bgColor;
-            this.targetDiv.title = data.title;
-        }
+        RedaxtorBackgroundEditor.applyEditor(this.targetDiv, data);
     }
 
     componentWillUnmount() {
@@ -193,3 +188,15 @@ export default class RedaxtorBackgroundEditor extends Component {
 RedaxtorBackgroundEditor.__renderType = "BEFORE";
 RedaxtorBackgroundEditor.__editLabel = "Click to Edit the Background";
 RedaxtorBackgroundEditor.__name = "Backgrounds";
+RedaxtorBackgroundEditor.applyEditor = function (node, data) {
+    if (!node) {
+        return;
+    }
+
+    node.style.backgroundImage = `url(${data.url})`;
+    node.style.backgroundSize = data.bgSize;
+    node.style.backgroundRepeat = data.bgRepeat;
+    node.style.backgroundPosition = data.bgPosition;
+    node.style.backgroundColor = data.bgColor;
+    node.title = data.title;
+};
