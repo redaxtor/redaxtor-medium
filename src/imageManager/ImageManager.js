@@ -273,7 +273,7 @@ export default class ImageManager extends Component {
     deleteGalleryItem(id) {
         if (this.props.api.deleteImage) {
             this.props.api.deleteImage(id).then(() => {
-                var index = this.state.gallery.findIndex(element => element.id === id);
+                var index = this.state.gallery.findIndex(element => (element.id || element.url) === id);
                 this.state.gallery.splice(index, 1);
                 this.forceUpdate()
             })

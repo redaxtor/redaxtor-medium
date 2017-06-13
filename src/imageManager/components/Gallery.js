@@ -9,7 +9,7 @@ export default class Gallery extends Component {
     }
 
     confirmDelete() {
-        this.props.onDelete && this.props.onDelete(this.state.image.id);
+        this.props.onDelete && this.props.onDelete(this.state.image.id || this.state.image.url);
         this.setState({image: null});
     }
 
