@@ -40,8 +40,7 @@ export default class Gallery extends Component {
                                 </span>}
                             </div>
                             <div
-                                className="item-title">{this.props.gallery[index].url.split('/').pop() || "N/A"}
-                                {(this.props.gallery[index].width && this.props.gallery[index].height) && (this.props.gallery[index].width + "×" + this.props.gallery[index].height)}
+                                className="item-title">{this.props.gallery[index].url.split('/').pop() || "N/A"} {(this.props.gallery[index].width && this.props.gallery[index].height) && (this.props.gallery[index].width + "×" + this.props.gallery[index].height)}
                             </div>
                         </div>
                     )}
