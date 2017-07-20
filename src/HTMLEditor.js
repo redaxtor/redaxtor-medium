@@ -236,6 +236,7 @@ export default class HTMLEditor {
                         contentDefault: '<b>0101</b>',
                         contentFA: '<i class="fa fa-code fa-lg"></i>'
                     },
+                    'source',
                     'save'
                 ],
                 static: true,
@@ -249,6 +250,7 @@ export default class HTMLEditor {
                 'undo': new MediumEditor.extensions.undoButton(),
                 'reset': new MediumEditor.extensions.resetButton(),
                 'save': new MediumEditor.extensions.saveButton(),
+                'source': new MediumEditor.extensions.sourceButton(),
                 'imageInsert': new MediumEditor.extensions.imageInsertButton(),
                 'link': new MediumEditor.extensions.link(),
                 'separator': new MediumEditor.extensions.toolbarSeparator(),

@@ -5,9 +5,9 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
         name: 'source',
         init: function () {
             this.button = this.document.createElement('button');
-            this.button.classList.add('medium-editor-action');
-            this.button.innerHTML = '<i class="rx_icon rx_icon-code"></i>';
-            this.button.title = "Source Editor";
+            this.button.classList.add('medium-editor-action rx_expert-mode');
+            this.button.innerHTML = '<i class="rx_icon rx_icon-mode_edit"></i>';
+            this.button.title = "Edit Source Code";
             this.handleClickBinded = this.handleClick.bind(this);
             this.on(this.button, 'click', this.handleClickBinded);
         },
