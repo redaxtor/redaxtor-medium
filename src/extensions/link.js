@@ -326,14 +326,14 @@ var MediumEditor = require('medium-editor/dist/js/medium-editor.js');
 
         completeFormSave: function (opts) {
             this.base.restoreSelection();
-            var node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(MediumEditor.selection.getSelectionRange(this.document)), 'a');
+            const node = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(MediumEditor.selection.getSelectionRange(this.document)), 'a');
             node && this.base.selectElement(node);
 
             this.execAction(this.action, opts);
 
             //a node an be crated after exec action. MediumEditor have no options to set the rel attribute
-            let createdNode = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(MediumEditor.selection.getSelectionRange(this.document)), 'a');
-            createdNode.rel = opts.rel;
+            const createdNode = MediumEditor.util.getClosestTag(MediumEditor.selection.getSelectedParentElement(MediumEditor.selection.getSelectionRange(this.document)), 'a') || node;
+            createdNode && (createdNode.rel = opts.rel);
 
             this.base.checkSelection();
         },
