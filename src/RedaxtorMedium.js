@@ -177,6 +177,9 @@ export default class RedaxtorMedium extends Component {
         if (nextProps.editorActive !== this.props.editorActive) {
             return true;
         }
+        if (nextProps.expert !== this.props.expert) {
+            return true;
+        }
         return nextProps.data.html !== this.props.data.html;
     }
 
@@ -216,6 +219,13 @@ export default class RedaxtorMedium extends Component {
                 // console.log('Re-Rendered HARD', this.props.id);
                 this.medium.editor.setContent(data.html);
                 this.nodeWasUpdated = true;
+            }
+
+            const toolbar = this.medium.editor.getExtensionByName('toolbar');
+            if(this.props.expert) {
+                toolbar.toolbar.classList.remove("rx_non-expert");
+            } else {
+                toolbar.toolbar.classList.add("rx_non-expert");
             }
         } else {
             this.nodeWasUpdated = RedaxtorMedium.applyEditor(this.props.node, data);
