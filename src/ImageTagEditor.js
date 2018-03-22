@@ -1,4 +1,5 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import {imageManagerApi} from './imageManager/index';
 
 export default class RedaxtorImageTag extends Component {
@@ -16,10 +17,42 @@ export default class RedaxtorImageTag extends Component {
 
     }
 
-    componentDidMount() {
-        imageManagerApi.init({api: this.props.api});
+    /**
+     * That is a common public method that should activate component editor if it presents
+     */
+    activateEditor() {
+        if (this.props.editorActive && !imageManagerApi.get().state.isVisible) {
+            this.onToggleImagePopup();
+        }
+    }
 
+    deactivateEditor() {
+        if (this.props.editorActive && imageManagerApi.get().state.isVisible) {
+            this.closePopup();
+        }
+    }
+
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.manualActivation) {
+            this.props.onManualActivation(this.props.id);
+            this.activateEditor();
+        }
+        if (newProps.manualDeactivation) {
+            this.props.onManualDeactivation(this.props.id);
+            this.deactivateEditor();
+        }
+    }
+
+    componentDidMount() {
+        imageManagerApi.init({
+            api: this.props.api,
+            container: ReactDOM.findDOMNode(this),
+            id: this.props.id
+        });
         this.check();
+        const nodeRect = this.props.api.getNodeRect(this.props);
+        this.rect = nodeRect.hover || nodeRect.node;
     };
 
 
@@ -27,10 +60,15 @@ export default class RedaxtorImageTag extends Component {
         imageManagerApi.get().setImageData({
             url: this.targetImg.src,
             alt: this.targetImg.alt || "",
+            title: this.targetImg.getAttribute("title") || "",
             width: this.targetImg.width,
-            height: this.targetImg.height
-        });
-        imageManagerApi.get().setImageData({
+            height: this.targetImg.height,
+            pieceRef: {
+                type: this.props.type,
+                data: this.props.data,
+                id: this.props.id,
+                dataset: this.props.dataset
+            },
             onClose: this.cancelCallback.bind(this),
             onSave: this.saveCallback.bind(this),
             settings: {
@@ -39,16 +77,21 @@ export default class RedaxtorImageTag extends Component {
             }
         });
         imageManagerApi.get().showPopup();
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, true);
+    }
+
+    closePopup() {
+        imageManagerApi.get().onClose();
     }
 
     saveCallback(data) {
-        this.targetImg.src = data.url;
-        this.targetImg.alt = data.alt;
-        this.props.updatePiece(this.props.id, {data: {src: this.targetImg.src, alt: this.targetImg.alt}});
+        this.props.updatePiece(this.props.id, {data: {src: data.url, alt: data.alt, title: data.title}});
         this.props.savePiece(this.props.id);
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
 
     cancelCallback() {
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
 
     onClick(e) {
@@ -70,7 +113,10 @@ export default class RedaxtorImageTag extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return (nextProps.data.src !== this.targetImg.src || nextProps.data.alt !== this.targetImg.alt || nextState.editorActive !== this.props.editorActive);
+        return (nextProps.data.src !== this.targetImg.src
+        || nextProps.data.alt !== this.targetImg.alt
+        || nextProps.data.title !== this.targetImg.title
+        || nextState.editorActive !== this.props.editorActive);
     }
 
     /**
@@ -86,7 +132,7 @@ export default class RedaxtorImageTag extends Component {
     };
 
     /**
-     * Based on external prop ensures editor is enabled or disabled
+     * Based on external prop ensures editor is enabled or disabled and attaches-detaches non-react bindings
      */
     check() {
         if (this.props.editorActive) {
@@ -96,14 +142,56 @@ export default class RedaxtorImageTag extends Component {
         }
     }
 
-    componentWillUnmount(){
+    /**
+     * Updates rendering of props that are not updated by react
+     * Here that updates IMG tag src and alt
+     */
+    renderNonReactAttributes(data) {
+        RedaxtorImageTag.applyEditor(this.targetImg, data);
+    }
+
+    componentWillUnmount() {
         this.die();
         console.log(`Image editor ${this.props.id} unmounted`);
     }
 
     render() {
         this.check();
+        this.renderNonReactAttributes(this.props.data);
         return React.createElement(this.props.wrapper, {})
+    }
+
+    componentDidUpdate() {
+        this.checkifResized();
+    }
+
+    checkifResized() {
+        const nodeRect = this.props.api.getNodeRect(this.props);
+        const rect = nodeRect.hover || nodeRect.node;
+        if (this.nodeWasUpdated && this.changedBoundingRect(rect)) {
+            this.setBoundingRect(rect);
+            this.props.onNodeResized && this.props.onNodeResized(this.props.id);
+        }
+    }
+
+    /**
+     * Check if node size is different
+     * @param rect {ClientRect}
+     */
+    changedBoundingRect(rect) {
+        return !this.rect ||
+            this.rect.top !== rect.top ||
+            this.rect.left !== rect.left ||
+            this.rect.bottom !== rect.bottom ||
+            this.rect.right !== rect.right;
+    }
+
+    /**
+     * Store node size
+     * @param rect {ClientRect}
+     */
+    setBoundingRect(rect) {
+        this.rect = rect;
     }
 }
 
@@ -112,4 +200,14 @@ export default class RedaxtorImageTag extends Component {
  * @type {string}
  */
 RedaxtorImageTag.__renderType = "BEFORE";
+RedaxtorImageTag.__editLabel = "Click to Edit Image";
 RedaxtorImageTag.__name = "Images";
+RedaxtorImageTag.applyEditor = function (node, data) {
+    if (!node) {
+        return;
+    }
+
+    node.src = data.src;
+    node.alt = data.alt;
+    node.setAttribute("title", data.title);
+};

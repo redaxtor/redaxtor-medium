@@ -7,25 +7,25 @@ const lazy = {
     api: null
 };
 
-const lazyGetImageManager = (api)=>{
+const lazyGetImageManager = (api, container)=>{
     if(lazy.imageManger) {
         return lazy.imageManager;
     }
     lazy.api = api;
-    var popupNode = document.createElement("DIV");
+    var popupNode = document.createElement("redaxtor-image-manager");
     lazy.imageManager = ReactDOM.render(
         <ImageManager api={api}/>,
         popupNode
     );
-    document.body.appendChild(popupNode);
+    container.appendChild(popupNode);
     return lazy.imageManager;
 };
 
 const init = (data) => {
     if(lazy.imageManger && lazy.api != data.api) {
-        console.error("Image manager is stand alone and can't be recreated with different API")
+        console.error("Image manager is singleton-ish and can't be recreated with different API")
     }
-    lazyGetImageManager(data.api);
+    lazyGetImageManager(data.api, data.container || document.body);
 };
 
 const get = () => {

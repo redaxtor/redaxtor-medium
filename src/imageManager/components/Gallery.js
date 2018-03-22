@@ -9,7 +9,7 @@ export default class Gallery extends Component {
     }
 
     confirmDelete() {
-        this.props.onDelete && this.props.onDelete(this.state.image.id);
+        this.props.onDelete && this.props.onDelete(this.state.image.id || this.state.image.url);
         this.setState({image: null});
     }
 
@@ -20,26 +20,37 @@ export default class Gallery extends Component {
     render() {
         return (
             <div className="gallery-wrapper">
-                <h3>Uploaded images</h3>
+                <h5 style={{textAlign: "center"}}>Pick From Uploaded</h5>
                 <div className="gallery-container">
                     {Object.keys(this.props.gallery).map(index =>
                         <div key={this.props.gallery[index].id} className="gallery-item-container">
                             <div className="gallery-item"
-                                 onClick={()=> {
+                                 onClick={() => {
                                      this.props.onChange(this.props.gallery[index])
                                  }}
-                                 style={{backgroundImage: "url(" + (this.props.gallery[index].url ? this.props.gallery[index].url : this.props.gallery[index]) + ")"}}>
+                                 style={{backgroundImage: "url(" + (this.props.gallery[index].thumbnailUrl ? this.props.gallery[index].thumbnailUrl : this.props.gallery[index]) + ")"}}>
+                                <span className="hover-shadow"></span>
                                 {this.props.api.deleteImage &&
                                 <span className="delete-icon"
-                                      onClick={(e)=> {
+                                      onClick={(e) => {
                                           e.stopPropagation();
                                           this.setState({image: this.props.gallery[index]})
                                       }}>
-                                    <i className="im-icon-trash-empty"/>
+                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
                                 </span>}
+                            </div>
+                            <div
+                                className="item-title">{this.props.gallery[index].url.split('/').pop() || "N/A"} {(this.props.gallery[index].width && this.props.gallery[index].height) && (this.props.gallery[index].width + "×" + this.props.gallery[index].height)}
                             </div>
                         </div>
                     )}
+                    {Object.keys(this.props.gallery).length==0 &&
+                        <div style={{textAlign: "center"}}>
+                            <p>&nbsp;</p>
+                            <p>No Images Uploaded</p>
+                            <p>&nbsp;</p>
+                        </div>
+                    }
                 </div>
                 {this.state.image &&
                 <Portal portalId={"confirm"}>

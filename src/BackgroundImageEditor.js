@@ -12,21 +12,55 @@ export default class RedaxtorBackgroundEditor extends Component {
     }
 
     componentDidMount() {
-        imageManagerApi.init({api: this.props.api});
+        imageManagerApi.init({
+            api: this.props.api,
+            container: ReactDOM.findDOMNode(this),
+            id: this.props.id
+        });
         this.check();
     };
 
+    /**
+     * That is a common public method that should activate component editor if it presents
+     */
+    activateEditor() {
+        if (this.props.editorActive && !imageManagerApi.get().state.isVisible) {
+            this.onToggleImagePopup();
+        }
+    }
+
+    deactivateEditor() {
+        if (this.props.editorActive && imageManagerApi.get().state.isVisible) {
+            this.closePopup();
+        }
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.manualActivation) {
+            this.props.onManualActivation(this.props.id);
+            this.activateEditor();
+        }
+        if (newProps.manualDeactivation) {
+            this.props.onManualDeactivation(this.props.id);
+            this.deactivateEditor();
+        }
+    }
 
     onToggleImagePopup() {
+        const computedStyle = getComputedStyle(this.targetDiv);
         imageManagerApi.get().setImageData({
-            url: this.targetDiv.style.backgroundImage && this.targetDiv.style.backgroundImage.slice(4, -1).replace(/"/g, ""),
-            bgColor: this.targetDiv.style.backgroundColor,
-            bgRepeat: this.targetDiv.style.backgroundRepeat,
-            bgSize: this.targetDiv.style.backgroundSize,
-            bgPosition: this.targetDiv.style.backgroundPosition,
-            alt: this.targetDiv.title || ""
-        });
-        imageManagerApi.get().setImageData({
+            url: computedStyle.backgroundImage && computedStyle.backgroundImage.slice(4, -1).replace(/"/g, ""),
+            bgColor: computedStyle.backgroundColor,
+            bgRepeat: computedStyle.backgroundRepeat,
+            bgSize: computedStyle.backgroundSize,
+            bgPosition: computedStyle.backgroundPosition,
+            title: this.targetDiv.getAttribute("title") || "",
+            pieceRef: {
+                type: this.props.type,
+                data: this.props.data,
+                id: this.props.id,
+                dataset: this.props.dataset
+            },
             onClose: this.cancelCallback.bind(this),
             onSave: this.saveCallback.bind(this),
             settings: {
@@ -35,14 +69,19 @@ export default class RedaxtorBackgroundEditor extends Component {
             }
         });
         imageManagerApi.get().showPopup();
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, true);
+    }
+
+    closePopup() {
+        imageManagerApi.get().onClose();
     }
 
     saveCallback(data) {
-        this.applyStyling(data);
+        this.renderNonReactAttributes(data);
         this.props.updatePiece(this.props.id, {
             data: {
                 url: data.url,
-                alt: data.alt,
+                title: data.title,
                 bgSize: data.bgSize,
                 bgRepeat: data.bgRepeat,
                 bgPosition: data.bgPosition,
@@ -50,20 +89,22 @@ export default class RedaxtorBackgroundEditor extends Component {
             }
         });
         this.props.savePiece(this.props.id);
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
 
     cancelCallback() {
+        this.props.onEditorActive && this.props.onEditorActive(this.props.id, false);
     }
 
-    findRedaxtor (el) {
-        while (el && el.tagName.toLowerCase() != 'redaxtor' && el.className && el.className.indexOf("r_modal-overlay")==-1 && el.className.indexOf("r_bar")==-1) {
+    findRedaxtor(el) {
+        while (el && el.tagName.toLowerCase() != 'redaxtor' && (!el.className || (el.className.indexOf("r_modal-overlay") == -1 && el.className.indexOf("r_bar") == -1))) {
             el = el.parentElement;
         }
         return el;
     }
 
     onClick(e) {
-        if(this.findRedaxtor(e.target)) {
+        if (this.findRedaxtor(e.target)) {
             // Here we try dealing with mix of native and React events
             // We find if event was triggered within redaxtor tag
             // This can only happen when this element is wrapped in editor that needs exclusive access to element
@@ -109,7 +150,7 @@ export default class RedaxtorBackgroundEditor extends Component {
     };
 
     /**
-     * Based on external prop ensures editor is enabled or disabled
+     * Based on external prop ensures editor is enabled or disabled and attaches-detaches non-react bindings
      */
     check() {
         if (this.props.editorActive) {
@@ -119,26 +160,22 @@ export default class RedaxtorBackgroundEditor extends Component {
         }
     }
 
-    applyStyling(data) {
-        if (this.targetDiv) {
-            this.targetDiv.style.backgroundImage = `url(${data.url})`;
-            this.targetDiv.style.backgroundSize = data.bgSize;
-            this.targetDiv.style.backgroundRepeat = data.bgRepeat;
-            this.targetDiv.style.backgroundPosition = data.bgPosition;
-            this.targetDiv.style.backgroundColor = data.bgColor;
-            this.targetDiv.title = data.alt;
-        }
+    /**
+     * Updates rendering of props that are not updated by react
+     * Here that updates styles of background
+     */
+    renderNonReactAttributes(data) {
+        RedaxtorBackgroundEditor.applyEditor(this.targetDiv, data);
     }
 
-
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.die();
         console.log(`Background editor ${this.props.id} unmounted`);
     }
 
     render() {
         this.check();
-        this.applyStyling(this.props.data);
+        this.renderNonReactAttributes(this.props.data);
         return React.createElement(this.props.wrapper, {})
     }
 }
@@ -149,4 +186,17 @@ export default class RedaxtorBackgroundEditor extends Component {
  * @type {string}
  */
 RedaxtorBackgroundEditor.__renderType = "BEFORE";
+RedaxtorBackgroundEditor.__editLabel = "Click to Edit the Background";
 RedaxtorBackgroundEditor.__name = "Backgrounds";
+RedaxtorBackgroundEditor.applyEditor = function (node, data) {
+    if (!node) {
+        return;
+    }
+
+    node.style.backgroundImage = `url(${data.url})`;
+    node.style.backgroundSize = data.bgSize;
+    node.style.backgroundRepeat = data.bgRepeat;
+    node.style.backgroundPosition = data.bgPosition;
+    node.style.backgroundColor = data.bgColor;
+    node.title = data.title;
+};
