@@ -1,4 +1,6 @@
-# Redaxtor-medium
+# DEPRECATED This project is deprecated in favor of [plugin-medium](https://github.com/writeaway/writeaway/tree/master/packages/plugin-medium)
+
+## Redaxtor-medium
 Redaxtor-medium is a MediumEditor plugin for Redaxtor library
 
 ## Build
